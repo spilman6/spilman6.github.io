@@ -1,6 +1,6 @@
 ---
 title: Data Access for Programmers
-subtitle: Appel
+subtitle: TJ
 hide-nav: true
  <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown-dark.min.css
  " rel="stylesheet"></link>
@@ -8,7 +8,7 @@ hide-nav: true
 live: https://fvtc.software/appel/data-access-for-programmers
 ---
 
-[Getting Started](data-access-for-programmers/getting-started) - _Week 1_
+[Getting Startedd](data-access-for-programmers/getting-started) - _Week 1_
 
 [Objects and File Types](data-access-for-programmers/objects-and-file-types) - _Week 2_
 
