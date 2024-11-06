@@ -2,6 +2,8 @@
 title: Data Access for Programmers
 subtitle: Appel
 hide-nav: true
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown-dark.min.css
+ " rel="stylesheet"></link>
 
 live: https://fvtc.software/appel/data-access-for-programmers
 ---
