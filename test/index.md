@@ -7,8 +7,8 @@ live: https://spilman6.github.io/test/
 <link rel="stylesheet" href="/styles/site.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown.css" integrity="sha512-5w+8HTmF4yW8eOhANaFUGMHP9TXqco8iQWtRteAhlhwFOYrx70Ha8knWRjqlskkwXJZbuJzcU6/ttrueziIoTQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown-light.min.css" integrity="sha512-kDjsFiusauOzRWlNNk7R5nFRVUPFlZjIqI3F0/DYUO9Uz93R0V4zNfrWGSKFtZvHnTIsoM3GwDaqQBJt8ZVt6w==" crossorigin="anonymous" referrerpolicy="no-referrer">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown-dark.min.css" integrity="sha512-kAGXrJyEBA7iWiXz6Nl5OBd6J3C5wujoFtWFYYom325fRFTSBZfUG472coKg6cJhAnMVSWpDuyUKKavig4NZzQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
+
 [Getting Started](data-access-for-programmers/getting-started) - _Week 1_
 
 [Objects and File Types](data-access-for-programmers/objects-and-file-types) - _Week 2_
