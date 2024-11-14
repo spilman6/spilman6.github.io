@@ -1,11 +1,11 @@
 ---
 title: Data Access for Programmers
 subtitle: TJ
-hide-nav: true
-live: https://fvtc.software/appel/data-access-for-programmers
+hide-nav: false
+live: https://spilman6.github.io/test/
 ---
-
-[Getting Startedd](data-access-for-programmers/getting-started) - _Week 1_
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
+[Getting Started](data-access-for-programmers/getting-started) - _Week 1_
 
 [Objects and File Types](data-access-for-programmers/objects-and-file-types) - _Week 2_
 
