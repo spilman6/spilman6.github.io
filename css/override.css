@@ -1,0 +1,22 @@
+:root {
+    --prime-color: #BD5D38;
+}
+body.sub{
+    padding-left: 0;
+}
+.btn {
+    text-transform: uppercase;
+
+}
+
+.btn-primary {
+    color: #fff;
+}
+
+header {
+    width: 100%;
+    padding: 2rem;
+    background-color: var(--prime-color);
+    font-size: 5rem;
+    color: white;
+}
