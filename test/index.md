@@ -7,7 +7,7 @@ live: https://spilman6.github.io/test/
 <link rel="stylesheet" href="/css/site.min.css">
 <link rel="stylesheet" href="/css/ryan.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown.css" integrity="sha512-5w+8HTmF4yW8eOhANaFUGMHP9TXqco8iQWtRteAhlhwFOYrx70Ha8knWRjqlskkwXJZbuJzcU6/ttrueziIoTQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
 
 [Getting Started](data-access-for-programmers/getting-started) - _Week 1_
 
