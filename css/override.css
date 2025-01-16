@@ -1,12 +1,13 @@
 :root {
     --prime-color: #BD5D38;
 }
-body.sub{
+
+body.sub {
     padding-left: 0;
 }
+
 .btn {
     text-transform: uppercase;
-
 }
 
 .btn-primary {
@@ -20,3 +21,25 @@ header {
     font-size: 5rem;
     color: white;
 }
+
+.bookmark {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #3898bd;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    min-width: 350px;
+    transition: all 0.5s;
+    cursor: grab;
+    margin: 5px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+    .bookmark:hover {
+        color: white;
+        background-color: #1f5c74;
+    }
+        

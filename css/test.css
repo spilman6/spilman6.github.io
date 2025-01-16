@@ -116,3 +116,7 @@
 #settings-button:hover {
     cursor: pointer;
 }
+
+.bookmark {
+    background-color: #84adea;
+}
