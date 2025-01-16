@@ -33,6 +33,7 @@
 .feedback-panel-inner {
     background-color: #84adea;
     padding: 12px;
+    color:#fff
     flex-grow: 1;
     min-width: 25%;
     height: 100%
@@ -57,7 +58,7 @@
     font-weight: bold;
     border-bottom: 1px solid black;
     padding-bottom: 2px;
-    margin-bottom: 4;
+    margin-bottom: 4rem;
     text-align: center;
 }
 
