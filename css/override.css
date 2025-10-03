@@ -33,10 +33,12 @@ header {
     padding: 20px;
     min-width: 350px;
     transition: all 0.5s;
+    min-width: 300px;
     cursor: grab;
     margin: 5px;
     text-decoration: none;
     transition: 0.3s;
+    line-height: 35px;
 }
     .bookmark:hover {
         color: white;
