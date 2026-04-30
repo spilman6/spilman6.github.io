@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pokedex Atlas</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #07111f;
+			--bg-elevated: rgba(13, 24, 44, 0.82);
+			--bg-panel: rgba(10, 19, 36, 0.94);
+			--line: rgba(146, 186, 255, 0.18);
+			--line-strong: rgba(146, 186, 255, 0.32);
+			--text: #ecf3ff;
+			--muted: #9fb4d8;
+			--accent: #6ce0ff;
+			--accent-strong: #1fd3ff;
+			--accent-warm: #ffd166;
+			--good: #65f2b1;
+			--danger: #ff7f96;
+			--shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+			--type-normal: #a8a77a;
+			--type-fire: #ee8130;
+			--type-water: #6390f0;
+			--type-electric: #f7d02c;
+			--type-grass: #7ac74c;
+			--type-ice: #96d9d6;
+			--type-fighting: #c22e28;
+			--type-poison: #a33ea1;
+			--type-ground: #e2bf65;
+			--type-flying: #a98ff3;
+			--type-psychic: #f95587;
+			--type-bug: #a6b91a;
+			--type-rock: #b6a136;
+			--type-ghost: #735797;
+			--type-dragon: #6f35fc;
+			--type-dark: #705746;
+			--type-steel: #b7b7ce;
+			--type-fairy: #d685ad;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			min-height: 100vh;
+			font-family: 'Space Grotesk', sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at top left, rgba(108, 224, 255, 0.24), transparent 28%),
+				radial-gradient(circle at 85% 15%, rgba(255, 209, 102, 0.16), transparent 20%),
+				linear-gradient(160deg, #020712 0%, #091426 45%, #0c1e3d 100%);
+			overflow-x: hidden;
+		}
+
+		body::before,
+		body::after {
+			content: '';
+			position: fixed;
+			inset: auto;
+			border-radius: 999px;
+			filter: blur(70px);
+			pointer-events: none;
+			opacity: 0.38;
+			z-index: 0;
+		}
+
+		body::before {
+			width: 24rem;
+			height: 24rem;
+			top: 8%;
+			left: -7rem;
+			background: rgba(31, 211, 255, 0.34);
+			animation: floatGlow 14s ease-in-out infinite;
+		}
+
+		body::after {
+			width: 20rem;
+			height: 20rem;
+			right: -5rem;
+			bottom: 10%;
+			background: rgba(255, 209, 102, 0.25);
+			animation: floatGlow 18s ease-in-out infinite reverse;
+		}
+
+		@keyframes floatGlow {
+			0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+			50% { transform: translate3d(0, -18px, 0) scale(1.06); }
+		}
+
+		.shell {
+			position: relative;
+			z-index: 1;
+			width: min(1180px, calc(100% - 2rem));
+			margin: 0 auto;
+			padding: 28px 0 56px;
+		}
+
+		.hero {
+			display: grid;
+			grid-template-columns: 1.2fr 0.8fr;
+			gap: 24px;
+			align-items: stretch;
+			margin-bottom: 24px;
+		}
+
+		.hero-card,
+		.panel,
+		.pokemon-card,
+		.type-chip,
+		.search-input,
+		.search-btn,
+		.status-banner {
+			backdrop-filter: blur(18px);
+			-webkit-backdrop-filter: blur(18px);
+		}
+
+		.hero-card,
+		.panel {
+			background: var(--bg-elevated);
+			border: 1px solid var(--line);
+			border-radius: 28px;
+			box-shadow: var(--shadow);
+		}
+
+		.hero-card {
+			padding: 28px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.hero-card::after {
+			content: '';
+			position: absolute;
+			inset: auto -4rem -5rem auto;
+			width: 14rem;
+			height: 14rem;
+			background: radial-gradient(circle, rgba(108, 224, 255, 0.22), transparent 70%);
+		}
+
+		.eyebrow,
+		.stat-label,
+		.section-label,
+		.type-chip,
+		.metric-label,
+		.empty-copy,
+		.search-hint {
+			font-family: 'IBM Plex Mono', monospace;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		.eyebrow {
+			color: var(--accent);
+			font-size: 0.78rem;
+			margin-bottom: 14px;
+		}
+
+		h1 {
+			font-size: clamp(2.8rem, 6vw, 5.8rem);
+			line-height: 0.92;
+			max-width: 9ch;
+			margin-bottom: 16px;
+		}
+
+		.hero-copy {
+			color: var(--muted);
+			font-size: 1rem;
+			max-width: 56ch;
+			line-height: 1.7;
+		}
+
+		.hero-stats {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 12px;
+			margin-top: 24px;
+		}
+
+		.hero-stat {
+			padding: 14px 16px;
+			border: 1px solid var(--line);
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.03);
+		}
+
+		.stat-label {
+			color: var(--muted);
+			font-size: 0.72rem;
+			margin-bottom: 6px;
+		}
+
+		.stat-value {
+			font-size: 1.35rem;
+			font-weight: 700;
+		}
+
+		.search-panel {
+			padding: 24px;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+			justify-content: space-between;
+		}
+
+		.search-panel h2,
+		.viewer-copy h2,
+		.section-head h2 {
+			font-size: 1.3rem;
+			margin-bottom: 10px;
+		}
+
+		.search-copy,
+		.viewer-copy p,
+		.section-head p,
+		.ability-list,
+		.move-list,
+		.flavor-copy,
+		.status-banner {
+			color: var(--muted);
+			line-height: 1.6;
+		}
+
+		.search-form {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto auto;
+			gap: 10px;
+		}
+
+		.search-input,
+		.search-btn,
+		.type-select {
+			min-height: 52px;
+			border-radius: 18px;
+			border: 1px solid var(--line);
+			font-family: inherit;
+			font-size: 0.98rem;
+		}
+
+		.search-input,
+		.type-select {
+			width: 100%;
+			background: rgba(255, 255, 255, 0.05);
+			color: var(--text);
+			color-scheme: dark;
+			padding: 0 16px;
+			outline: none;
+			transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+		}
+
+		.type-select {
+			background-color: #0c1830;
+		}
+
+		.type-select option {
+			background: #0c1830;
+			color: var(--text);
+		}
+
+		.search-input:focus,
+		.type-select:focus {
+			border-color: var(--accent);
+			background: rgba(255, 255, 255, 0.08);
+			transform: translateY(-1px);
+		}
+
+		.search-btn {
+			padding: 0 18px;
+			cursor: pointer;
+			font-weight: 700;
+			color: #021220;
+			background: linear-gradient(135deg, var(--accent), #9bf1ff);
+			transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+		}
+
+		.search-btn.secondary {
+			color: var(--text);
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		.search-btn:hover,
+		.search-btn:focus-visible {
+			transform: translateY(-2px);
+			box-shadow: 0 14px 32px rgba(31, 211, 255, 0.2);
+			filter: saturate(1.08);
+		}
+
+		.search-hint {
+			font-size: 0.74rem;
+			color: rgba(236, 243, 255, 0.62);
+		}
+
+		.toolbar {
+			display: flex;
+			gap: 12px;
+			flex-wrap: wrap;
+			margin-bottom: 18px;
+			align-items: center;
+		}
+
+		.toolbar .type-select {
+			width: auto;
+			min-width: 200px;
+			background: rgba(255, 255, 255, 0.06);
+		}
+
+		.status-banner {
+			margin-bottom: 18px;
+			padding: 12px 16px;
+			border-radius: 18px;
+			border: 1px solid var(--line);
+			background: rgba(255, 255, 255, 0.04);
+			font-size: 0.84rem;
+			display: none;
+		}
+
+		.status-banner.visible {
+			display: block;
+		}
+
+		.viewer-grid {
+			display: grid;
+			grid-template-columns: 1.08fr 0.92fr;
+			gap: 24px;
+			margin-bottom: 24px;
+		}
+
+		.viewer-panel {
+			padding: 24px;
+			position: relative;
+			overflow: hidden;
+			min-height: 560px;
+		}
+
+		.viewer-panel::before {
+			content: '';
+			position: absolute;
+			inset: -3rem auto auto -3rem;
+			width: 14rem;
+			height: 14rem;
+			background: radial-gradient(circle, rgba(255, 209, 102, 0.15), transparent 70%);
+			pointer-events: none;
+		}
+
+		.viewer-copy {
+			position: relative;
+			z-index: 1;
+		}
+
+		.pokemon-meta {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 12px;
+			margin-bottom: 20px;
+		}
+
+		.pokemon-index {
+			font-family: 'IBM Plex Mono', monospace;
+			color: var(--accent-warm);
+			font-size: 0.95rem;
+		}
+
+		.hero-display {
+			display: grid;
+			grid-template-columns: 260px minmax(0, 1fr);
+			gap: 20px;
+			align-items: center;
+			margin: 24px 0;
+		}
+
+		.art-stage {
+			position: relative;
+			aspect-ratio: 1;
+			border-radius: 28px;
+			border: 1px solid var(--line);
+			background:
+				radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12), transparent 20%),
+				linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+			display: grid;
+			place-items: center;
+			overflow: hidden;
+		}
+
+		.art-stage::before {
+			content: '';
+			position: absolute;
+			width: 65%;
+			aspect-ratio: 1;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(108, 224, 255, 0.22), transparent 70%);
+			filter: blur(12px);
+		}
+
+		.art-stage img {
+			position: relative;
+			z-index: 1;
+			width: 82%;
+			max-height: 82%;
+			object-fit: contain;
+			image-rendering: pixelated;
+			animation: revealCard 0.55s ease;
+		}
+
+		@keyframes revealCard {
+			from {
+				opacity: 0;
+				transform: translateY(8px) scale(0.97);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0) scale(1);
+			}
+		}
+
+		.detail-stack {
+			display: grid;
+			gap: 16px;
+		}
+
+		.type-row,
+		.metrics,
+		.section-grid,
+		.card-grid,
+		.skeleton-grid {
+			display: grid;
+			gap: 12px;
+		}
+
+		.type-row {
+			grid-template-columns: repeat(auto-fit, minmax(90px, max-content));
+		}
+
+		.type-chip {
+			padding: 10px 14px;
+			border-radius: 999px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			font-size: 0.74rem;
+			color: #03101e;
+			font-weight: 700;
+			background: var(--accent);
+			justify-self: start;
+		}
+
+		.metrics {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.metric-card {
+			padding: 14px 16px;
+			border-radius: 20px;
+			border: 1px solid var(--line);
+			background: rgba(255, 255, 255, 0.04);
+		}
+
+		.metric-label {
+			font-size: 0.7rem;
+			color: var(--muted);
+			margin-bottom: 6px;
+		}
+
+		.metric-value {
+			font-size: 1.1rem;
+			font-weight: 700;
+		}
+
+		.mini-panel .metric-value {
+			font-size: 0.95rem;
+			line-height: 1.35;
+			font-weight: 600;
+			word-break: break-word;
+		}
+
+		.field-notes-panel {
+			padding: 22px;
+		}
+
+		.field-notes-grid {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 12px;
+		}
+
+		.field-note-item {
+			padding: 14px 16px;
+			border-radius: 16px;
+			border: 1px solid var(--line);
+			background: rgba(255, 255, 255, 0.03);
+		}
+
+		.field-note-item.wide {
+			grid-column: 1 / -1;
+		}
+
+		.field-note-item .metric-label {
+			margin-bottom: 6px;
+		}
+
+		.field-note-item .metric-value {
+			font-size: 0.95rem;
+			line-height: 1.35;
+			font-weight: 600;
+			word-break: break-word;
+		}
+
+		.field-note-stats {
+			margin-top: 18px;
+			padding-top: 14px;
+			border-top: 1px solid var(--line);
+		}
+
+		.field-note-stats .section-label {
+			margin-bottom: 10px;
+		}
+
+		.field-note-stats .stat-bars {
+			margin-top: 0;
+		}
+
+		.flavor-copy {
+			padding: 16px 18px;
+			border-left: 3px solid var(--accent-strong);
+			background: rgba(255, 255, 255, 0.03);
+			border-radius: 0 18px 18px 0;
+			font-size: 0.96rem;
+		}
+
+		.section-grid {
+			grid-template-columns: 1fr 1fr;
+			margin-top: 20px;
+			gap: 16px;
+		}
+
+		.mini-panel {
+			padding: 18px;
+			border-radius: 22px;
+			border: 1px solid var(--line);
+			background: rgba(255, 255, 255, 0.04);
+		}
+
+		.section-label {
+			color: var(--accent);
+			font-size: 0.78rem;
+			margin-bottom: 12px;
+		}
+
+		.ability-list,
+		.move-list {
+			list-style: none;
+			display: grid;
+			gap: 8px;
+			font-size: 0.94rem;
+		}
+
+		.stat-bars {
+			display: grid;
+			gap: 12px;
+			margin-top: 16px;
+		}
+
+		.stat-row {
+			display: grid;
+			grid-template-columns: 90px 42px minmax(0, 1fr);
+			align-items: center;
+			gap: 10px;
+			font-size: 0.88rem;
+		}
+
+		.stat-name {
+			color: var(--muted);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-size: 0.72rem;
+			font-family: 'IBM Plex Mono', monospace;
+		}
+
+		.stat-track {
+			height: 10px;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.08);
+			overflow: hidden;
+		}
+
+		.stat-fill {
+			height: 100%;
+			border-radius: inherit;
+			background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+		}
+
+		.section-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: end;
+			gap: 16px;
+			margin-bottom: 14px;
+		}
+
+		.card-grid,
+		.skeleton-grid {
+			grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+		}
+
+		.pokemon-card {
+			position: relative;
+			padding: 18px;
+			border-radius: 24px;
+			border: 1px solid var(--line);
+			background: rgba(7, 17, 31, 0.7);
+			color: var(--text);
+			text-align: left;
+			cursor: pointer;
+			transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+			overflow: hidden;
+		}
+
+		.pokemon-card:hover,
+		.pokemon-card:focus-visible {
+			transform: translateY(-4px);
+			border-color: var(--line-strong);
+			background: rgba(10, 22, 42, 0.9);
+		}
+
+		.pokemon-card::after {
+			content: '';
+			position: absolute;
+			inset: auto -2rem -2rem auto;
+			width: 7rem;
+			height: 7rem;
+			background: radial-gradient(circle, rgba(108, 224, 255, 0.18), transparent 70%);
+		}
+
+		.card-top {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			gap: 12px;
+			margin-bottom: 10px;
+		}
+
+		.card-id {
+			font-family: 'IBM Plex Mono', monospace;
+			color: var(--accent-warm);
+			font-size: 0.78rem;
+		}
+
+		.card-name {
+			font-size: 1.12rem;
+			font-weight: 700;
+			text-transform: capitalize;
+		}
+
+		.card-image {
+			display: block;
+			width: 120px;
+			height: 120px;
+			object-fit: contain;
+			margin: 0 auto 10px;
+			image-rendering: pixelated;
+		}
+
+		.card-types {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+		}
+
+		.card-type-pill {
+			padding: 6px 10px;
+			border-radius: 999px;
+			font-size: 0.72rem;
+			font-family: 'IBM Plex Mono', monospace;
+			text-transform: uppercase;
+			color: rgba(3, 16, 30, 0.96);
+			font-weight: 700;
+		}
+
+		.empty-state {
+			padding: 28px;
+			border-radius: 26px;
+			border: 1px dashed var(--line-strong);
+			text-align: center;
+			background: rgba(255, 255, 255, 0.03);
+		}
+
+		.empty-state strong {
+			display: block;
+			font-size: 1.08rem;
+			margin-bottom: 8px;
+		}
+
+		.empty-copy {
+			font-size: 0.76rem;
+			color: var(--muted);
+			margin-top: 8px;
+		}
+
+		.skeleton-card {
+			min-height: 250px;
+			border-radius: 24px;
+			border: 1px solid var(--line);
+			background: linear-gradient(120deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+			background-size: 200% 100%;
+			animation: shimmer 1.2s linear infinite;
+		}
+
+		@keyframes shimmer {
+			from { background-position: 200% 0; }
+			to { background-position: -200% 0; }
+		}
+
+		.footer-note {
+			margin-top: 24px;
+			text-align: center;
+			color: rgba(159, 180, 216, 0.85);
+			font-size: 0.92rem;
+		}
+
+		@media (max-width: 980px) {
+			.hero,
+			.viewer-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.hero-display {
+				grid-template-columns: 1fr;
+			}
+
+			.art-stage {
+				max-width: 280px;
+				margin: 0 auto;
+			}
+		}
+
+		@media (max-width: 720px) {
+			.shell {
+				width: min(100% - 1rem, 100%);
+				padding-top: 14px;
+			}
+
+			.hero-card,
+			.panel,
+			.viewer-panel {
+				border-radius: 24px;
+			}
+
+			.hero-card,
+			.search-panel,
+			.viewer-panel {
+				padding: 20px;
+			}
+
+			h1 {
+				font-size: clamp(2.4rem, 12vw, 4rem);
+			}
+
+			.search-form,
+			.metrics,
+			.section-grid,
+			.hero-stats {
+				grid-template-columns: 1fr;
+			}
+
+			.field-notes-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.toolbar {
+				align-items: stretch;
+			}
+
+			.toolbar .type-select,
+			.toolbar .search-btn {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="shell">
+		<section class="hero">
+			<div class="hero-card">
+				<div class="eyebrow">Live PokeAPI Explorer</div>
+				<h1>Pokedex Atlas</h1>
+				<p class="hero-copy">Search any Pokemon by name or number, browse by type, and inspect live stats, abilities, artwork, and flavor text pulled straight from PokeAPI.</p>
+				<div class="hero-stats">
+					<div class="hero-stat">
+						<div class="stat-label">Data Source</div>
+						<div class="stat-value">PokeAPI</div>
+					</div>
+					<div class="hero-stat">
+						<div class="stat-label">Explorer Mode</div>
+						<div class="stat-value">Search + Browse</div>
+					</div>
+					<div class="hero-stat">
+						<div class="stat-label">Catalog Window</div>
+						<div class="stat-value">Live Fetch</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="panel search-panel">
+				<div>
+					<h2>Find a Pokemon</h2>
+					<p class="search-copy">Try <strong>pikachu</strong>, <strong>mewtwo</strong>, or a Pokedex number like <strong>25</strong>.</p>
+				</div>
+
+				<form class="search-form" id="search-form">
+					<input id="search-input" class="search-input" type="search" placeholder="Search name or id" autocomplete="off" aria-label="Search Pokemon by name or id">
+					<button class="search-btn" type="submit">Search</button>
+					<button class="search-btn secondary" type="button" id="random-btn">Random</button>
+				</form>
+
+				<div class="search-hint">Interactive features use the public PokeAPI over HTTPS, so this page works as a static site.</div>
+			</aside>
+		</section>
+
+		<div class="toolbar">
+			<select id="type-filter" class="type-select" aria-label="Filter Pokemon by type">
+				<option value="all">Browse all types</option>
+			</select>
+			<button class="search-btn secondary" type="button" id="load-more-btn">Load More</button>
+			<button class="search-btn secondary" type="button" id="reset-btn">Reset View</button>
+		</div>
+
+		<div class="status-banner" id="status-banner" aria-live="polite"></div>
+
+		<section class="viewer-grid">
+			<article class="panel viewer-panel">
+				<div class="viewer-copy" id="pokemon-viewer">
+					<div class="eyebrow">Selected Pokemon</div>
+					<h2>Loading featured Pokemon...</h2>
+					<p>Fetching live data from PokeAPI.</p>
+				</div>
+			</article>
+
+			<aside class="panel viewer-panel">
+				<div class="section-head">
+					<div>
+						<div class="eyebrow">Catalog</div>
+						<h2 id="grid-title">Featured picks</h2>
+					</div>
+					<p id="grid-summary">Pulling the first batch.</p>
+				</div>
+				<div class="card-grid" id="pokemon-grid"></div>
+			</aside>
+		</section>
+
+		<p class="footer-note">Data and artwork metadata provided by PokeAPI. This site fetches live records on demand.</p>
+	</main>
+
+	<script>
+		const API_ROOT = 'https://pokeapi.co/api/v2';
+		const viewer = document.getElementById('pokemon-viewer');
+		const grid = document.getElementById('pokemon-grid');
+		const gridTitle = document.getElementById('grid-title');
+		const gridSummary = document.getElementById('grid-summary');
+		const statusBanner = document.getElementById('status-banner');
+		const searchForm = document.getElementById('search-form');
+		const searchInput = document.getElementById('search-input');
+		const randomBtn = document.getElementById('random-btn');
+		const typeFilter = document.getElementById('type-filter');
+		const loadMoreBtn = document.getElementById('load-more-btn');
+		const resetBtn = document.getElementById('reset-btn');
+
+		const state = {
+			limit: 12,
+			offset: 0,
+			activeType: 'all',
+			gridMode: 'all',
+			currentList: [],
+			currentTypeMembers: [],
+			selectedPokemon: null,
+			listCache: new Map(),
+			detailCache: new Map(),
+			speciesCache: new Map()
+		};
+
+		const typeColors = {
+			normal: 'var(--type-normal)',
+			fire: 'var(--type-fire)',
+			water: 'var(--type-water)',
+			electric: 'var(--type-electric)',
+			grass: 'var(--type-grass)',
+			ice: 'var(--type-ice)',
+			fighting: 'var(--type-fighting)',
+			poison: 'var(--type-poison)',
+			ground: 'var(--type-ground)',
+			flying: 'var(--type-flying)',
+			psychic: 'var(--type-psychic)',
+			bug: 'var(--type-bug)',
+			rock: 'var(--type-rock)',
+			ghost: 'var(--type-ghost)',
+			dragon: 'var(--type-dragon)',
+			dark: 'var(--type-dark)',
+			steel: 'var(--type-steel)',
+			fairy: 'var(--type-fairy)'
+		};
+
+		function capitalize(value) {
+			return value.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+		}
+
+		function formatId(id) {
+			return '#' + String(id).padStart(4, '0');
+		}
+
+		function getArtwork(pokemon) {
+			return pokemon.sprites.other['official-artwork'].front_default
+				|| pokemon.sprites.other.home.front_default
+				|| pokemon.sprites.front_default
+				|| '';
+		}
+
+		function normalizeFlavor(text) {
+			return text.replace(/[\f\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+		}
+
+		function setStatus(message, tone = 'neutral') {
+			if (!message) {
+				statusBanner.classList.remove('visible');
+				statusBanner.textContent = '';
+				statusBanner.style.borderColor = 'var(--line)';
+				return;
+			}
+
+			const borderColor = tone === 'error'
+				? 'rgba(255, 127, 150, 0.5)'
+				: tone === 'success'
+					? 'rgba(101, 242, 177, 0.45)'
+					: 'var(--line-strong)';
+
+			statusBanner.textContent = message;
+			statusBanner.style.borderColor = borderColor;
+			statusBanner.classList.add('visible');
+		}
+
+		function renderSkeletons(count = 6) {
+			grid.innerHTML = Array.from({ length: count }, () => '<div class="skeleton-card"></div>').join('');
+		}
+
+		async function fetchJson(url) {
+			const response = await fetch(url);
+			if (!response.ok) {
+				throw new Error('Request failed with status ' + response.status);
+			}
+			return response.json();
+		}
+
+		async function fetchPokemonDetail(nameOrId) {
+			const key = String(nameOrId).toLowerCase();
+			if (state.detailCache.has(key)) {
+				return state.detailCache.get(key);
+			}
+
+			const pokemon = await fetchJson(`${API_ROOT}/pokemon/${encodeURIComponent(key)}`);
+			state.detailCache.set(key, pokemon);
+			state.detailCache.set(String(pokemon.id), pokemon);
+			state.detailCache.set(pokemon.name.toLowerCase(), pokemon);
+			return pokemon;
+		}
+
+		async function fetchSpecies(nameOrId) {
+			const key = String(nameOrId).toLowerCase();
+			if (state.speciesCache.has(key)) {
+				return state.speciesCache.get(key);
+			}
+
+			const species = await fetchJson(`${API_ROOT}/pokemon-species/${encodeURIComponent(key)}`);
+			state.speciesCache.set(key, species);
+			state.speciesCache.set(String(species.id), species);
+			if (species.name) {
+				state.speciesCache.set(species.name.toLowerCase(), species);
+			}
+			return species;
+		}
+
+		async function fetchList(offset, limit) {
+			const cacheKey = `${offset}:${limit}`;
+			if (state.listCache.has(cacheKey)) {
+				return state.listCache.get(cacheKey);
+			}
+
+			const payload = await fetchJson(`${API_ROOT}/pokemon?offset=${offset}&limit=${limit}`);
+			const details = await Promise.all(payload.results.map(entry => fetchPokemonDetail(entry.name)));
+			state.listCache.set(cacheKey, details);
+			return details;
+		}
+
+		async function fetchTypeMembers(typeName) {
+			const payload = await fetchJson(`${API_ROOT}/type/${encodeURIComponent(typeName)}`);
+			const members = payload.pokemon
+				.map(entry => entry.pokemon.name)
+				.filter((name, index, names) => names.indexOf(name) === index)
+				.slice(0, 48);
+			return Promise.all(members.map(name => fetchPokemonDetail(name)));
+		}
+
+		function renderTypePills(types) {
+			return types.map(typeInfo => {
+				const color = typeColors[typeInfo.type.name] || 'var(--accent)';
+				return `<span class="type-chip" style="background:${color}">${capitalize(typeInfo.type.name)}</span>`;
+			}).join('');
+		}
+
+		function renderStatBars(stats) {
+			return stats.map(stat => {
+				const width = Math.min((stat.base_stat / 180) * 100, 100);
+				return `
+					<div class="stat-row">
+						<div class="stat-name">${stat.stat.name.replace('special-', 'sp. ')}</div>
+						<div>${stat.base_stat}</div>
+						<div class="stat-track"><div class="stat-fill" style="width:${width}%"></div></div>
+					</div>
+				`;
+			}).join('');
+		}
+
+		async function renderViewer(pokemon) {
+			state.selectedPokemon = pokemon;
+
+			let flavorText = 'No flavor text available for this Pokemon yet.';
+			let habitat = 'Unknown';
+			let growthRate = 'Unknown';
+
+			try {
+				const species = await fetchSpecies(pokemon.name);
+				const englishFlavor = species.flavor_text_entries.find(entry => entry.language.name === 'en');
+				if (englishFlavor) {
+					flavorText = normalizeFlavor(englishFlavor.flavor_text);
+				}
+				habitat = species.habitat ? capitalize(species.habitat.name) : 'Rarely documented';
+				growthRate = species.growth_rate ? capitalize(species.growth_rate.name) : 'Unknown';
+			} catch (error) {
+				flavorText = 'Flavor text is unavailable right now, but the core battle data loaded successfully.';
+			}
+
+			const artwork = getArtwork(pokemon);
+			const abilities = pokemon.abilities
+				.map(entry => capitalize(entry.ability.name) + (entry.is_hidden ? ' (Hidden)' : ''))
+				.slice(0, 4)
+				.map(label => `<li>${label}</li>`)
+				.join('');
+			const moves = pokemon.moves
+				.slice(0, 5)
+				.map(entry => `<li>${capitalize(entry.move.name)}</li>`)
+				.join('');
+			const totalStats = pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0);
+
+			viewer.innerHTML = `
+				<div class="eyebrow">Selected Pokemon</div>
+				<div class="pokemon-meta">
+					<div>
+						<h2>${capitalize(pokemon.name)}</h2>
+						<p>${pokemon.types.length > 1 ? 'Dual-type battle profile' : 'Single-type battle profile'}</p>
+					</div>
+					<div class="pokemon-index">${formatId(pokemon.id)}</div>
+				</div>
+
+				<div class="hero-display">
+					<div class="art-stage">
+						${artwork ? `<img src="${artwork}" alt="${capitalize(pokemon.name)} artwork">` : '<div>No artwork found</div>'}
+					</div>
+
+					<div class="detail-stack">
+						<div class="type-row">${renderTypePills(pokemon.types)}</div>
+
+						<div class="metrics">
+							<div class="metric-card">
+								<div class="metric-label">Height</div>
+								<div class="metric-value">${(pokemon.height / 10).toFixed(1)} m</div>
+							</div>
+							<div class="metric-card">
+								<div class="metric-label">Weight</div>
+								<div class="metric-value">${(pokemon.weight / 10).toFixed(1)} kg</div>
+							</div>
+							<div class="metric-card">
+								<div class="metric-label">Base Total</div>
+								<div class="metric-value">${totalStats}</div>
+							</div>
+						</div>
+
+						<div class="flavor-copy">${flavorText}</div>
+					</div>
+				</div>
+
+				<div class="section-grid">
+					<div class="mini-panel field-notes-panel">
+						<div class="section-label">Field Notes</div>
+						<div class="field-notes-grid">
+							<div class="field-note-item">
+								<div class="metric-label">Habitat</div>
+								<div class="metric-value">${habitat}</div>
+							</div>
+							<div class="field-note-item">
+								<div class="metric-label">Growth</div>
+								<div class="metric-value">${growthRate}</div>
+							</div>
+							<div class="field-note-item wide">
+								<div class="metric-label">Experience</div>
+								<div class="metric-value">${pokemon.base_experience ?? 'N/A'}</div>
+							</div>
+						</div>
+
+						<div class="field-note-stats">
+							<div class="section-label">Base Stats</div>
+							<div class="stat-bars">
+								${renderStatBars(pokemon.stats)}
+							</div>
+						</div>
+					</div>
+
+					<div class="mini-panel">
+						<div class="section-label">Loadout</div>
+						<ul class="ability-list">${abilities || '<li>No abilities found.</li>'}</ul>
+						<div class="section-label" style="margin-top:18px;">Featured Moves</div>
+						<ul class="move-list">${moves || '<li>No moves found.</li>'}</ul>
+					</div>
+				</div>
+			`;
+		}
+
+		function createCardMarkup(pokemon) {
+			const artwork = getArtwork(pokemon);
+			return `
+				<button class="pokemon-card" type="button" data-name="${pokemon.name}">
+					<div class="card-top">
+						<div>
+							<div class="card-id">${formatId(pokemon.id)}</div>
+							<div class="card-name">${capitalize(pokemon.name)}</div>
+						</div>
+						<div class="card-id">${pokemon.base_experience ?? 'N/A'} xp</div>
+					</div>
+					${artwork ? `<img class="card-image" src="${artwork}" alt="${capitalize(pokemon.name)} artwork">` : ''}
+					<div class="card-types">
+						${pokemon.types.map(typeInfo => {
+							const color = typeColors[typeInfo.type.name] || 'var(--accent)';
+							return `<span class="card-type-pill" style="background:${color}">${capitalize(typeInfo.type.name)}</span>`;
+						}).join('')}
+					</div>
+				</button>
+			`;
+		}
+
+		function attachCardEvents() {
+			grid.querySelectorAll('.pokemon-card').forEach(button => {
+				button.addEventListener('click', async () => {
+					const pokemon = await fetchPokemonDetail(button.dataset.name);
+					await renderViewer(pokemon);
+					setStatus(`Showing ${capitalize(pokemon.name)}.`, 'success');
+				});
+			});
+		}
+
+		async function renderGrid(pokemonList, append = false) {
+			if (!append) {
+				grid.innerHTML = '';
+			}
+
+			if (!pokemonList.length && !append) {
+				grid.innerHTML = `
+					<div class="empty-state">
+						<strong>No Pokemon matched this view.</strong>
+						<div>Try a different type, reset the catalog, or search directly by name.</div>
+						<div class="empty-copy">PokeAPI data stays live, but the current filter returned zero results.</div>
+					</div>
+				`;
+				return;
+			}
+
+			const markup = pokemonList.map(createCardMarkup).join('');
+			if (append) {
+				grid.insertAdjacentHTML('beforeend', markup);
+			} else {
+				grid.innerHTML = markup;
+			}
+			attachCardEvents();
+		}
+
+		function updateGridSummary() {
+			if (state.gridMode === 'type') {
+				gridTitle.textContent = `${capitalize(state.activeType)} roster`;
+				gridSummary.textContent = `Showing ${state.currentList.length} of ${state.currentTypeMembers.length} cached ${state.activeType}-type Pokemon.`;
+			} else {
+				gridTitle.textContent = 'Featured picks';
+				gridSummary.textContent = `Showing ${state.currentList.length} Pokemon from the live national catalog window.`;
+			}
+		}
+
+		async function loadFeatured() {
+			state.gridMode = 'all';
+			state.activeType = 'all';
+			typeFilter.value = 'all';
+			state.offset = 0;
+			renderSkeletons();
+			setStatus('Loading the featured catalog...', 'neutral');
+
+			const list = await fetchList(0, state.limit);
+			state.currentList = list;
+			await renderGrid(list, false);
+			updateGridSummary();
+
+			if (!state.selectedPokemon && list[0]) {
+				await renderViewer(list[0]);
+			}
+
+			setStatus('Featured catalog is ready.', 'success');
+		}
+
+		async function loadMore() {
+			try {
+				if (state.gridMode === 'type') {
+					const next = state.currentTypeMembers.slice(state.currentList.length, state.currentList.length + 12);
+					if (!next.length) {
+						setStatus(`No more ${state.activeType}-type Pokemon in this cached view.`, 'neutral');
+						return;
+					}
+					state.currentList = state.currentList.concat(next);
+					await renderGrid(next, true);
+					updateGridSummary();
+					setStatus(`Loaded more ${state.activeType}-type Pokemon.`, 'success');
+					return;
+				}
+
+				state.offset += state.limit;
+				setStatus('Loading more Pokemon from the national catalog...', 'neutral');
+				const next = await fetchList(state.offset, state.limit);
+				state.currentList = state.currentList.concat(next);
+				await renderGrid(next, true);
+				updateGridSummary();
+				setStatus('More Pokemon added to the catalog.', 'success');
+			} catch (error) {
+				setStatus('Unable to load more Pokemon right now.', 'error');
+			}
+		}
+
+		async function searchPokemon(query) {
+			const value = query.trim().toLowerCase();
+			if (!value) {
+				setStatus('Enter a Pokemon name or numeric id.', 'error');
+				return;
+			}
+
+			try {
+				setStatus(`Searching for ${value}...`, 'neutral');
+				const pokemon = await fetchPokemonDetail(value);
+				await renderViewer(pokemon);
+				state.currentList = [pokemon];
+				state.gridMode = 'search';
+				gridTitle.textContent = 'Search result';
+				gridSummary.textContent = `Found a live match for ${capitalize(pokemon.name)}.`;
+				await renderGrid([pokemon], false);
+				setStatus(`Loaded ${capitalize(pokemon.name)} from PokeAPI.`, 'success');
+			} catch (error) {
+				await renderGrid([], false);
+				gridTitle.textContent = 'Search result';
+				gridSummary.textContent = 'No matching Pokemon was found.';
+				setStatus(`No Pokemon matched "${query}".`, 'error');
+			}
+		}
+
+		async function loadRandomPokemon() {
+			const randomId = Math.floor(Math.random() * 1025) + 1;
+			searchInput.value = String(randomId);
+			await searchPokemon(String(randomId));
+		}
+
+		async function filterByType(typeName) {
+			if (typeName === 'all') {
+				await loadFeatured();
+				return;
+			}
+
+			try {
+				setStatus(`Loading ${typeName}-type Pokemon...`, 'neutral');
+				renderSkeletons(6);
+				const members = await fetchTypeMembers(typeName);
+				state.gridMode = 'type';
+				state.activeType = typeName;
+				state.currentTypeMembers = members;
+				state.currentList = members.slice(0, 12);
+				await renderGrid(state.currentList, false);
+				updateGridSummary();
+				if (state.currentList[0]) {
+					await renderViewer(state.currentList[0]);
+				}
+				setStatus(`${capitalize(typeName)} roster loaded.`, 'success');
+			} catch (error) {
+				setStatus(`Unable to load the ${typeName} roster right now.`, 'error');
+			}
+		}
+
+		async function populateTypes() {
+			try {
+				const payload = await fetchJson(`${API_ROOT}/type`);
+				const commonTypes = payload.results.filter(entry => !['unknown', 'shadow'].includes(entry.name));
+				typeFilter.insertAdjacentHTML(
+					'beforeend',
+					commonTypes.map(entry => `<option value="${entry.name}">${capitalize(entry.name)}</option>`).join('')
+				);
+			} catch (error) {
+				setStatus('Type filters could not be loaded, but direct search still works.', 'error');
+			}
+		}
+
+		searchForm.addEventListener('submit', async event => {
+			event.preventDefault();
+			await searchPokemon(searchInput.value);
+		});
+
+		randomBtn.addEventListener('click', async () => {
+			await loadRandomPokemon();
+		});
+
+		typeFilter.addEventListener('change', async event => {
+			await filterByType(event.target.value);
+		});
+
+		loadMoreBtn.addEventListener('click', async () => {
+			await loadMore();
+		});
+
+		resetBtn.addEventListener('click', async () => {
+			searchInput.value = '';
+			setStatus('', 'neutral');
+			await loadFeatured();
+		});
+
+		async function boot() {
+			try {
+				await populateTypes();
+				await loadFeatured();
+			} catch (error) {
+				viewer.innerHTML = `
+					<div class="empty-state">
+						<strong>Live data failed to load.</strong>
+						<div>PokeAPI may be unavailable or blocked by the current network.</div>
+						<div class="empty-copy">Try refreshing the page or testing again when network access is available.</div>
+					</div>
+				`;
+				grid.innerHTML = '';
+				setStatus('Initial PokeAPI load failed.', 'error');
+			}
+		}
+
+		boot();
+	</script>
+</body>
+</html>

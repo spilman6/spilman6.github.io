@@ -282,6 +282,9 @@
     transition: color 0.2s;
     white-space: nowrap;
   }
+  th:not([data-col]) {
+    cursor: default;
+  }
   th:hover { color: var(--fog); }
   th.sorted { color: var(--gold-light); }
 
@@ -606,10 +609,10 @@
   <table id="prop-table">
     <thead>
       <tr>
-        <th class="col-parcel" data-col="parcel">Parcel <span class="sort-arrow">↕</span></th>
-        <th data-col="owner">Owner <span class="sort-arrow">↕</span></th>
-        <th class="col-acres" data-col="acres" style="text-align:right">Acres <span class="sort-arrow">↕</span></th>
-        <th data-col="value" style="text-align:right">Assessed Value <span class="sort-arrow">↕</span></th>
+        <th class="col-parcel" data-col="parcel" tabindex="0" aria-sort="ascending">Parcel <span class="sort-arrow">↕</span></th>
+        <th data-col="owner" tabindex="0" aria-sort="none">Owner <span class="sort-arrow">↕</span></th>
+        <th class="col-acres" data-col="acres" style="text-align:right" tabindex="0" aria-sort="none">Acres <span class="sort-arrow">↕</span></th>
+        <th data-col="value" style="text-align:right" tabindex="0" aria-sort="none">Assessed Value <span class="sort-arrow">↕</span></th>
         <th style="text-align:right">Map</th>
       </tr>
     </thead>
@@ -721,6 +724,34 @@ let sortDir = 1;
 let searchQuery = '';
 let filteredData = [...DATA];
 
+function setSort(key) {
+  if (sortKey === key) sortDir *= -1;
+  else {
+    sortKey = key;
+    sortDir = 1;
+  }
+  syncSortUi();
+  renderTable();
+}
+
+function syncSortUi() {
+  document.querySelectorAll('.pill-btn[data-sort]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sort === sortKey);
+  });
+
+  document.querySelectorAll('th[data-col]').forEach(th => {
+    const isActive = th.dataset.col === sortKey;
+    const arrow = th.querySelector('.sort-arrow');
+
+    th.classList.toggle('sorted', isActive);
+    th.setAttribute('aria-sort', isActive ? (sortDir === 1 ? 'ascending' : 'descending') : 'none');
+
+    if (arrow) {
+      arrow.textContent = isActive ? (sortDir === 1 ? '↑' : '↓') : '↕';
+    }
+  });
+}
+
 function ownerClass(owner) {
   const lower = owner.toLowerCase();
   if (lower.includes('trust')) return 'trust';
@@ -822,12 +853,20 @@ document.getElementById('search').addEventListener('input', e => {
 
 document.querySelectorAll('.pill-btn[data-sort]').forEach(btn => {
   btn.addEventListener('click', () => {
-    const key = btn.dataset.sort;
-    if (sortKey === key) sortDir *= -1;
-    else { sortKey = key; sortDir = 1; }
-    document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderTable();
+    setSort(btn.dataset.sort);
+  });
+});
+
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    setSort(th.dataset.col);
+  });
+
+  th.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setSort(th.dataset.col);
+    }
   });
 });
 
@@ -842,6 +881,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.getElementById('detail-overlay').classList.remove('open');
 });
 
+syncSortUi();
 renderTable();
 </script>
 </body>
