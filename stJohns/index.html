@@ -515,21 +515,20 @@
       }
 
       .panel-close {
-        position: absolute;
-        top: 16px;
-        right: 16px;
         background: rgba(255, 255, 255, 0.07);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         color: rgba(200, 220, 235, 0.6);
-        font-size: 18px;
+        font-size: 16px;
         transition: all 0.2s;
+        margin-left: auto;
       }
       .panel-close:hover {
         background: rgba(255, 255, 255, 0.12);
@@ -543,6 +542,43 @@
         text-transform: uppercase;
         color: var(--water-shimmer);
         margin-bottom: 12px;
+      }
+
+      .panel-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .panel-nav-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: rgba(200, 220, 235, 0.7);
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+      }
+
+      .panel-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--fog);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      .panel-nav-counter {
+        flex: 1;
+        text-align: center;
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        color: rgba(200, 220, 235, 0.4);
       }
 
       .panel-owner {
@@ -1022,7 +1058,16 @@
     <!-- DETAIL PANEL -->
     <div class="detail-overlay" id="detail-overlay">
       <div class="detail-panel">
-        <button class="panel-close" id="panel-close">×</button>
+        <div class="panel-nav">
+          <button class="panel-nav-btn" id="panel-prev" title="Previous parcel">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="panel-nav-counter" id="panel-nav-counter"></div>
+          <button class="panel-nav-btn" id="panel-next" title="Next parcel">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="panel-close" id="panel-close">×</button>
+        </div>
         <div class="panel-eyebrow" id="panel-parcel"></div>
         <div class="panel-owner" id="panel-owner"></div>
         <div id="panel-address" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(200,220,235,0.5);margin-top:-10px;margin-bottom:16px;letter-spacing:0.04em"></div>
@@ -1089,6 +1134,7 @@
       let sortDir = 1;
       let searchQuery = "";
       let filteredData = [];
+      let currentPanelIdx = -1;
 
       function toTitleCase(str) {
         return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
@@ -1267,28 +1313,29 @@
         tbody.querySelectorAll("tr").forEach((tr) => {
           tr.addEventListener("click", () => {
             const d = DATA[parseInt(tr.dataset.idx)];
-            openPanel(d);
+            const idx = filteredData.indexOf(d);
+            openPanel(idx);
           });
         });
       }
 
-      function openPanel(d) {
-        document.getElementById("panel-parcel").textContent =
-          "Parcel · " + d.parcel;
-        document.getElementById("panel-owner").textContent   = d.owner;
-        document.getElementById("panel-address").textContent = d.address || "";
-        document.getElementById("panel-acres").textContent =
-          d.acres.toFixed(3) + " ac";
-        document.getElementById("panel-value").textContent =
-          "$" + d.value.toLocaleString();
-        document.getElementById("panel-per-acre").textContent =
-          "$" + Math.round(d.value / d.acres).toLocaleString() + " / ac";
-        document.getElementById("panel-type").textContent = ownerType(d.owner);
-        document.getElementById("panel-fmv").textContent  = d.fmv  ? "$" + d.fmv.toLocaleString()  : "—";
-        document.getElementById("panel-land").textContent = d.land ? "$" + d.land.toLocaleString() : "—";
-        document.getElementById("panel-impr").textContent = d.impr ? "$" + d.impr.toLocaleString() : "—";
-        document.getElementById("panel-map-link").href = "map.html#" + d.parcel;
-        document.getElementById("panel-map-btn").href = parcelMapUrl(d.parcel);
+      function openPanel(idx) {
+        currentPanelIdx = idx;
+        const d = filteredData[idx];
+        document.getElementById("panel-parcel").textContent   = "Parcel · " + d.parcel;
+        document.getElementById("panel-owner").textContent    = d.owner;
+        document.getElementById("panel-address").textContent  = d.address || "";
+        document.getElementById("panel-acres").textContent    = d.acres.toFixed(3) + " ac";
+        document.getElementById("panel-value").textContent    = "$" + d.value.toLocaleString();
+        document.getElementById("panel-per-acre").textContent = "$" + Math.round(d.value / d.acres).toLocaleString() + " / ac";
+        document.getElementById("panel-type").textContent     = ownerType(d.owner);
+        document.getElementById("panel-fmv").textContent      = d.fmv  ? "$" + d.fmv.toLocaleString()  : "—";
+        document.getElementById("panel-land").textContent     = d.land ? "$" + d.land.toLocaleString() : "—";
+        document.getElementById("panel-impr").textContent     = d.impr ? "$" + d.impr.toLocaleString() : "—";
+        document.getElementById("panel-map-link").href        = "map.html#" + d.parcel;
+        document.getElementById("panel-map-btn").href         = parcelMapUrl(d.parcel);
+        document.getElementById("panel-nav-counter").textContent =
+          (idx + 1) + " of " + filteredData.length;
         document.getElementById("detail-overlay").classList.add("open");
       }
 
@@ -1327,8 +1374,22 @@
             document.getElementById("detail-overlay").classList.remove("open");
         });
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape")
+        const overlayOpen = document.getElementById("detail-overlay").classList.contains("open");
+        if (e.key === "Escape") {
           document.getElementById("detail-overlay").classList.remove("open");
+        } else if (overlayOpen && e.key === "ArrowLeft") {
+          openPanel((currentPanelIdx - 1 + filteredData.length) % filteredData.length);
+        } else if (overlayOpen && e.key === "ArrowRight") {
+          openPanel((currentPanelIdx + 1) % filteredData.length);
+        }
+      });
+
+      document.getElementById("panel-prev").addEventListener("click", () => {
+        openPanel((currentPanelIdx - 1 + filteredData.length) % filteredData.length);
+      });
+
+      document.getElementById("panel-next").addEventListener("click", () => {
+        openPanel((currentPanelIdx + 1) % filteredData.length);
       });
 
       const YEAR = new Date().getFullYear();

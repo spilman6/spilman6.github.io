@@ -300,6 +300,44 @@
         margin-top: 0;
       }
 
+      .sidebar-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-shrink: 0;
+      }
+
+      .sidebar-nav-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: rgba(200, 220, 235, 0.7);
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+      }
+
+      .sidebar-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--fog);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      .sidebar-nav-counter {
+        flex: 1;
+        text-align: center;
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        color: rgba(200, 220, 235, 0.4);
+      }
+
       .sidebar-actions {
         margin-top: auto;
         display: flex;
@@ -532,6 +570,15 @@
         </div>
 
         <div class="sidebar-detail" id="sidebar-detail">
+          <div class="sidebar-nav">
+            <button class="sidebar-nav-btn" id="sidebar-prev" title="Previous parcel">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="sidebar-nav-counter" id="sidebar-nav-counter"></div>
+            <button class="sidebar-nav-btn" id="sidebar-next" title="Next parcel">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
           <div class="sidebar-parcel" id="sidebar-parcel"></div>
           <div class="sidebar-owner" id="sidebar-owner"></div>
           <div id="sidebar-address" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(200,220,235,0.45);margin-top:-20px;margin-bottom:24px;letter-spacing:0.04em"></div>
@@ -591,6 +638,18 @@
         return `https://beacon.schneidercorp.com/Application.aspx?AppID=1198&LayerID=36063&PageTypeID=1&PageID=13677&KeyValue=${encodeURIComponent(parcel)}`;
       }
 
+      function parcelCentroid(feature) {
+        const pts = [];
+        const geom = feature.geometry;
+        const collect = ring => ring.forEach(p => pts.push(p));
+        if (geom.type === "Polygon") geom.coordinates.forEach(collect);
+        else if (geom.type === "MultiPolygon") geom.coordinates.forEach(poly => poly.forEach(collect));
+        return [
+          pts.reduce((s, p) => s + p[0], 0) / pts.length,
+          pts.reduce((s, p) => s + p[1], 0) / pts.length,
+        ];
+      }
+
       function valueToColor(value, minVal, maxVal) {
         const t = Math.sqrt((value - minVal) / (maxVal - minVal || 1));
         const r = Math.round(42  + (201 - 42)  * t);
@@ -620,8 +679,11 @@
 
       // ─── SIDEBAR ───
       let activeLayer = null;
+      let parcelList  = [];
+      let currentParcelIdx = -1;
 
-      function showSidebar(feature, layer) {
+      function showSidebar(feature, layer, idx) {
+        currentParcelIdx = idx ?? parcelList.findIndex(p => p.feature === feature);
         const p = feature.properties;
         document.getElementById("sidebar-parcel").textContent = p.parcel;
         document.getElementById("sidebar-owner").textContent   = p.owner;
@@ -636,6 +698,8 @@
         document.getElementById("sidebar-impr").textContent   = p.impr ? "$" + p.impr.toLocaleString() : "—";
         document.getElementById("sidebar-parcel-site").href   = parcelMapUrl(p.parcel);
 
+        document.getElementById("sidebar-nav-counter").textContent =
+          parcelList.length ? (currentParcelIdx + 1) + " of " + parcelList.length : "";
         document.getElementById("sidebar-empty").style.display  = "none";
         document.getElementById("sidebar-detail").classList.add("visible");
 
@@ -706,6 +770,7 @@
               fillOpacity: 0.45,
             };
             parcelLayerMap[feature.properties.parcel] = { feature, layer };
+            parcelList.push({ feature, layer });
 
             layer.on({
               mouseover(e) {
@@ -718,7 +783,10 @@
                   e.target.setStyle(layer._defaultStyle);
                 }
               },
-              click() { showSidebar(feature, layer); },
+              click() {
+                const idx = parcelList.findIndex(p => p.feature === feature);
+                showSidebar(feature, layer, idx);
+              },
             });
 
             layer.bindTooltip(
@@ -728,10 +796,39 @@
           },
         }).addTo(map);
 
+        // Sort parcelList clockwise by angle around the geographic center of all parcels
+        // so ← / → navigate to the physically adjacent neighbor around the lake.
+        const centroids = parcelList.map(p => parcelCentroid(p.feature));
+        const cLng = centroids.reduce((s, c) => s + c[0], 0) / centroids.length;
+        const cLat = centroids.reduce((s, c) => s + c[1], 0) / centroids.length;
+        parcelList.sort((a, b) => {
+          const [aLng, aLat] = parcelCentroid(a.feature);
+          const [bLng, bLat] = parcelCentroid(b.feature);
+          // atan2(x, y) gives clockwise angle from north
+          return Math.atan2(aLng - cLng, aLat - cLat) - Math.atan2(bLng - cLng, bLat - cLat);
+        });
+
+        document.getElementById("sidebar-prev").addEventListener("click", () => {
+          if (!parcelList.length) return;
+          const idx = (currentParcelIdx - 1 + parcelList.length) % parcelList.length;
+          const { feature, layer } = parcelList[idx];
+          map.fitBounds(layer.getBounds(), { maxZoom: 17, padding: [60, 60] });
+          showSidebar(feature, layer, idx);
+        });
+
+        document.getElementById("sidebar-next").addEventListener("click", () => {
+          if (!parcelList.length) return;
+          const idx = (currentParcelIdx + 1) % parcelList.length;
+          const { feature, layer } = parcelList[idx];
+          map.fitBounds(layer.getBounds(), { maxZoom: 17, padding: [60, 60] });
+          showSidebar(feature, layer, idx);
+        });
+
         if (targetParcel && parcelLayerMap[targetParcel]) {
           const { feature, layer } = parcelLayerMap[targetParcel];
+          const idx = parcelList.findIndex(p => p.feature === feature);
           map.fitBounds(layer.getBounds(), { maxZoom: 17, padding: [60, 60] });
-          showSidebar(feature, layer);
+          showSidebar(feature, layer, idx);
         }
 
         document.getElementById("loading").classList.add("hidden");
