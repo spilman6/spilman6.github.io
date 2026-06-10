@@ -183,6 +183,15 @@
         margin-left: 4px;
       }
 
+      /* ─── LAST UPDATED ─── */
+      .last-updated {
+        text-align: right;
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.35);
+        padding: 6px 32px 0;
+        letter-spacing: 0.03em;
+      }
+
       /* ─── CONTROLS ─── */
       .controls {
         position: relative;
@@ -873,6 +882,8 @@
       </div>
     </div>
 
+    <div class="last-updated">Data sourced from county assessor records · Last updated: June 2026</div>
+
     <!-- CONTROLS -->
     <div class="controls">
       <div class="search-wrap">
@@ -1001,315 +1012,117 @@
     </footer>
 
     <script>
+      // ─── STATIC DATA (owner + acreage from county assessor records) ───
       const DATA = [
-        {
-          parcel: "022-01077-0000",
-          owner: "Joshua Dutton / Sari Dutton",
-          acres: 41.94,
-          value: 117100,
-        },
-        {
-          parcel: "022-01091-0000",
-          owner: "Sharon L Krueger Irrevocable Trust",
-          acres: 2.75,
-          value: 219500,
-        },
-        {
-          parcel: "022-01092-0000",
-          owner: "Judith A Mertz",
-          acres: 1.24,
-          value: 81600,
-        },
-        {
-          parcel: "022-01093-0000",
-          owner: "Judith A Mertz",
-          acres: 1.15,
-          value: 150700,
-        },
-        {
-          parcel: "022-01094-0000",
-          owner: "Judith A Mertz",
-          acres: 2.11,
-          value: 120800,
-        },
-        {
-          parcel: "022-01095-0000",
-          owner: "David L Erdman / Roxanne M Erdman",
-          acres: 1.854,
-          value: 242300,
-        },
-        {
-          parcel: "022-01096-0000",
-          owner: "Michelle Adams / Thomas D Adams",
-          acres: 0.779,
-          value: 99300,
-        },
-        {
-          parcel: "022-01097-0000",
-          owner: "Jerry J Gerondale / Sheri A Gerondale",
-          acres: 1.85,
-          value: 273300,
-        },
-        {
-          parcel: "022-01098-0000",
-          owner: "Jerry J Gerondale / Sheri A Gerondale",
-          acres: 0.65,
-          value: 103300,
-        },
-        {
-          parcel: "022-01099-0000",
-          owner: "Gary Van Lanen / Marilyn Van Lanen",
-          acres: 0.55,
-          value: 147200,
-        },
-        {
-          parcel: "022-01100-0000",
-          owner: "James R Duquaine Et Ux",
-          acres: 0.53,
-          value: 127100,
-        },
-        {
-          parcel: "022-01101-0000",
-          owner: "Mary R Mongin / Paul J Mongin",
-          acres: 0.53,
-          value: 163300,
-        },
-        {
-          parcel: "022-01102-0000",
-          owner: "Mary R Mongin / Paul J Mongin",
-          acres: 0.478,
-          value: 68300,
-        },
-        {
-          parcel: "022-01103-0000",
-          owner: "Mary R Mongin / Paul J Mongin",
-          acres: 0.551,
-          value: 80800,
-        },
-        {
-          parcel: "022-01104-0000",
-          owner: "Chris H Meixner / Mary A Meixner",
-          acres: 0.528,
-          value: 80800,
-        },
-        {
-          parcel: "022-01105-0000",
-          owner: "Chris H Meixner / Mary A Meixner",
-          acres: 0.505,
-          value: 155500,
-        },
-        {
-          parcel: "022-01106-0000",
-          owner: "Robert R Veit & Alice L Veit Trust",
-          acres: 0.72,
-          value: 265100,
-        },
-        {
-          parcel: "022-01107-0000",
-          owner: "Shupe / Canaday Trust",
-          acres: 0.551,
-          value: 252900,
-        },
-        {
-          parcel: "022-01108-0000",
-          owner: "Lefevre / Dwyer (small parcel)",
-          acres: 0.25,
-          value: 1400,
-        },
-        {
-          parcel: "022-01109-0000",
-          owner: "Curtis Lefevre / Lynn Dwyer",
-          acres: 0.551,
-          value: 229000,
-        },
-        {
-          parcel: "022-01110-0000",
-          owner: "Schallock Group",
-          acres: 0.415,
-          value: 69200,
-        },
-        {
-          parcel: "022-01111-0000",
-          owner: "Caroll Vandenberg / Michael J Vandenberg",
-          acres: 1.3,
-          value: 164200,
-        },
-        {
-          parcel: "022-01112-0000",
-          owner: "Saint Johns Lake LLC",
-          acres: 1.13,
-          value: 19600,
-        },
-        {
-          parcel: "022-01113-0000",
-          owner: "Rebecca Chaney / Trevor Chaney",
-          acres: 0.618,
-          value: 84100,
-        },
-        {
-          parcel: "022-01114-0000",
-          owner: "Wagner Trust",
-          acres: 0.77,
-          value: 202000,
-        },
-        {
-          parcel: "022-01115-0000",
-          owner: "Gwen Bergsbaken",
-          acres: 0.559,
-          value: 204700,
-        },
-        {
-          parcel: "022-01116-0000",
-          owner: "David G Van Eppen / Joan S Van Eppen",
-          acres: 0.558,
-          value: 183200,
-        },
-        {
-          parcel: "022-01117-0001",
-          owner: "Collin T Wagner / Sheri L Wagner",
-          acres: 1.25,
-          value: 46500,
-        },
-        {
-          parcel: "022-01117-0002",
-          owner: "Collin T Wagner / Sheri L Wagner",
-          acres: 0.56,
-          value: 290600,
-        },
-        {
-          parcel: "022-01118-0000",
-          owner: "Daniel Walvoort / Robin Walvoort",
-          acres: 3.8,
-          value: 230300,
-        },
-        {
-          parcel: "022-01119-0000",
-          owner: "Ann M Klapper / Gary W Klapper",
-          acres: 1.9,
-          value: 115800,
-        },
-        {
-          parcel: "022-01120-0000",
-          owner: "Gary W Klapper",
-          acres: 1.65,
-          value: 139100,
-        },
-        {
-          parcel: "022-01121-0000",
-          owner: "David D Klapper",
-          acres: 1.033,
-          value: 199300,
-        },
-        {
-          parcel: "022-01122-0000",
-          owner: "James P Piper / Susan M Piper",
-          acres: 0.49,
-          value: 225800,
-        },
-        {
-          parcel: "022-01123-0000",
-          owner: "St John Lake Cottage LLP",
-          acres: 1.31,
-          value: 205000,
-        },
-        {
-          parcel: "022-01125-0000",
-          owner: "Dennis R Dercks / Jennifer L Dercks",
-          acres: 0.91,
-          value: 308900,
-        },
-        {
-          parcel: "022-01127-0000",
-          owner: "Patty M Bartels",
-          acres: 1.808,
-          value: 247900,
-        },
-        {
-          parcel: "022-01128-0001",
-          owner: "Chris Vansambeek / Renee Vansambeek",
-          acres: 3.403,
-          value: 256500,
-        },
-        {
-          parcel: "022-01128-0002",
-          owner: "Heberer Family Trust",
-          acres: 1.88,
-          value: 273700,
-        },
-        {
-          parcel: "022-01129-0000",
-          owner: "Nikki Nienhaus",
-          acres: 0.895,
-          value: 173800,
-        },
-        {
-          parcel: "022-01130-0000",
-          owner: "Cynthia A Sterr",
-          acres: 1.309,
-          value: 162400,
-        },
-        {
-          parcel: "022-01131-0000",
-          owner: "Johnson / Arneson / Chaney group",
-          acres: 1.86,
-          value: 194800,
-        },
-        {
-          parcel: "022-01132-0000",
-          owner: "Davis Trust",
-          acres: 0.727,
-          value: 98900,
-        },
-        {
-          parcel: "022-01132-0001",
-          owner: "Davis Trust",
-          acres: 0.854,
-          value: 89600,
-        },
-        {
-          parcel: "022-01132-0002",
-          owner: "Don Scott Davis / Pamela Davis",
-          acres: 1.097,
-          value: 445000,
-        },
-        {
-          parcel: "022-01133-0000",
-          owner: "Bernard Urban Revocable Trust",
-          acres: 1.377,
-          value: 200100,
-        },
-        {
-          parcel: "022-01134-0000",
-          owner: "Bernard Urban Revocable Trust (small)",
-          acres: 1.1,
-          value: 8200,
-        },
-        {
-          parcel: "022-01320-0000",
-          owner: "Don Scott Davis / Pamela Roddy Davis (backlot)",
-          acres: 21.7,
-          value: 54600,
-        },
+        { parcel: "022-01077-0000", owner: "Joshua Dutton / Sari Dutton", acres: 41.94, value: 117100 },
+        { parcel: "022-01091-0000", owner: "Sharon L Krueger Irrevocable Trust", acres: 2.75, value: 219500 },
+        { parcel: "022-01092-0000", owner: "Judith A Mertz", acres: 1.24, value: 81600 },
+        { parcel: "022-01093-0000", owner: "Judith A Mertz", acres: 1.15, value: 150700 },
+        { parcel: "022-01094-0000", owner: "Judith A Mertz", acres: 2.11, value: 120800 },
+        { parcel: "022-01095-0000", owner: "David L Erdman / Roxanne M Erdman", acres: 1.854, value: 242300 },
+        { parcel: "022-01096-0000", owner: "Michelle Adams / Thomas D Adams", acres: 0.779, value: 99300 },
+        { parcel: "022-01097-0000", owner: "Jerry J Gerondale / Sheri A Gerondale", acres: 1.85, value: 273300 },
+        { parcel: "022-01098-0000", owner: "Jerry J Gerondale / Sheri A Gerondale", acres: 0.65, value: 103300 },
+        { parcel: "022-01099-0000", owner: "Gary Van Lanen / Marilyn Van Lanen", acres: 0.55, value: 147200 },
+        { parcel: "022-01100-0000", owner: "James R Duquaine Et Ux", acres: 0.53, value: 127100 },
+        { parcel: "022-01101-0000", owner: "Mary R Mongin / Paul J Mongin", acres: 0.53, value: 163300 },
+        { parcel: "022-01102-0000", owner: "Mary R Mongin / Paul J Mongin", acres: 0.478, value: 68300 },
+        { parcel: "022-01103-0000", owner: "Mary R Mongin / Paul J Mongin", acres: 0.551, value: 80800 },
+        { parcel: "022-01104-0000", owner: "Chris H Meixner / Mary A Meixner", acres: 0.528, value: 80800 },
+        { parcel: "022-01105-0000", owner: "Chris H Meixner / Mary A Meixner", acres: 0.505, value: 155500 },
+        { parcel: "022-01106-0000", owner: "Robert R Veit & Alice L Veit Trust", acres: 0.72, value: 265100 },
+        { parcel: "022-01107-0000", owner: "Shupe / Canaday Trust", acres: 0.551, value: 252900 },
+        { parcel: "022-01108-0000", owner: "Lefevre / Dwyer (small parcel)", acres: 0.25, value: 1400 },
+        { parcel: "022-01109-0000", owner: "Curtis Lefevre / Lynn Dwyer", acres: 0.551, value: 229000 },
+        { parcel: "022-01110-0000", owner: "Schallock Group", acres: 0.415, value: 69200 },
+        { parcel: "022-01111-0000", owner: "Caroll Vandenberg / Michael J Vandenberg", acres: 1.3, value: 164200 },
+        { parcel: "022-01112-0000", owner: "Saint Johns Lake LLC", acres: 1.13, value: 19600 },
+        { parcel: "022-01113-0000", owner: "Rebecca Chaney / Trevor Chaney", acres: 0.618, value: 84100 },
+        { parcel: "022-01114-0000", owner: "Wagner Trust", acres: 0.77, value: 202000 },
+        { parcel: "022-01115-0000", owner: "Gwen Bergsbaken", acres: 0.559, value: 204700 },
+        { parcel: "022-01116-0000", owner: "David G Van Eppen / Joan S Van Eppen", acres: 0.558, value: 183200 },
+        { parcel: "022-01117-0001", owner: "Collin T Wagner / Sheri L Wagner", acres: 1.25, value: 46500 },
+        { parcel: "022-01117-0002", owner: "Collin T Wagner / Sheri L Wagner", acres: 0.56, value: 290600 },
+        { parcel: "022-01118-0000", owner: "Daniel Walvoort / Robin Walvoort", acres: 3.8, value: 230300 },
+        { parcel: "022-01119-0000", owner: "Ann M Klapper / Gary W Klapper", acres: 1.9, value: 115800 },
+        { parcel: "022-01120-0000", owner: "Gary W Klapper", acres: 1.65, value: 139100 },
+        { parcel: "022-01121-0000", owner: "David D Klapper", acres: 1.033, value: 199300 },
+        { parcel: "022-01122-0000", owner: "James P Piper / Susan M Piper", acres: 0.49, value: 225800 },
+        { parcel: "022-01123-0000", owner: "St John Lake Cottage LLP", acres: 1.31, value: 205000 },
+        { parcel: "022-01125-0000", owner: "Dennis R Dercks / Jennifer L Dercks", acres: 0.91, value: 308900 },
+        { parcel: "022-01127-0000", owner: "Patty M Bartels", acres: 1.808, value: 247900 },
+        { parcel: "022-01128-0001", owner: "Chris Vansambeek / Renee Vansambeek", acres: 3.403, value: 256500 },
+        { parcel: "022-01128-0002", owner: "Heberer Family Trust", acres: 1.88, value: 273700 },
+        { parcel: "022-01129-0000", owner: "Nikki Nienhaus", acres: 0.895, value: 173800 },
+        { parcel: "022-01130-0000", owner: "Cynthia A Sterr", acres: 1.309, value: 162400 },
+        { parcel: "022-01131-0000", owner: "Johnson / Arneson / Chaney group", acres: 1.86, value: 194800 },
+        { parcel: "022-01132-0000", owner: "Davis Trust", acres: 0.727, value: 98900 },
+        { parcel: "022-01132-0001", owner: "Davis Trust", acres: 0.854, value: 89600 },
+        { parcel: "022-01132-0002", owner: "Don Scott Davis / Pamela Davis", acres: 1.097, value: 445000 },
+        { parcel: "022-01133-0000", owner: "Bernard Urban Revocable Trust", acres: 1.377, value: 200100 },
+        { parcel: "022-01134-0000", owner: "Bernard Urban Revocable Trust (small)", acres: 1.1, value: 8200 },
+        { parcel: "022-01320-0000", owner: "Don Scott Davis / Pamela Roddy Davis (backlot)", acres: 21.7, value: 54600 },
       ];
 
-      const MAX_VALUE = Math.max(...DATA.map((d) => d.value));
-      const totalAcres = DATA.reduce((s, d) => s + d.acres, 0);
-      const totalValue = DATA.reduce((s, d) => s + d.value, 0);
-
-      // Populate stats
-      document.getElementById("stat-acres").innerHTML =
-        totalAcres.toFixed(2) + " <span>ac</span>";
-      document.getElementById("stat-value").innerHTML =
-        "$" + (totalValue / 1000000).toFixed(2) + " <span>M</span>";
-      document.getElementById("stat-avg").innerHTML =
-        "$" +
-        Math.round(totalValue / totalAcres).toLocaleString() +
-        " <span>/ac</span>";
-
+      // ─── STATE ───
+      let MAX_VALUE = 0;
       let sortKey = "parcel";
       let sortDir = 1;
       let searchQuery = "";
-      let filteredData = [...DATA];
+      let filteredData = [];
+
+      // ─── LOAD DATA: overlay assessed values from ArcGIS ───
+      async function loadData() {
+        const API =
+          "https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/Wisconsin_Statewide_Parcels/FeatureServer/0/query";
+        const params = new URLSearchParams({
+          where:
+            "CONAME = 'FOREST' AND TAXPARCELID IN ('022-01077-0000','022-01091-0000','022-01092-0000','022-01093-0000','022-01094-0000','022-01095-0000','022-01096-0000','022-01097-0000','022-01098-0000','022-01099-0000','022-01100-0000','022-01101-0000','022-01102-0000','022-01103-0000','022-01104-0000','022-01105-0000','022-01106-0000','022-01107-0000','022-01108-0000','022-01109-0000','022-01110-0000','022-01111-0000','022-01112-0000','022-01113-0000','022-01114-0000','022-01115-0000','022-01116-0000','022-01117-0001','022-01117-0002','022-01118-0000','022-01119-0000','022-01120-0000','022-01121-0000','022-01122-0000','022-01123-0000','022-01125-0000','022-01127-0000','022-01128-0001','022-01128-0002','022-01129-0000','022-01130-0000','022-01131-0000','022-01132-0000','022-01132-0001','022-01132-0002','022-01133-0000','022-01134-0000','022-01320-0000')",
+          outFields: "TAXPARCELID,CNTASSDVALUE",
+          f: "json",
+          returnGeometry: "false",
+          resultRecordCount: "200",
+        });
+        try {
+          const res = await fetch(API, { method: "POST", body: params });
+          if (res.ok) {
+            const json = await res.json();
+            // Build a map of parcel → latest assessed value
+            const valueMap = {};
+            (json.features || []).forEach(({ attributes: a }) => {
+              if (a.TAXPARCELID && a.CNTASSDVALUE != null) {
+                valueMap[a.TAXPARCELID] = a.CNTASSDVALUE;
+              }
+            });
+            // Overlay API values onto static data where available
+            DATA.forEach((d) => {
+              if (valueMap[d.parcel] !== undefined) {
+                d.value = valueMap[d.parcel];
+              }
+            });
+          }
+        } catch (err) {
+          console.warn("Could not fetch live assessed values, using static data:", err);
+        }
+
+        MAX_VALUE = Math.max(...DATA.map((d) => d.value));
+        const totalAcres = DATA.reduce((s, d) => s + d.acres, 0);
+        const totalValue = DATA.reduce((s, d) => s + d.value, 0);
+
+        document.getElementById("stat-acres").innerHTML =
+          totalAcres.toFixed(2) + " <span>ac</span>";
+        document.getElementById("stat-value").innerHTML =
+          "$" + (totalValue / 1000000).toFixed(2) + " <span>M</span>";
+        document.getElementById("stat-avg").innerHTML =
+          "$" +
+          Math.round(totalValue / totalAcres).toLocaleString() +
+          " <span>/ac</span>";
+
+        syncSortUi();
+        renderTable();
+      }
+
+
 
       function setSort(key) {
         if (sortKey === key) sortDir *= -1;
@@ -1491,8 +1304,7 @@
           document.getElementById("detail-overlay").classList.remove("open");
       });
 
-      syncSortUi();
-      renderTable();
+      loadData();
 
       // ─── PIN LOGIN ───
       (function () {
