@@ -74,6 +74,38 @@
         align-items: center;
         gap: 48px;
       }
+      .view-nav {
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+      .view-btn {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 7px 14px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        color: rgba(200, 220, 235, 0.7);
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+      }
+      .view-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--fog);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      .view-btn.active {
+        background: rgba(61, 143, 192, 0.2);
+        color: var(--fog);
+        border-color: var(--water-shimmer);
+      }
       .header-text {
         flex: 1;
       }
@@ -555,6 +587,24 @@
         color: var(--gold-light);
       }
 
+      .panel-section-label {
+        grid-column: 1 / -1;
+        font-family: "DM Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(200, 220, 235, 0.3);
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        margin-top: 4px;
+      }
+
+      .panel-section-label:first-child {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 0;
+      }
+
       .panel-map-btn {
         display: flex;
         align-items: center;
@@ -844,7 +894,7 @@
       <div class="header-inner">
         <div class="header-text">
           <div class="header-eyebrow">
-            Wisconsin &middot; Forest County &middot; 2026
+            Wisconsin &middot; Forest County &middot; <span id="current-year"></span>
           </div>
           <h1>St. John's <em>Lake</em></h1>
           <div>Property Ownership Registry</div>
@@ -852,6 +902,16 @@
             48 recorded parcels &nbsp;&middot;&nbsp; Full Dataset
           </div>
         </div>
+        <nav class="view-nav">
+          <a href="index.html" class="view-btn active">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Grid View
+          </a>
+          <a href="map.html" class="view-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            Map View
+          </a>
+        </nav>
         <div class="header-lake-wrap">
           <img
             class="lake-svg"
@@ -882,7 +942,7 @@
       </div>
     </div>
 
-    <div class="last-updated">Data sourced from county assessor records · Last updated: June 2026</div>
+    <div class="last-updated">Data sourced from county assessor records · Last updated: <span id="last-updated-time"></span></div>
 
     <!-- CONTROLS -->
     <div class="controls">
@@ -965,10 +1025,12 @@
         <button class="panel-close" id="panel-close">×</button>
         <div class="panel-eyebrow" id="panel-parcel"></div>
         <div class="panel-owner" id="panel-owner"></div>
+        <div id="panel-address" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(200,220,235,0.5);margin-top:-10px;margin-bottom:16px;letter-spacing:0.04em"></div>
         <div class="panel-grid">
-          <div class="panel-field">
-            <div class="panel-field-label">Acreage</div>
-            <div class="panel-field-value green" id="panel-acres"></div>
+          <div class="panel-section-label">Valuation</div>
+          <div class="panel-field" style="grid-column:1/-1">
+            <div class="panel-field-label">Est. Fair Market Value</div>
+            <div class="panel-field-value" id="panel-fmv" style="font-size:1.15rem"></div>
           </div>
           <div class="panel-field">
             <div class="panel-field-label">Assessed Value</div>
@@ -979,90 +1041,47 @@
             <div class="panel-field-value" id="panel-per-acre"></div>
           </div>
           <div class="panel-field">
+            <div class="panel-field-label">Land Value</div>
+            <div class="panel-field-value" id="panel-land"></div>
+          </div>
+          <div class="panel-field">
+            <div class="panel-field-label">Improvements</div>
+            <div class="panel-field-value" id="panel-impr"></div>
+          </div>
+          <div class="panel-section-label">Property</div>
+          <div class="panel-field">
+            <div class="panel-field-label">Acreage</div>
+            <div class="panel-field-value green" id="panel-acres"></div>
+          </div>
+          <div class="panel-field">
             <div class="panel-field-label">Parcel Type</div>
             <div class="panel-field-value" id="panel-type"></div>
           </div>
         </div>
-        <button class="panel-map-btn" id="panel-map-btn">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-            <line x1="9" y1="3" x2="9" y2="18" />
-            <line x1="15" y1="6" x2="15" y2="21" />
-          </svg>
-          View Parcel Map
-        </button>
+        <div style="display:flex;gap:8px">
+          <a class="panel-map-btn" id="panel-map-link" href="#" style="flex:1">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            View on Map
+          </a>
+          <a class="panel-map-btn" id="panel-map-btn" href="#" target="_blank" rel="noopener" style="flex:1">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+            Parcel Website
+          </a>
+        </div>
       </div>
     </div>
 
     <!-- FOOTER -->
     <footer>
       <div class="footer-text">
-        St. John's Lake Property Registry · 2026 · Forest County, Wisconsin
+        St. John's Lake Property Registry · <span class="current-year"></span> · Forest County, Wisconsin
       </div>
       <div class="footer-text">Data sourced from county assessor records</div>
     </footer>
 
     <script>
-      // ─── STATIC DATA (owner + acreage from county assessor records) ───
-      const DATA = [
-        { parcel: "022-01077-0000", owner: "Joshua Dutton / Sari Dutton", acres: 41.94, value: 117100 },
-        { parcel: "022-01091-0000", owner: "Sharon L Krueger Irrevocable Trust", acres: 2.75, value: 219500 },
-        { parcel: "022-01092-0000", owner: "Judith A Mertz", acres: 1.24, value: 81600 },
-        { parcel: "022-01093-0000", owner: "Judith A Mertz", acres: 1.15, value: 150700 },
-        { parcel: "022-01094-0000", owner: "Judith A Mertz", acres: 2.11, value: 120800 },
-        { parcel: "022-01095-0000", owner: "David L Erdman / Roxanne M Erdman", acres: 1.854, value: 242300 },
-        { parcel: "022-01096-0000", owner: "Michelle Adams / Thomas D Adams", acres: 0.779, value: 99300 },
-        { parcel: "022-01097-0000", owner: "Jerry J Gerondale / Sheri A Gerondale", acres: 1.85, value: 273300 },
-        { parcel: "022-01098-0000", owner: "Jerry J Gerondale / Sheri A Gerondale", acres: 0.65, value: 103300 },
-        { parcel: "022-01099-0000", owner: "Gary Van Lanen / Marilyn Van Lanen", acres: 0.55, value: 147200 },
-        { parcel: "022-01100-0000", owner: "James R Duquaine Et Ux", acres: 0.53, value: 127100 },
-        { parcel: "022-01101-0000", owner: "Mary R Mongin / Paul J Mongin", acres: 0.53, value: 163300 },
-        { parcel: "022-01102-0000", owner: "Mary R Mongin / Paul J Mongin", acres: 0.478, value: 68300 },
-        { parcel: "022-01103-0000", owner: "Mary R Mongin / Paul J Mongin", acres: 0.551, value: 80800 },
-        { parcel: "022-01104-0000", owner: "Chris H Meixner / Mary A Meixner", acres: 0.528, value: 80800 },
-        { parcel: "022-01105-0000", owner: "Chris H Meixner / Mary A Meixner", acres: 0.505, value: 155500 },
-        { parcel: "022-01106-0000", owner: "Robert R Veit & Alice L Veit Trust", acres: 0.72, value: 265100 },
-        { parcel: "022-01107-0000", owner: "Shupe / Canaday Trust", acres: 0.551, value: 252900 },
-        { parcel: "022-01108-0000", owner: "Lefevre / Dwyer (small parcel)", acres: 0.25, value: 1400 },
-        { parcel: "022-01109-0000", owner: "Curtis Lefevre / Lynn Dwyer", acres: 0.551, value: 229000 },
-        { parcel: "022-01110-0000", owner: "Schallock Group", acres: 0.415, value: 69200 },
-        { parcel: "022-01111-0000", owner: "Caroll Vandenberg / Michael J Vandenberg", acres: 1.3, value: 164200 },
-        { parcel: "022-01112-0000", owner: "Saint Johns Lake LLC", acres: 1.13, value: 19600 },
-        { parcel: "022-01113-0000", owner: "Rebecca Chaney / Trevor Chaney", acres: 0.618, value: 84100 },
-        { parcel: "022-01114-0000", owner: "Wagner Trust", acres: 0.77, value: 202000 },
-        { parcel: "022-01115-0000", owner: "Gwen Bergsbaken", acres: 0.559, value: 204700 },
-        { parcel: "022-01116-0000", owner: "David G Van Eppen / Joan S Van Eppen", acres: 0.558, value: 183200 },
-        { parcel: "022-01117-0001", owner: "Collin T Wagner / Sheri L Wagner", acres: 1.25, value: 46500 },
-        { parcel: "022-01117-0002", owner: "Collin T Wagner / Sheri L Wagner", acres: 0.56, value: 290600 },
-        { parcel: "022-01118-0000", owner: "Daniel Walvoort / Robin Walvoort", acres: 3.8, value: 230300 },
-        { parcel: "022-01119-0000", owner: "Ann M Klapper / Gary W Klapper", acres: 1.9, value: 115800 },
-        { parcel: "022-01120-0000", owner: "Gary W Klapper", acres: 1.65, value: 139100 },
-        { parcel: "022-01121-0000", owner: "David D Klapper", acres: 1.033, value: 199300 },
-        { parcel: "022-01122-0000", owner: "James P Piper / Susan M Piper", acres: 0.49, value: 225800 },
-        { parcel: "022-01123-0000", owner: "St John Lake Cottage LLP", acres: 1.31, value: 205000 },
-        { parcel: "022-01125-0000", owner: "Dennis R Dercks / Jennifer L Dercks", acres: 0.91, value: 308900 },
-        { parcel: "022-01127-0000", owner: "Patty M Bartels", acres: 1.808, value: 247900 },
-        { parcel: "022-01128-0001", owner: "Chris Vansambeek / Renee Vansambeek", acres: 3.403, value: 256500 },
-        { parcel: "022-01128-0002", owner: "Heberer Family Trust", acres: 1.88, value: 273700 },
-        { parcel: "022-01129-0000", owner: "Nikki Nienhaus", acres: 0.895, value: 173800 },
-        { parcel: "022-01130-0000", owner: "Cynthia A Sterr", acres: 1.309, value: 162400 },
-        { parcel: "022-01131-0000", owner: "Johnson / Arneson / Chaney group", acres: 1.86, value: 194800 },
-        { parcel: "022-01132-0000", owner: "Davis Trust", acres: 0.727, value: 98900 },
-        { parcel: "022-01132-0001", owner: "Davis Trust", acres: 0.854, value: 89600 },
-        { parcel: "022-01132-0002", owner: "Don Scott Davis / Pamela Davis", acres: 1.097, value: 445000 },
-        { parcel: "022-01133-0000", owner: "Bernard Urban Revocable Trust", acres: 1.377, value: 200100 },
-        { parcel: "022-01134-0000", owner: "Bernard Urban Revocable Trust (small)", acres: 1.1, value: 8200 },
-        { parcel: "022-01320-0000", owner: "Don Scott Davis / Pamela Roddy Davis (backlot)", acres: 21.7, value: 54600 },
-      ];
+      // ─── DATA loaded from data.json ───
+      let DATA = [];
 
       // ─── STATE ───
       let MAX_VALUE = 0;
@@ -1071,38 +1090,42 @@
       let searchQuery = "";
       let filteredData = [];
 
-      // ─── LOAD DATA: overlay assessed values from ArcGIS ───
+      function toTitleCase(str) {
+        return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+      }
+
+      // ─── LOAD DATA: parcel IDs from data.json, all fields live from ArcGIS ───
       async function loadData() {
+        const ids = await fetch("data.json").then((r) => r.json());
+
         const API =
           "https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/Wisconsin_Statewide_Parcels/FeatureServer/0/query";
+        const inClause = ids.map((id) => `'${id}'`).join(",");
         const params = new URLSearchParams({
-          where:
-            "CONAME = 'FOREST' AND TAXPARCELID IN ('022-01077-0000','022-01091-0000','022-01092-0000','022-01093-0000','022-01094-0000','022-01095-0000','022-01096-0000','022-01097-0000','022-01098-0000','022-01099-0000','022-01100-0000','022-01101-0000','022-01102-0000','022-01103-0000','022-01104-0000','022-01105-0000','022-01106-0000','022-01107-0000','022-01108-0000','022-01109-0000','022-01110-0000','022-01111-0000','022-01112-0000','022-01113-0000','022-01114-0000','022-01115-0000','022-01116-0000','022-01117-0001','022-01117-0002','022-01118-0000','022-01119-0000','022-01120-0000','022-01121-0000','022-01122-0000','022-01123-0000','022-01125-0000','022-01127-0000','022-01128-0001','022-01128-0002','022-01129-0000','022-01130-0000','022-01131-0000','022-01132-0000','022-01132-0001','022-01132-0002','022-01133-0000','022-01134-0000','022-01320-0000')",
-          outFields: "TAXPARCELID,CNTASSDVALUE",
+          where: `CONAME = 'FOREST' AND TAXPARCELID IN (${inClause})`,
+          outFields: "TAXPARCELID,OWNERNME1,OWNERNME2,SITEADRESS,ASSDACRES,CNTASSDVALUE,LNDVALUE,IMPVALUE,ESTFMKVALUE",
           f: "json",
           returnGeometry: "false",
           resultRecordCount: "200",
         });
         try {
           const res = await fetch(API, { method: "POST", body: params });
-          if (res.ok) {
-            const json = await res.json();
-            // Build a map of parcel → latest assessed value
-            const valueMap = {};
-            (json.features || []).forEach(({ attributes: a }) => {
-              if (a.TAXPARCELID && a.CNTASSDVALUE != null) {
-                valueMap[a.TAXPARCELID] = a.CNTASSDVALUE;
-              }
-            });
-            // Overlay API values onto static data where available
-            DATA.forEach((d) => {
-              if (valueMap[d.parcel] !== undefined) {
-                d.value = valueMap[d.parcel];
-              }
-            });
-          }
+          if (!res.ok) throw new Error("API error");
+          const json = await res.json();
+          DATA = (json.features || []).map(({ attributes: a }) => ({
+            parcel: a.TAXPARCELID,
+            owner: toTitleCase(
+              a.OWNERNME1 + (a.OWNERNME2 ? " / " + a.OWNERNME2 : ""),
+            ),
+            address: a.SITEADRESS ? toTitleCase(a.SITEADRESS) : "",
+            acres: a.ASSDACRES ?? 0,
+            value: a.CNTASSDVALUE ?? 0,
+            land:  a.LNDVALUE ?? 0,
+            impr:  a.IMPVALUE ?? 0,
+            fmv:   a.ESTFMKVALUE ?? 0,
+          }));
         } catch (err) {
-          console.warn("Could not fetch live assessed values, using static data:", err);
+          console.warn("Could not fetch parcel data from ArcGIS:", err);
         }
 
         MAX_VALUE = Math.max(...DATA.map((d) => d.value));
@@ -1231,7 +1254,7 @@
         </div>
       </td>
       <td style="text-align:right">
-        <a class="map-btn" href="${parcelMapUrl(d.parcel)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+        <a class="map-btn" href="map.html#${d.parcel}" onclick="event.stopPropagation()">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
           Map
         </a>
@@ -1252,7 +1275,8 @@
       function openPanel(d) {
         document.getElementById("panel-parcel").textContent =
           "Parcel · " + d.parcel;
-        document.getElementById("panel-owner").textContent = d.owner;
+        document.getElementById("panel-owner").textContent   = d.owner;
+        document.getElementById("panel-address").textContent = d.address || "";
         document.getElementById("panel-acres").textContent =
           d.acres.toFixed(3) + " ac";
         document.getElementById("panel-value").textContent =
@@ -1260,8 +1284,11 @@
         document.getElementById("panel-per-acre").textContent =
           "$" + Math.round(d.value / d.acres).toLocaleString() + " / ac";
         document.getElementById("panel-type").textContent = ownerType(d.owner);
-        document.getElementById("panel-map-btn").onclick = () =>
-          window.open(parcelMapUrl(d.parcel), "_blank");
+        document.getElementById("panel-fmv").textContent  = d.fmv  ? "$" + d.fmv.toLocaleString()  : "—";
+        document.getElementById("panel-land").textContent = d.land ? "$" + d.land.toLocaleString() : "—";
+        document.getElementById("panel-impr").textContent = d.impr ? "$" + d.impr.toLocaleString() : "—";
+        document.getElementById("panel-map-link").href = "map.html#" + d.parcel;
+        document.getElementById("panel-map-btn").href = parcelMapUrl(d.parcel);
         document.getElementById("detail-overlay").classList.add("open");
       }
 
@@ -1304,52 +1331,57 @@
           document.getElementById("detail-overlay").classList.remove("open");
       });
 
+      const YEAR = new Date().getFullYear();
+      document.querySelectorAll("#current-year, .current-year").forEach(el => el.textContent = YEAR);
+      document.title = `St. John's Lake — Forest County Property Registry ${YEAR}`;
+
+      document.getElementById("last-updated-time").textContent =
+        new Date().toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+
       loadData();
 
       // ─── PIN LOGIN ───
       (function () {
-        const CORRECT = [98, 100, 98, 100]
-          .map((n) => String.fromCharCode(n ^ 82))
-          .join("");
+        const CORRECT   = [98, 100, 98, 100].map((n) => String.fromCharCode(n ^ 82)).join("");
+        const CACHE_KEY = "sj_pin_ts";
+        const ONE_DAY   = 86400000;
+        const overlay   = document.getElementById("pin-overlay");
+
+        // Skip PIN if verified within the last 24 hours
+        const ts = parseInt(localStorage.getItem(CACHE_KEY) || "0", 10);
+        if (Date.now() - ts < ONE_DAY) {
+          overlay.style.display = "none";
+        }
+
         let entered = "";
 
         function updateDots(isError) {
           for (let i = 0; i < 4; i++) {
             const dot = document.getElementById("dot-" + i);
             dot.classList.remove("filled", "error");
-            if (isError) {
-              dot.classList.add("error");
-            } else if (i < entered.length) {
-              dot.classList.add("filled");
-            }
+            if (isError) dot.classList.add("error");
+            else if (i < entered.length) dot.classList.add("filled");
           }
         }
 
         function pressKey(val) {
           document.getElementById("pin-error").textContent = "";
-          if (val === "del") {
-            entered = entered.slice(0, -1);
-            updateDots(false);
-            return;
-          }
+          if (val === "del") { entered = entered.slice(0, -1); updateDots(false); return; }
           if (entered.length >= 4) return;
           entered += val;
           updateDots(false);
           if (entered.length === 4) {
             if (entered === CORRECT) {
-              document.getElementById("pin-overlay").style.display = "none";
+              localStorage.setItem(CACHE_KEY, Date.now().toString());
+              overlay.style.display = "none";
             } else {
               const box = document.getElementById("pin-box");
               box.classList.remove("shake");
-              void box.offsetWidth; // reflow
+              void box.offsetWidth;
               box.classList.add("shake");
               updateDots(true);
-              document.getElementById("pin-error").textContent =
-                "Incorrect PIN";
-              setTimeout(() => {
-                entered = "";
-                updateDots(false);
-              }, 800);
+              document.getElementById("pin-error").textContent = "Incorrect PIN";
+              setTimeout(() => { entered = ""; updateDots(false); }, 800);
             }
           }
         }
@@ -1359,8 +1391,7 @@
         });
 
         document.addEventListener("keydown", (e) => {
-          if (document.getElementById("pin-overlay").style.display === "none")
-            return;
+          if (overlay.style.display === "none") return;
           if (e.key >= "0" && e.key <= "9") pressKey(e.key);
           else if (e.key === "Backspace") pressKey("del");
         });
