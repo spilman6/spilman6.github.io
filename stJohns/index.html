@@ -683,6 +683,11 @@
         color: rgba(200, 220, 235, 0.25);
       }
 
+      @keyframes panelSlideUp {
+        from { transform: translateY(60px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+      }
+
       /* ─── RESPONSIVE ─── */
       @media (max-width: 900px) {
         header {
@@ -723,19 +728,79 @@
         }
       }
 
-      @media (max-width: 600px) {
+      @media (max-width: 640px) {
+        header {
+          padding: 16px 16px 14px;
+        }
+        .header-inner {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .header-lake-wrap {
+          display: none;
+        }
+        .view-nav {
+          order: -1;
+        }
         .stats-bar {
           grid-template-columns: 1fr 1fr;
         }
         .stat-card {
-          padding: 20px;
+          padding: 18px;
         }
         .stat-value {
           font-size: 1.4rem;
         }
+        .controls {
+          padding: 12px 16px;
+        }
+        .search-wrap {
+          max-width: 100%;
+          flex: 1 1 100%;
+        }
         .col-parcel,
         .col-acres {
           display: none;
+        }
+        .table-wrap {
+          padding: 0 16px 32px;
+          overflow-x: auto;
+        }
+        .detail-overlay {
+          padding: 0;
+          align-items: flex-end;
+        }
+        .detail-panel {
+          border-radius: 16px 16px 0 0;
+          max-width: 100%;
+          max-height: 90vh;
+          overflow-y: auto;
+          padding: 20px 16px 36px;
+          animation: panelSlideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        footer {
+          padding: 16px;
+        }
+        .pin-box {
+          width: calc(100% - 32px);
+          padding: 36px 24px 28px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        h1 {
+          font-size: 1.9rem;
+        }
+        .header-eyebrow {
+          font-size: 10px;
+          letter-spacing: 0.15em;
+        }
+        .sort-label {
+          display: none;
+        }
+        .stat-value {
+          font-size: 1.2rem;
         }
       }
 

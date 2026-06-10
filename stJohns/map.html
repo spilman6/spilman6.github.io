@@ -495,6 +495,71 @@
         text-transform: uppercase;
         color: var(--water-shimmer);
       }
+
+      /* ─── MOBILE HANDLE (hidden on desktop) ─── */
+      .sidebar-handle {
+        display: none;
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 680px) {
+        header {
+          padding: 10px 16px;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .header-title { font-size: 1.1rem; }
+        .header-sub   { display: none; }
+
+        /* Legend repositioned above map controls */
+        .legend {
+          bottom: auto;
+          top: 56px;
+          left: 8px;
+          padding: 8px 12px;
+        }
+        .legend-bar  { width: 100px; }
+
+        /* Sidebar becomes a fixed bottom sheet */
+        .sidebar {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          max-height: 65vh;
+          height: auto;
+          border-left: none;
+          border-top: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 16px 16px 0 0;
+          transform: translateY(100%);
+          transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+          z-index: 600;
+          overflow-y: auto;
+        }
+        .sidebar.mobile-visible {
+          transform: translateY(0);
+        }
+
+        /* Drag-handle pill — tap to dismiss */
+        .sidebar-handle {
+          display: block;
+          width: 40px;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.22);
+          border-radius: 2px;
+          margin: 10px auto 0;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        /* No empty state on mobile — sidebar just stays hidden */
+        .sidebar-empty { display: none; }
+
+        .sidebar-detail { padding: 16px 20px 32px; }
+        .sidebar-owner  { font-size: 1.25rem; margin-bottom: 18px; }
+        .sidebar-accent { height: 3px; }
+      }
     </style>
   </head>
   <body>
@@ -561,7 +626,8 @@
       </div>
 
       <!-- ─── SIDEBAR ─── -->
-      <aside class="sidebar">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-handle" id="sidebar-handle"></div>
         <div class="sidebar-accent"></div>
 
         <div class="sidebar-empty" id="sidebar-empty">
@@ -702,6 +768,7 @@
           parcelList.length ? (currentParcelIdx + 1) + " of " + parcelList.length : "";
         document.getElementById("sidebar-empty").style.display  = "none";
         document.getElementById("sidebar-detail").classList.add("visible");
+        document.getElementById("sidebar").classList.add("mobile-visible");
 
         if (activeLayer && activeLayer !== layer) {
           activeLayer.setStyle(activeLayer._defaultStyle);
@@ -806,6 +873,10 @@
           const [bLng, bLat] = parcelCentroid(b.feature);
           // atan2(x, y) gives clockwise angle from north
           return Math.atan2(aLng - cLng, aLat - cLat) - Math.atan2(bLng - cLng, bLat - cLat);
+        });
+
+        document.getElementById("sidebar-handle").addEventListener("click", () => {
+          document.getElementById("sidebar").classList.remove("mobile-visible");
         });
 
         document.getElementById("sidebar-prev").addEventListener("click", () => {
