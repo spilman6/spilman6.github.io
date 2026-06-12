@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>St. John's Lake — Parcel Map</title>
+    <title>Jungle Lake — Parcel Map</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
       rel="stylesheet"
@@ -131,6 +131,8 @@
       }
 
       .leaflet-control-zoom a:hover { background: rgba(61, 143, 192, 0.3) !important; }
+      .parcel-tooltip { background: rgba(8,20,34,0.92) !important; border: 1px solid rgba(61,143,192,0.35) !important; border-radius: 8px !important; box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important; padding: 10px 14px !important; color: #e8eff5 !important; }
+      .parcel-tooltip::before { display: none !important; }
 
       /* ─── LEGEND ─── */
       .legend {
@@ -567,7 +569,7 @@
     <div id="pin-overlay">
       <div class="pin-box" id="pin-box">
         <div class="pin-lake-icon">🔒</div>
-        <div class="pin-title">St. John's <em style="font-style:italic;color:var(--gold-light)">Lake</em></div>
+        <div class="pin-title"><em style="font-style:italic;color:var(--gold-light)">Jungle</em> Lake</div>
         <div class="pin-subtitle">Enter PIN to continue</div>
         <div class="pin-dots">
           <div class="pin-dot" id="dot-0"></div>
@@ -594,10 +596,14 @@
 
     <header>
       <div class="header-left">
-        <div class="header-title">St. <em>John's</em> Lake</div>
+        <div class="header-title"><em>Jungle</em> Lake</div>
         <div class="header-sub">Forest County · Parcel Map</div>
       </div>
       <nav class="header-nav">
+        <a href="../index.html" class="nav-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
         <a href="index.html" class="nav-btn">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           Grid View
@@ -651,10 +657,6 @@
           <div class="sidebar-divider"></div>
           <div class="sidebar-grid">
             <div class="sidebar-section-label">Valuation</div>
-            <div class="sidebar-field" style="grid-column:1/-1">
-              <div class="sidebar-field-label">Est. Fair Market Value</div>
-              <div class="sidebar-field-value" id="sidebar-fmv" style="font-size:1.3rem"></div>
-            </div>
             <div class="sidebar-field">
               <div class="sidebar-field-label">Assessed Value</div>
               <div class="sidebar-field-value gold" id="sidebar-value"></div>
@@ -759,7 +761,6 @@
         document.getElementById("sidebar-per-acre").textContent =
           p.acres > 0 ? fmt$(p.value / p.acres) + " /ac" : "—";
         document.getElementById("sidebar-year").textContent   = p.taxYear || "—";
-        document.getElementById("sidebar-fmv").textContent    = p.fmv  ? "$" + p.fmv.toLocaleString()  : "—";
         document.getElementById("sidebar-land").textContent   = p.land ? "$" + p.land.toLocaleString() : "—";
         document.getElementById("sidebar-impr").textContent   = p.impr ? "$" + p.impr.toLocaleString() : "—";
         document.getElementById("sidebar-parcel-site").href   = parcelMapUrl(p.parcel);
@@ -779,14 +780,14 @@
 
       // ─── LOAD PARCELS ───
       async function loadMap() {
-        const ids = await fetch("data.json").then((r) => r.json());
+        const ids = await fetch("parcels.json").then((r) => r.json());
 
         const API =
           "https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/Wisconsin_Statewide_Parcels/FeatureServer/0/query";
         const inClause = ids.map((id) => `'${id}'`).join(",");
         const params = new URLSearchParams({
           where: `CONAME = 'FOREST' AND TAXPARCELID IN (${inClause})`,
-          outFields: "TAXPARCELID,OWNERNME1,OWNERNME2,SITEADRESS,ASSDACRES,CNTASSDVALUE,LNDVALUE,IMPVALUE,ESTFMKVALUE,TAXROLLYEAR",
+          outFields: "TAXPARCELID,OWNERNME1,OWNERNME2,SITEADRESS,ASSDACRES,CNTASSDVALUE,LNDVALUE,IMPVALUE,TAXROLLYEAR",
           f: "geojson",
           returnGeometry: "true",
           resultRecordCount: "200",
@@ -812,7 +813,6 @@
             value:   a.CNTASSDVALUE ?? 0,
             land:    a.LNDVALUE ?? 0,
             impr:    a.IMPVALUE ?? 0,
-            fmv:     a.ESTFMKVALUE ?? 0,
             taxYear: a.TAXROLLYEAR,
           };
         });
@@ -820,7 +820,7 @@
         const targetParcel  = window.location.hash.slice(1);
         const parcelLayerMap = {};
 
-        L.geoJSON(geojson, {
+        const geoLayer = L.geoJSON(geojson, {
           style(feature) {
             return {
               color:       "rgba(255,255,255,0.25)",
@@ -857,11 +857,20 @@
             });
 
             layer.bindTooltip(
-              `<span style="font-family:'DM Mono',monospace;font-size:11px">${feature.properties.owner}</span>`,
+              `<div style="font-family:'DM Mono',monospace;min-width:180px">
+                <div style="font-size:12px;font-weight:500;color:#e8eff5;margin-bottom:7px;white-space:nowrap">${feature.properties.owner}</div>
+                <div style="font-size:10px;color:rgba(200,220,235,0.55);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px">Assessed Value</div>
+                <div style="font-size:12px;color:#e8c06a">$${feature.properties.value.toLocaleString()}</div>
+              </div>`,
               { sticky: true, className: "parcel-tooltip" }
             );
           },
         }).addTo(map);
+
+        // Fit map to loaded parcels if no specific parcel is targeted
+        if (!targetParcel) {
+          map.fitBounds(geoLayer.getBounds(), { padding: [40, 40] });
+        }
 
         // Sort parcelList clockwise by angle around the geographic center of all parcels
         // so ← / → navigate to the physically adjacent neighbor around the lake.
@@ -908,7 +917,7 @@
       // ─── PIN LOGIN ───
       (function () {
         const CORRECT   = [98, 100, 98, 100].map((n) => String.fromCharCode(n ^ 82)).join("");
-        const CACHE_KEY = "sj_pin_ts";
+        const CACHE_KEY = "jl_pin_ts";
         const ONE_DAY   = 86400000;
         const overlay   = document.getElementById("pin-overlay");
 

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "WebFetch(domain:maps.sco.wisc.edu)",
+      "Bash(python3 get_parcels.py)",
+      "WebFetch(domain:codepen.io)"
+    ]
+  }
+}
