@@ -1,10 +1,13 @@
 {
+   "permissionMode": "acceptEdits",
   "permissions": {
     "allow": [
       "Bash(python -c ' *)",
       "WebFetch(domain:maps.sco.wisc.edu)",
       "Bash(python3 get_parcels.py)",
-      "WebFetch(domain:codepen.io)"
+      
+      "WebFetch(domain:codepen.io)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=1037900\" -UseBasicParsing -TimeoutSec 30; $t = $r.Content -replace '<[^>]+>', ' ' -replace '\\\\s+', ' '; $i = $t.IndexOf\\('Lake'\\); $t.Substring\\(2000, 2500\\))"
     ]
   }
 }

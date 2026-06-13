@@ -1,0 +1,31 @@
+{
+  "name": "Saint Johns Lake",
+  "wbic": 388700,
+  "county": "Forest",
+  "surface_acres": 107,
+  "max_depth_ft": 21,
+  "mean_depth_ft": 11,
+  "water_clarity": "Low",
+  "trophic_status": "Eutrophic",
+  "lake_type": "Seepage",
+  "bottom": "55% sand, 25% gravel, 10% rock, 10% muck",
+  "latitude": 45.4397759,
+  "longitude": -88.8774096,
+  "fish": [
+    {
+      "species": "Panfish",
+      "status": "Common"
+    },
+    {
+      "species": "Largemouth Bass",
+      "status": "Common"
+    },
+    {
+      "species": "Walleye",
+      "status": "Present"
+    }
+  ],
+  "boat_launches": [],
+  "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=388700",
+  "retrieved": "2026-06-12"
+}

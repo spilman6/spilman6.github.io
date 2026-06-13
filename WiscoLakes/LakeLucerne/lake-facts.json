@@ -1,0 +1,43 @@
+{
+  "name": "Lake Lucerne",
+  "wbic": 396500,
+  "county": "Forest",
+  "surface_acres": 1039,
+  "max_depth_ft": 73,
+  "mean_depth_ft": 31,
+  "water_clarity": "Very",
+  "trophic_status": "Oligotrophic",
+  "lake_type": "Drained",
+  "bottom": "50% sand, 12% gravel, 36% rock, 2% muck",
+  "latitude": 45.5268762,
+  "longitude": -88.8464614,
+  "fish": [
+    {
+      "species": "Smallmouth Bass",
+      "status": "Abundant"
+    },
+    {
+      "species": "Walleye",
+      "status": "Common"
+    },
+    {
+      "species": "Panfish",
+      "status": "Present"
+    },
+    {
+      "species": "Largemouth Bass",
+      "status": "Present"
+    },
+    {
+      "species": "Northern Pike",
+      "status": "Present"
+    },
+    {
+      "species": "Trout",
+      "status": "Present"
+    }
+  ],
+  "boat_launches": [],
+  "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=396500",
+  "retrieved": "2026-06-13"
+}

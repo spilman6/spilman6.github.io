@@ -1,17 +1,10 @@
 """
 get_parcels.py — Parcels around Jungle Lake (Forest County, WI)
 
-Queries the Wisconsin Statewide Parcel Map (V11) with a spatial buffer:
-"every parcel within RADIUS_M meters of the lake's center point."
-Writes parcels.json keyed by PARCELID (the dashed 022-... format):
-
-{
-  "022-01077-0000": {
-    "owner": "...",
-    "site_address": "...",
-    ...
-  }
-}
+Uses a shoreline-hugging polygon (points traced around the lake in Google
+Maps) so the query captures lakefront parcels without pulling in large
+forest/farm parcels farther out.  Adjust RING coordinates to expand or
+shrink the capture area.
 
 Usage:
     pip install requests
@@ -21,31 +14,44 @@ Usage:
 import json
 import requests
 
-LAYER_URL = ("https://dnrmaps.wi.gov/arcgis/rest/services/DW_Map_Dynamic/"
-             "EN_County_Tax_Parcels_WTM_Ext_Dynamic_L16/MapServer/0")
+API = ("https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/"
+       "Wisconsin_Statewide_Parcels/FeatureServer/0/query")
 
-# Jungle Lake center — verify/tweak by right-clicking the lake in Google Maps
-LAT = 45.455202849623944
-LON = -88.83247649309125       # <-- confirm this; the lake is just west of Pickerel
+# Shoreline polygon around Jungle Lake — Forest County, WI
+# Points traced clockwise from the NW shore; (lon, lat) order for ArcGIS.
+RING = [
+    [-88.835018, 45.459189],  # NW shore
+    [-88.831558, 45.460338],  # N
+    [-88.828281, 45.459955],  # NE
+    [-88.827128, 45.457784],  # E
+    [-88.826369, 45.455357],  # E
+    [-88.826824, 45.453144],  # SE
+    [-88.828979, 45.451611],  # S
+    [-88.832226, 45.450781],  # S
+    [-88.835078, 45.450376],  # SW
+    [-88.838507, 45.450844],  # SW
+    [-88.841572, 45.452569],  # W
+    [-88.835018, 45.459189],  # close ring
+]
 
-RADIUS_M = 1200       # meters from center; bump up to widen the net
+POLYGON = {
+    "rings": [RING],
+    "spatialReference": {"wkid": 4326},
+}
 
 OUTPUT = "parcels.json"
 MAX_RETRIES = 5
-
-# V11 schema fields (statewide-standardized)
-FIELDS = ["TAXPARCELID"]
+PAGE_SIZE = 1000
 
 session = requests.Session()
 session.headers["User-Agent"] = "Mozilla/5.0 (parcel-export)"
 
 
 def get_json(params):
-    params = dict(params, f="json")
     last_err = None
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            r = session.get(f"{LAYER_URL}/query", params=params, timeout=120)
+            r = session.post(API, data={**params, "f": "json"}, timeout=120)
             r.raise_for_status()
             data = r.json()
             if "error" in data:
@@ -60,7 +66,6 @@ def get_json(params):
     raise last_err
 
 
-
 def clean(v):
     if isinstance(v, str):
         v = v.strip()
@@ -70,33 +75,43 @@ def clean(v):
 
 def main():
     spatial = {
-        "geometry": json.dumps({"x": LON, "y": LAT,
-                                "spatialReference": {"wkid": 4326}}),
-        "geometryType": "esriGeometryPoint",
-        "inSR": 4326,
-        "spatialRel": "esriSpatialRelIntersects",
-        "distance": RADIUS_M,
-        "units": "esriSRUnit_Meter",
+        "geometry":     json.dumps(POLYGON),
+        "geometryType": "esriGeometryPolygon",
+        "inSR":         "4326",
+        "spatialRel":   "esriSpatialRelIntersects",
+        "where":        "CONAME = 'FOREST'",
     }
 
-    count = get_json({**spatial, "where": "1=1",
-                      "returnCountOnly": "true"})["count"]
-    print(f"{count} parcels within {RADIUS_M} m of ({LAT}, {LON}).")
+    count_data = get_json({**spatial, "returnCountOnly": "true"})
+    count = count_data.get("count", 0)
+    print(f"{count} Forest County parcels intersecting shoreline polygon.")
     if count == 0:
-        print("Zero parcels — double-check LAT/LON.")
+        print("Zero parcels — double-check RING coordinates.")
         return
     if count >= 1000:
-        print("WARNING: hit the 1000-record cap; shrink RADIUS_M or add paging.")
+        print("WARNING: may hit record cap — add paging if ids look truncated.")
 
-    page = get_json({**spatial,
-                     "where": "1=1",
-                     "outFields": ",".join(FIELDS),
-                     "returnGeometry": "false"})
+    feats = []
+    offset = 0
+    while True:
+        data = get_json({**spatial,
+                         "outFields": "TAXPARCELID,OWNERNME1",
+                         "returnGeometry": "false",
+                         "resultRecordCount": str(PAGE_SIZE),
+                         "resultOffset": str(offset)})
+        page = data.get("features", [])
+        feats.extend(page)
+        print(f"  fetched {len(feats)} / {count} ...")
+        if len(page) < PAGE_SIZE:
+            break
+        offset += PAGE_SIZE
+
+    print(f"  sample: {feats[0]['attributes'] if feats else 'none'}")
 
     ids = sorted(set(
-        clean(feat["attributes"].get("TAXPARCELID"))
-        for feat in page.get("features", [])
-        if clean(feat["attributes"].get("TAXPARCELID"))
+        clean(f["attributes"].get("TAXPARCELID"))
+        for f in feats
+        if clean(f["attributes"].get("TAXPARCELID"))
     ))
 
     with open(OUTPUT, "w") as f:

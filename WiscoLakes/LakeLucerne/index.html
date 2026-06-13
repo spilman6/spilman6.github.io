@@ -294,6 +294,40 @@
       .pin-error-msg { font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: 0.1em; color: #e74c3c; min-height: 18px; }
       @keyframes pinShake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-8px); } 40%,80% { transform: translateX(8px); } }
       .pin-box.shake { animation: pinShake 0.4s ease; }
+
+      /* ─── LAKE FACTS MODAL ─── */
+      #facts-overlay {
+        position: fixed; inset: 0; z-index: 800; display: none;
+        align-items: center; justify-content: center; padding: 24px;
+        background: rgba(8, 20, 34, 0.7); backdrop-filter: blur(5px);
+      }
+      #facts-overlay.open { display: flex; }
+      .facts-box {
+        background: linear-gradient(145deg, #0f2840 0%, #162f47 100%);
+        border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+        padding: 40px 44px 36px; width: 520px; max-width: 100%;
+        max-height: 90vh; overflow-y: auto;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        animation: panelIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+        position: relative;
+      }
+      .facts-close { position: absolute; top: 16px; right: 18px; background: none; border: none; color: rgba(200,220,235,0.5); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 6px; }
+      .facts-close:hover { color: var(--fog); }
+      .facts-eyebrow { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--water-shimmer); margin-bottom: 8px; }
+      .facts-title { font-family: "Playfair Display", serif; font-size: 1.6rem; font-weight: 400; color: var(--fog); margin-bottom: 24px; }
+      .facts-title em { font-style: italic; color: var(--gold-light); }
+      .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin-bottom: 24px; }
+      .facts-field-label { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(200,220,235,0.45); margin-bottom: 4px; }
+      .facts-field-value { font-size: 0.95rem; color: var(--fog); }
+      .facts-field-value.gold { color: var(--gold-light); }
+      .facts-section-label { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--water-shimmer); border-bottom: 1px solid rgba(61,143,192,0.25); padding-bottom: 6px; margin-bottom: 12px; }
+      .facts-fish-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.92rem; color: var(--fog); }
+      .facts-fish-status { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light, #3fa876); }
+      .facts-empty { font-size: 0.88rem; color: rgba(200,220,235,0.55); font-style: italic; }
+      .facts-block { margin-bottom: 24px; }
+      .facts-source { font-family: "DM Mono", monospace; font-size: 10px; color: rgba(200,220,235,0.4); margin-top: 4px; }
+      .facts-source a { color: var(--water-shimmer); text-decoration: none; }
+      .facts-source a:hover { text-decoration: underline; }
     </style>
   </head>
   <body>
@@ -355,6 +389,10 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
             Map View
           </a>
+          <button type="button" class="view-btn" id="facts-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Lake Facts
+          </button>
         </nav>
       </div>
     </header>
@@ -731,6 +769,90 @@
           if (overlay.style.display === "none") return;
           if (e.key >= "0" && e.key <= "9") pressKey(e.key);
           else if (e.key === "Backspace") pressKey("del");
+        });
+      })();
+    </script>
+
+    <!-- LAKE FACTS MODAL -->
+    <div id="facts-overlay">
+      <div class="facts-box" role="dialog" aria-modal="true" aria-labelledby="facts-title">
+        <button type="button" class="facts-close" id="facts-close" aria-label="Close">&times;</button>
+        <div class="facts-eyebrow">Wisconsin DNR &middot; Lake Facts</div>
+        <div class="facts-title" id="facts-title">Lake <em>Lucerne</em></div>
+        <div id="facts-content"><div class="facts-empty">Loading&hellip;</div></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const overlay = document.getElementById("facts-overlay");
+        const content = document.getElementById("facts-content");
+        let loaded = false;
+
+        function field(label, value, gold) {
+          return `<div><div class="facts-field-label">${label}</div>
+            <div class="facts-field-value${gold ? " gold" : ""}">${value ?? "—"}</div></div>`;
+        }
+
+        function render(d) {
+          const fish = d.fish && d.fish.length
+            ? d.fish.map((f) =>
+                `<div class="facts-fish-row"><span>${f.species}</span>
+                 <span class="facts-fish-status">${f.status}</span></div>`).join("")
+            : '<div class="facts-empty">No fish survey data recorded.</div>';
+
+          const launches = d.boat_launches && d.boat_launches.length
+            ? d.boat_launches.map((b) =>
+                `<div class="facts-fish-row"><span>${b.name}</span>
+                 <span class="facts-fish-status">${b.boat_ramp === "Yes" ? "Boat ramp" : b.type || ""}</span></div>`).join("")
+            : '<div class="facts-empty">No public boat launches recorded for this lake.</div>';
+
+          content.innerHTML = `
+            <div class="facts-grid">
+              ${field("Surface Area", d.surface_acres ? d.surface_acres + " acres" : null, true)}
+              ${field("Maximum Depth", d.max_depth_ft ? d.max_depth_ft + " ft" : null)}
+              ${field("Mean Depth", d.mean_depth_ft ? d.mean_depth_ft + " ft" : null)}
+              ${field("Water Clarity", d.water_clarity)}
+              ${field("Trophic Status", d.trophic_status)}
+              ${field("Lake Type", d.lake_type)}
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Bottom Composition</div>
+              <div class="facts-field-value">${d.bottom ?? "—"}</div>
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Fish Species</div>
+              ${fish}
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Public Boat Launches</div>
+              ${launches}
+            </div>
+            <div class="facts-source">
+              Source: <a href="${d.source}" target="_blank" rel="noopener">Wisconsin DNR &mdash; Find A Lake (WBIC ${d.wbic})</a>
+              &middot; retrieved ${d.retrieved}
+            </div>`;
+        }
+
+        function open() {
+          overlay.classList.add("open");
+          if (loaded) return;
+          fetch("lake-facts.json")
+            .then((r) => r.json())
+            .then((d) => { loaded = true; render(d); })
+            .catch(() => {
+              content.innerHTML = '<div class="facts-empty">Could not load lake facts.</div>';
+            });
+        }
+
+        document.getElementById("facts-btn").addEventListener("click", open);
+        document.getElementById("facts-close").addEventListener("click", () =>
+          overlay.classList.remove("open"));
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) overlay.classList.remove("open");
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") overlay.classList.remove("open");
         });
       })();
     </script>

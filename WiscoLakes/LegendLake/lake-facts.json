@@ -1,0 +1,27 @@
+{
+  "name": "Legend Lake",
+  "wbic": 339800,
+  "county": "Menominee",
+  "surface_acres": 1304,
+  "max_depth_ft": 74,
+  "mean_depth_ft": null,
+  "water_clarity": null,
+  "trophic_status": null,
+  "lake_type": "Drained",
+  "bottom": null,
+  "latitude": 44.887104,
+  "longitude": -88.62947,
+  "fish": [
+    {
+      "species": "Largemouth Bass",
+      "status": "Abundant"
+    },
+    {
+      "species": "Northern Pike",
+      "status": "Common"
+    }
+  ],
+  "boat_launches": [],
+  "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=339800",
+  "retrieved": "2026-06-13"
+}

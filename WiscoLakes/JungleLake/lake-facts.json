@@ -1,0 +1,35 @@
+{
+  "name": "Jungle Lake",
+  "wbic": 377900,
+  "county": "Forest",
+  "surface_acres": 180,
+  "max_depth_ft": 14,
+  "mean_depth_ft": 7,
+  "water_clarity": null,
+  "trophic_status": "Mesotrophic",
+  "lake_type": "Drainage",
+  "bottom": "65% sand, 10% gravel, 5% rock, 20% muck",
+  "latitude": 45.4548851,
+  "longitude": -88.8333237,
+  "fish": [
+    {
+      "species": "Panfish",
+      "status": "Common"
+    },
+    {
+      "species": "Largemouth Bass",
+      "status": "Common"
+    },
+    {
+      "species": "Northern Pike",
+      "status": "Common"
+    },
+    {
+      "species": "Walleye",
+      "status": "Present"
+    }
+  ],
+  "boat_launches": [],
+  "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=377900",
+  "retrieved": "2026-06-13"
+}
