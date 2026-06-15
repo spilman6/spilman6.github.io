@@ -1,0 +1,31 @@
+{
+  "name": "Arbutus Lake",
+  "wbic": 181400,
+  "county": "Forest",
+  "surface_acres": 163,
+  "max_depth_ft": 28,
+  "mean_depth_ft": 12,
+  "water_clarity": null,
+  "trophic_status": null,
+  "lake_type": "Seepage",
+  "bottom": "65% sand, 15% gravel, 5% rock, 15% muck",
+  "latitude": 45.4013509,
+  "longitude": -88.8613424,
+  "fish": [
+    {
+      "species": "Panfish",
+      "status": "Abundant"
+    },
+    {
+      "species": "Largemouth Bass",
+      "status": "Abundant"
+    },
+    {
+      "species": "Walleye",
+      "status": "Present"
+    }
+  ],
+  "boat_launches": [],
+  "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=181400",
+  "retrieved": "2026-06-15"
+}

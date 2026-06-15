@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -401,9 +401,15 @@
 						Shoreline parcel registries gathered into one quiet, searchable home for Wisconsin lake ownership records.
 					</p>
 				</div>
-				<div class="registry-badge" aria-label="Registry summary">
-					<div class="registry-label">Available Registries</div>
-					<div class="registry-value">4 Lakes</div>
+				<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+					<div class="registry-badge" aria-label="Registry summary">
+						<div class="registry-label">Available Registries</div>
+						<div class="registry-value">6 Lakes</div>
+					</div>
+					<a href="compare.html" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border:1px solid rgba(201,153,58,0.38);border-radius:7px;background:rgba(201,153,58,0.07);color:var(--gold-light);font-family:'DM Sans',sans-serif;font-size:0.82rem;text-decoration:none;transition:background 0.18s,border-color 0.18s;white-space:nowrap" onmouseover="this.style.background='rgba(201,153,58,0.14)'" onmouseout="this.style.background='rgba(201,153,58,0.07)'">
+						<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="17" y="5" width="4" height="16"/></svg>
+						Compare Lakes
+					</a>
 				</div>
 			</header>
 
@@ -468,7 +474,37 @@
 							</div>
 						</div>
 					</a>
-				</section>
+
+					<a class="lake-card" href="ArbutusLake/index.html">
+						<div class="lake-image-wrap">
+							<img src="ArbutusLake/Arbutus-Lake.png" alt="Arbutus Lake silhouette" />
+						</div>
+						<div class="lake-content">
+							<div class="lake-county">Forest County</div>
+							<h2 class="lake-name"><em>Arbutus</em> Lake</h2>
+							<p class="lake-detail">Shoreline parcel registry for Arbutus Lake ownership records near Pickerel.</p>
+							<div class="card-footer">
+								<span class="card-stat">187 recorded parcels</span>
+								<span class="card-arrow" aria-hidden="true">&#8594;</span>
+							</div>
+						</div>
+					</a>
+				
+					<a class="lake-card" href="PickerelLake/index.html">
+						<div class="lake-image-wrap">
+							<img src="PickerelLake/Pickerel-Lake.png" alt="Pickerel Lake silhouette" />
+						</div>
+						<div class="lake-content">
+							<div class="lake-county">Forest County</div>
+							<h2 class="lake-name">Pickerel <em>Lake</em></h2>
+							<p class="lake-detail">Shoreline parcel registry for Pickerel Lake in Nashville Township.</p>
+							<div class="card-footer">
+								<span class="card-stat">133 recorded parcels</span>
+								<span class="card-arrow" aria-hidden="true">&#8594;</span>
+							</div>
+						</div>
+					</a>
+</section>
 			</main>
 
 			<footer>

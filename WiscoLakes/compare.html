@@ -1,0 +1,751 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lake Comparison Â· WiscoLakes</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --water: #1a3a52;
+        --water-deep: #0d2235;
+        --water-mid: #1e4d6b;
+        --water-light: #2a6a94;
+        --water-shimmer: #3d8fc0;
+        --fog: #e8eff5;
+        --mist: #d0dde8;
+        --gold: #c9993a;
+        --gold-light: #e8c06a;
+        --accent-light: #3fa876;
+        --owner-individual: #3d8fc0;
+        --owner-trust: #c9993a;
+        --owner-llc: #3fa876;
+        --owner-govt: #6b8fa8;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        font-family: "DM Sans", sans-serif;
+        background:
+          radial-gradient(ellipse 90% 55% at 50% 0%, rgba(61,143,192,0.22), transparent 68%),
+          linear-gradient(180deg, var(--water-deep) 0%, var(--water) 52%, #10283f 100%);
+        color: var(--fog);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent 72%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 48px 40px 80px;
+      }
+
+      /* â”€â”€ HEADER â”€â”€ */
+      header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        margin-bottom: 40px;
+      }
+
+      .eyebrow {
+        color: var(--water-shimmer);
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 400;
+        line-height: 1;
+        color: var(--fog);
+      }
+      h1 em { color: var(--gold-light); font-style: italic; }
+
+      .subhead {
+        margin-top: 14px;
+        color: rgba(232,239,245,0.6);
+        font-size: 0.95rem;
+        font-weight: 300;
+        line-height: 1.65;
+        max-width: 540px;
+      }
+
+      .nav-row { display: flex; gap: 8px; flex-shrink: 0; padding-top: 6px; }
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 6px;
+        background: rgba(255,255,255,0.05);
+        color: var(--mist);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.82rem;
+        text-decoration: none;
+        transition: background 0.18s, border-color 0.18s;
+      }
+      .nav-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); }
+
+      /* â”€â”€ LOADING â”€â”€ */
+      .loading-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding: 80px 0;
+      }
+      .spinner {
+        width: 40px; height: 40px;
+        border: 3px solid rgba(255,255,255,0.12);
+        border-top-color: var(--water-shimmer);
+        border-radius: 50%;
+        animation: spin 0.85s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .loading-text {
+        color: rgba(232,239,245,0.55);
+        font-family: "DM Mono", monospace;
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+      }
+      .load-status {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .load-pill {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-family: "DM Mono", monospace;
+        background: rgba(255,255,255,0.06);
+        color: rgba(232,239,245,0.4);
+        transition: background 0.3s, color 0.3s;
+      }
+      .load-pill.done { background: rgba(63,168,118,0.18); color: var(--accent-light); }
+      .load-pill.error { background: rgba(220,60,60,0.18); color: #e77; }
+
+      /* â”€â”€ AGGREGATE STATS â”€â”€ */
+      .agg-bar {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        margin-bottom: 52px;
+        animation: fadeUp 0.45s ease both;
+      }
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .agg-card {
+        padding: 20px 18px;
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(8px);
+      }
+      .agg-label {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(208,221,232,0.5);
+        margin-bottom: 8px;
+      }
+      .agg-value {
+        font-family: "Playfair Display", serif;
+        font-size: 1.85rem;
+        color: var(--fog);
+        line-height: 1;
+      }
+      .agg-value span { font-size: 1rem; color: rgba(232,239,245,0.5); }
+
+      /* â”€â”€ SECTIONS â”€â”€ */
+      .section { margin-bottom: 56px; animation: fadeUp 0.5s ease both; }
+      .section:nth-child(2) { animation-delay: 0.05s; }
+      .section:nth-child(3) { animation-delay: 0.1s; }
+      .section:nth-child(4) { animation-delay: 0.15s; }
+
+      .section-heading {
+        font-family: "Playfair Display", serif;
+        font-size: 1.65rem;
+        font-weight: 400;
+        color: var(--fog);
+        margin-bottom: 24px;
+      }
+      .section-heading em { color: var(--gold-light); font-style: italic; }
+
+      /* â”€â”€ LAKE CARDS â”€â”€ */
+      .lake-cards {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 14px;
+      }
+      .lc {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(8px);
+        overflow: hidden;
+        transition: border-color 0.2s, transform 0.2s;
+        text-decoration: none;
+        color: inherit;
+      }
+      .lc:hover { border-color: rgba(201,153,58,0.4); transform: translateY(-2px); }
+
+      .lc-img-wrap {
+        height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(13,34,53,0.5);
+        padding: 14px;
+      }
+      .lc-img {
+        max-height: 88px;
+        max-width: 80%;
+        object-fit: contain;
+        mix-blend-mode: screen;
+        filter: drop-shadow(0 0 12px rgba(61,143,192,0.4));
+      }
+
+      .lc-body { padding: 16px 16px 14px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+      .lc-name {
+        font-family: "Playfair Display", serif;
+        font-size: 1.05rem;
+        font-weight: 400;
+        color: var(--fog);
+        line-height: 1.2;
+      }
+      .lc-county {
+        font-family: "DM Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--water-shimmer);
+        margin-top: 2px;
+      }
+
+      .lc-stats { display: flex; flex-direction: column; gap: 6px; }
+      .lc-stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: 0.8rem;
+      }
+      .lc-stat-label { color: rgba(208,221,232,0.5); }
+      .lc-stat-value { font-family: "DM Mono", monospace; font-size: 0.82rem; color: var(--fog); }
+      .lc-stat-value.gold { color: var(--gold-light); }
+
+      .lc-owner-bar {
+        height: 6px;
+        border-radius: 3px;
+        overflow: hidden;
+        display: flex;
+        background: rgba(255,255,255,0.07);
+      }
+      .lc-owner-bar-seg { height: 100%; transition: width 0.6s ease; }
+
+      .lc-owner-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 10px;
+        font-size: 0.7rem;
+        color: rgba(208,221,232,0.5);
+      }
+      .legend-dot {
+        display: inline-block;
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        margin-right: 3px;
+        vertical-align: middle;
+      }
+
+      .lc-link {
+        display: block;
+        margin: 0 16px 14px;
+        padding: 8px;
+        text-align: center;
+        border: 1px solid rgba(201,153,58,0.3);
+        border-radius: 6px;
+        font-size: 0.78rem;
+        color: var(--gold);
+        text-decoration: none;
+        transition: background 0.18s;
+        font-family: "DM Mono", monospace;
+        letter-spacing: 0.06em;
+      }
+      .lc-link:hover { background: rgba(201,153,58,0.1); }
+
+      /* â”€â”€ RANKINGS â”€â”€ */
+      .rankings-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+      .rank-panel {
+        padding: 22px;
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.04);
+      }
+      .rank-panel-title {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(208,221,232,0.5);
+        margin-bottom: 18px;
+      }
+      .rank-row { margin-bottom: 14px; }
+      .rank-row-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 5px;
+      }
+      .rank-name { font-size: 0.82rem; color: var(--fog); }
+      .rank-val {
+        font-family: "DM Mono", monospace;
+        font-size: 0.8rem;
+        color: var(--gold-light);
+      }
+      .rank-bar-bg {
+        height: 5px;
+        border-radius: 3px;
+        background: rgba(255,255,255,0.07);
+        overflow: hidden;
+      }
+      .rank-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        background: linear-gradient(90deg, var(--water-shimmer), var(--water-light));
+        transition: width 0.7s ease;
+      }
+      .rank-bar-fill.gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+      .rank-bar-fill.green { background: linear-gradient(90deg, #2a8a5e, var(--accent-light)); }
+
+      /* â”€â”€ OWNER ANALYSIS â”€â”€ */
+      .owner-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .owner-row {
+        display: grid;
+        grid-template-columns: 160px 1fr 220px;
+        gap: 20px;
+        align-items: center;
+        padding: 16px 20px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.03);
+      }
+      .owner-lake-name {
+        font-family: "Playfair Display", serif;
+        font-size: 0.95rem;
+        color: var(--fog);
+      }
+      .owner-lake-county {
+        font-family: "DM Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--water-shimmer);
+        margin-top: 2px;
+      }
+      .owner-big-bar {
+        height: 20px;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        background: rgba(255,255,255,0.06);
+      }
+      .owner-big-seg { height: 100%; }
+      .owner-counts {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .owner-count-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.75rem;
+      }
+      .owner-count-label { color: rgba(208,221,232,0.55); flex: 1; }
+      .owner-count-val { font-family: "DM Mono", monospace; color: var(--fog); font-size: 0.72rem; }
+      .owner-count-pct { font-family: "DM Mono", monospace; color: rgba(208,221,232,0.4); font-size: 0.68rem; width: 36px; text-align: right; }
+
+      /* â”€â”€ RESPONSIVE â”€â”€ */
+      @media (max-width: 1200px) {
+        .lake-cards { grid-template-columns: repeat(3, 1fr); }
+        .agg-bar { grid-template-columns: repeat(3, 1fr); }
+      }
+      @media (max-width: 780px) {
+        .page { padding: 28px 20px 60px; }
+        .lake-cards { grid-template-columns: repeat(2, 1fr); }
+        .rankings-grid { grid-template-columns: 1fr; }
+        .agg-bar { grid-template-columns: repeat(2, 1fr); }
+        .owner-row { grid-template-columns: 1fr; gap: 10px; }
+      }
+      @media (max-width: 480px) {
+        .lake-cards { grid-template-columns: 1fr; }
+        .agg-bar { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div>
+          <div class="eyebrow">Wisconsin Â· Forest &amp; Menominee County</div>
+          <h1>Lake <em>Comparison</em></h1>
+          <p class="subhead">
+            Live parcel data across 6 northern Wisconsin lakes â€” assessed values, acreage, and ownership breakdown.
+          </p>
+        </div>
+        <nav class="nav-row">
+          <a href="index.html" class="nav-btn">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Home
+          </a>
+        </nav>
+      </header>
+
+      <!-- Loading -->
+      <div id="loading" class="loading-wrap">
+        <div class="spinner"></div>
+        <div class="loading-text">Fetching live parcel data from 5 lakesâ€¦</div>
+        <div class="load-status" id="load-status"></div>
+      </div>
+
+      <!-- Content (hidden until data loads) -->
+      <div id="content" style="display:none">
+        <!-- Aggregate totals -->
+        <div class="agg-bar" id="agg-bar"></div>
+
+        <!-- Lake cards -->
+        <section class="section">
+          <div class="section-heading">Lake <em>Profiles</em></div>
+          <div class="lake-cards" id="lake-cards"></div>
+        </section>
+
+        <!-- Rankings -->
+        <section class="section">
+          <div class="section-heading"><em>Rankings</em></div>
+          <div class="rankings-grid" id="rankings-grid"></div>
+        </section>
+
+        <!-- Ownership analysis -->
+        <section class="section">
+          <div class="section-heading">Ownership <em>Analysis</em></div>
+          <div class="owner-wrap" id="owner-wrap"></div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const API = "https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/Wisconsin_Statewide_Parcels/FeatureServer/0/query";
+
+      const LAKES = [
+        { name: "St. John's Lake",  county: "Forest",    coname: "FOREST",    parcelsFile: "stJohns/data.json",           href: "stJohns/index.html",       img: "stJohns/st-johns-lake.png" },
+        { name: "Lake Lucerne",     county: "Forest",    coname: "FOREST",    parcelsFile: "LakeLucerne/parcels.json",     href: "LakeLucerne/index.html",   img: "LakeLucerne/lake-lucerne.png" },
+        { name: "Jungle Lake",      county: "Forest",    coname: "FOREST",    parcelsFile: "JungleLake/parcels.json",      href: "JungleLake/index.html",    img: "JungleLake/Jungle-Lake.png" },
+        { name: "Arbutus Lake",     county: "Forest",    coname: "FOREST",    parcelsFile: "ArbutusLake/parcels.json",     href: "ArbutusLake/index.html",   img: "ArbutusLake/Arbutus-Lake.png" },
+        { name: "Pickerel Lake",    county: "Forest",    coname: "FOREST",    parcelsFile: "PickerelLake/parcels.json",    href: "PickerelLake/index.html",  img: "PickerelLake/Pickerel-Lake.png" },
+        { name: "Legend Lake",      county: "Menominee", coname: "MENOMINEE", parcelsFile: "LegendLake/parcels.json",      href: "LegendLake/index.html",    img: "LegendLake/legend-lake.png" },
+      ];
+
+      const BATCH = 400;
+
+      async function fetchLakeData(lake, onProgress) {
+        const ids = await fetch(lake.parcelsFile).then(r => r.json());
+        const chunks = [];
+        for (let i = 0; i < ids.length; i += BATCH) chunks.push(ids.slice(i, i + BATCH));
+
+        const results = await Promise.all(chunks.map(async chunk => {
+          const inClause = chunk.map(id => `'${id}'`).join(",");
+          const params = new URLSearchParams({
+            where: `CONAME = '${lake.coname}' AND TAXPARCELID IN (${inClause})`,
+            outFields: "TAXPARCELID,OWNERNME1,ASSDACRES,CNTASSDVALUE",
+            f: "json",
+            returnGeometry: "false",
+            resultRecordCount: String(BATCH + 50),
+          });
+          const res = await fetch(API, { method: "POST", body: params });
+          const json = await res.json();
+          if (json.error) throw new Error(json.error.message);
+          return json.features.map(f => f.attributes);
+        }));
+
+        onProgress(lake.name);
+        return results.flat();
+      }
+
+      function classifyOwner(name) {
+        const n = (name || "").toUpperCase();
+        if (/STATE OF|TOWN OF|COUNTY OF|UNITED STATES|U\.S\. |DNR|DEPT OF|DEPARTMENT OF/.test(n)) return "govt";
+        if (/\bTRUST\b/.test(n)) return "trust";
+        if (/\bLLC\b|\bLLP\b|\bINC\b|\bCORP\b|\bGROUP\b|\bASSOC|\bCO\b/.test(n)) return "llc";
+        return "individual";
+      }
+
+      function computeStats(features) {
+        let totalAcres = 0, totalValue = 0;
+        const owners = { individual: 0, trust: 0, llc: 0, govt: 0 };
+        for (const a of features) {
+          totalAcres += a.ASSDACRES ?? 0;
+          totalValue += a.CNTASSDVALUE ?? 0;
+          owners[classifyOwner(a.OWNERNME1)]++;
+        }
+        const n = features.length;
+        return {
+          parcels: n,
+          totalAcres,
+          totalValue,
+          avgValuePerAcre: totalAcres > 0 ? totalValue / totalAcres : 0,
+          avgValuePerParcel: n > 0 ? totalValue / n : 0,
+          owners,
+        };
+      }
+
+      function fmt$(n) {
+        if (n >= 1e6) return "$" + (n / 1e6).toFixed(2) + "M";
+        if (n >= 1e3) return "$" + Math.round(n / 1e3) + "K";
+        return "$" + Math.round(n).toLocaleString();
+      }
+      function fmtAcres(n) {
+        return n >= 1000 ? (n / 1000).toFixed(1) + "K" : Math.round(n).toLocaleString();
+      }
+      function fmtPct(a, b) { return b > 0 ? Math.round(a / b * 100) + "%" : "0%"; }
+
+      // â”€â”€ RENDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+      function renderAgg(allStats, allLakes) {
+        const totParcels = allStats.reduce((s, x) => s + x.parcels, 0);
+        const totAcres   = allStats.reduce((s, x) => s + x.totalAcres, 0);
+        const totValue   = allStats.reduce((s, x) => s + x.totalValue, 0);
+        const avgAcre    = totAcres > 0 ? totValue / totAcres : 0;
+        const totOwners  = { individual: 0, trust: 0, llc: 0, govt: 0 };
+        for (const s of allStats) {
+          for (const k of Object.keys(totOwners)) totOwners[k] += s.owners[k];
+        }
+        const pctTrust = fmtPct(totOwners.trust + totOwners.llc, totParcels);
+
+        document.getElementById("agg-bar").innerHTML = `
+          <div class="agg-card">
+            <div class="agg-label">Lakes Tracked</div>
+            <div class="agg-value">6</div>
+          </div>
+          <div class="agg-card">
+            <div class="agg-label">Total Parcels</div>
+            <div class="agg-value">${totParcels.toLocaleString()}</div>
+          </div>
+          <div class="agg-card">
+            <div class="agg-label">Total Assessed</div>
+            <div class="agg-value">${fmt$(totValue)}</div>
+          </div>
+          <div class="agg-card">
+            <div class="agg-label">Total Acreage</div>
+            <div class="agg-value">${fmtAcres(totAcres)} <span>ac</span></div>
+          </div>
+          <div class="agg-card">
+            <div class="agg-label">Trust / LLC Holdings</div>
+            <div class="agg-value">${pctTrust}</div>
+          </div>`;
+      }
+
+      function ownerBarSegs(owners) {
+        const total = owners.individual + owners.trust + owners.llc + owners.govt;
+        if (total === 0) return "";
+        const pct = k => (owners[k] / total * 100).toFixed(1);
+        return [
+          ["individual", "var(--owner-individual)"],
+          ["trust",      "var(--owner-trust)"],
+          ["llc",        "var(--owner-llc)"],
+          ["govt",       "var(--owner-govt)"],
+        ].filter(([k]) => owners[k] > 0)
+         .map(([k, c]) => `<div class="lc-owner-bar-seg" style="width:${pct(k)}%;background:${c}"></div>`)
+         .join("");
+      }
+
+      function renderLakeCards(allLakes, allStats) {
+        const el = document.getElementById("lake-cards");
+        el.innerHTML = LAKES.map((lake, i) => {
+          const s = allStats[i];
+          const total = s.owners.individual + s.owners.trust + s.owners.llc + s.owners.govt;
+          return `
+          <a class="lc" href="${lake.href}">
+            <div class="lc-img-wrap">
+              <img class="lc-img" src="${lake.img}" alt="${lake.name}" />
+            </div>
+            <div class="lc-body">
+              <div>
+                <div class="lc-name">${lake.name}</div>
+                <div class="lc-county">${lake.county} County</div>
+              </div>
+              <div class="lc-stats">
+                <div class="lc-stat">
+                  <span class="lc-stat-label">Parcels</span>
+                  <span class="lc-stat-value">${s.parcels.toLocaleString()}</span>
+                </div>
+                <div class="lc-stat">
+                  <span class="lc-stat-label">Total Value</span>
+                  <span class="lc-stat-value gold">${fmt$(s.totalValue)}</span>
+                </div>
+                <div class="lc-stat">
+                  <span class="lc-stat-label">Avg / Acre</span>
+                  <span class="lc-stat-value">${fmt$(s.avgValuePerAcre)}</span>
+                </div>
+                <div class="lc-stat">
+                  <span class="lc-stat-label">Total Acres</span>
+                  <span class="lc-stat-value">${fmtAcres(s.totalAcres)}</span>
+                </div>
+              </div>
+              <div>
+                <div class="lc-owner-bar">${ownerBarSegs(s.owners)}</div>
+                <div class="lc-owner-legend" style="margin-top:6px">
+                  ${[["individual","var(--owner-individual)","Individual"],["trust","var(--owner-trust)","Trust"],["llc","var(--owner-llc)","LLC/Corp"],["govt","var(--owner-govt)","Govt"]].filter(([k])=>s.owners[k]>0).map(([k,c,label])=>`<span><span class="legend-dot" style="background:${c}"></span>${fmtPct(s.owners[k],total)} ${label}</span>`).join("")}
+                </div>
+              </div>
+            </div>
+            <span class="lc-link">View Registry â†’</span>
+          </a>`;
+        }).join("");
+      }
+
+      function renderRankings(allStats) {
+        const named = LAKES.map((l, i) => ({ name: l.name.replace("'s", "'s"), ...allStats[i] }));
+
+        function panel(title, key, fmtFn, barClass = "") {
+          const sorted = [...named].sort((a, b) => b[key] - a[key]);
+          const max = sorted[0][key];
+          const rows = sorted.map(r => `
+            <div class="rank-row">
+              <div class="rank-row-header">
+                <span class="rank-name">${r.name}</span>
+                <span class="rank-val">${fmtFn(r[key])}</span>
+              </div>
+              <div class="rank-bar-bg">
+                <div class="rank-bar-fill ${barClass}" style="width:${max > 0 ? (r[key]/max*100).toFixed(1) : 0}%"></div>
+              </div>
+            </div>`).join("");
+          return `<div class="rank-panel"><div class="rank-panel-title">${title}</div>${rows}</div>`;
+        }
+
+        document.getElementById("rankings-grid").innerHTML =
+          panel("By Total Assessed Value", "totalValue",       v => fmt$(v),            "gold") +
+          panel("By Avg Value / Acre",     "avgValuePerAcre",  v => fmt$(v) + "/ac",    "") +
+          panel("By Total Acreage",        "totalAcres",       v => fmtAcres(v) + " ac","green");
+      }
+
+      function renderOwnerAnalysis(allStats) {
+        const el = document.getElementById("owner-wrap");
+        el.innerHTML = LAKES.map((lake, i) => {
+          const s = allStats[i];
+          const total = s.owners.individual + s.owners.trust + s.owners.llc + s.owners.govt;
+          const cats = [
+            ["individual", "var(--owner-individual)", "Individual"],
+            ["trust",      "var(--owner-trust)",      "Trust"],
+            ["llc",        "var(--owner-llc)",        "LLC / Corp"],
+            ["govt",       "var(--owner-govt)",       "Government"],
+          ];
+          const segs = cats.filter(([k]) => s.owners[k] > 0)
+            .map(([k,c]) => `<div class="owner-big-seg" style="width:${(s.owners[k]/total*100).toFixed(1)}%;background:${c}"></div>`)
+            .join("");
+          const counts = cats.map(([k,c,label]) => `
+            <div class="owner-count-row">
+              <span class="legend-dot" style="background:${c}"></span>
+              <span class="owner-count-label">${label}</span>
+              <span class="owner-count-val">${s.owners[k]}</span>
+              <span class="owner-count-pct">${fmtPct(s.owners[k], total)}</span>
+            </div>`).join("");
+          return `
+          <div class="owner-row">
+            <div>
+              <div class="owner-lake-name">${lake.name}</div>
+              <div class="owner-lake-county">${lake.county} County Â· ${s.parcels} parcels</div>
+            </div>
+            <div class="owner-big-bar">${segs}</div>
+            <div class="owner-counts">${counts}</div>
+          </div>`;
+        }).join("");
+      }
+
+      // â”€â”€ BOOT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+      (async function () {
+        const statusEl = document.getElementById("load-status");
+
+        // Init load pills
+        statusEl.innerHTML = LAKES.map(l =>
+          `<div class="load-pill" id="pill-${l.name.replace(/\W+/g, "-")}">${l.name}</div>`
+        ).join("");
+
+        function onLakeLoaded(name) {
+          const id = "pill-" + name.replace(/\W+/g, "-");
+          const el = document.getElementById(id);
+          if (el) el.classList.add("done");
+        }
+
+        let allStats;
+        try {
+          const allFeatures = await Promise.all(
+            LAKES.map(lake => fetchLakeData(lake, onLakeLoaded).catch(err => {
+              const id = "pill-" + lake.name.replace(/\W+/g, "-");
+              const el = document.getElementById(id);
+              if (el) { el.classList.add("error"); el.title = err.message; }
+              return [];
+            }))
+          );
+          allStats = allFeatures.map(computeStats);
+        } catch (err) {
+          document.getElementById("loading").innerHTML =
+            `<div style="color:rgba(220,80,80,0.8);font-family:'DM Mono',monospace;font-size:0.85rem">Error loading data: ${err.message}</div>`;
+          return;
+        }
+
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("content").style.display = "";
+
+        renderAgg(allStats, LAKES);
+        renderLakeCards(LAKES, allStats);
+        renderRankings(allStats);
+        renderOwnerAnalysis(allStats);
+      })();
+    </script>
+  </body>
+</html>

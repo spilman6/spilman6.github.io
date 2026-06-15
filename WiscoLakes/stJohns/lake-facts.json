@@ -27,5 +27,16 @@
   ],
   "boat_launches": [],
   "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=388700",
-  "retrieved": "2026-06-12"
+  "retrieved": "2026-06-12",
+  "regulations": [
+    { "species": "Walleye / Sauger",  "size": "15\" min · 20–24\" slot", "bag": "3 / day",  "note": "Max 1 over 24\"" },
+    { "species": "Largemouth Bass",   "size": "14\" min",                 "bag": "5 / day",  "note": null },
+    { "species": "Smallmouth Bass",   "size": "14\" min (after Jun 20)",  "bag": "5 / day",  "note": "C&R only May 2 – Jun 19" },
+    { "species": "Northern Pike",     "size": "None",                     "bag": "5 / day",  "note": null },
+    { "species": "Muskellunge",       "size": "40\" min",                 "bag": "1 / day",  "note": "Open May 2 – Dec 31" },
+    { "species": "Panfish",           "size": "None",                     "bag": "25 / day", "note": null },
+    { "species": "Catfish",           "size": "None",                     "bag": "10 / day", "note": null }
+  ],
+  "reg_source": "https://apps.dnr.wi.gov/fisheriesmanagement/Public/LakeRegulation/Details?WBIC=388700&WBIC_NAME=Saint%20Johns%20Lake",
+  "reg_season": "2026–2027"
 }

@@ -695,6 +695,8 @@
 
       /* ─── RESPONSIVE ─── */
       @media (max-width: 900px) {
+        .sales-cols   { grid-template-columns: 1fr 1fr; }
+        .sales-section { padding: 0 24px 40px; }
         header {
           padding: 32px 24px 24px;
         }
@@ -768,9 +770,12 @@
           flex: 1 1 100%;
         }
         .col-parcel,
-        .col-acres {
+        .col-acres,
+        .col-sale {
           display: none;
         }
+        .sales-cols   { grid-template-columns: 1fr; }
+        .sales-section { padding: 0 16px 32px; }
         .table-wrap {
           padding: 0 16px 32px;
           overflow-x: auto;
@@ -1076,6 +1081,41 @@
         font-style: italic;
       }
       .facts-block { margin-bottom: 24px; }
+      .facts-reg-header {
+        display: grid;
+        grid-template-columns: 1.6fr 1.6fr 1fr;
+        padding: 0 0 6px;
+        margin-bottom: 2px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-family: "DM Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(200,220,235,0.35);
+      }
+      .facts-reg-row {
+        display: grid;
+        grid-template-columns: 1.6fr 1.6fr 1fr;
+        align-items: baseline;
+        padding: 7px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        font-size: 0.88rem;
+        color: var(--fog);
+        row-gap: 2px;
+      }
+      .facts-reg-note {
+        grid-column: 2 / -1;
+        font-family: "DM Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 0.06em;
+        color: var(--gold-light);
+        padding-top: 2px;
+      }
+      .facts-reg-val {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: rgba(200,220,235,0.7);
+      }
       .facts-source {
         font-family: "DM Mono", monospace;
         font-size: 10px;
@@ -1084,6 +1124,111 @@
       }
       .facts-source a { color: var(--water-shimmer); text-decoration: none; }
       .facts-source a:hover { text-decoration: underline; }
+
+      /* ─── SALES STATS ROW ─── */
+      .sales-stats-bar {
+        background: rgba(201, 153, 58, 0.05);
+        border-bottom-color: rgba(255, 255, 255, 0.06);
+      }
+      .sales-stats-bar .stat-label { color: rgba(232, 192, 106, 0.55); }
+
+      /* ─── SALES HISTORY SECTION ─── */
+      .sales-section {
+        position: relative;
+        z-index: 10;
+        padding: 0 48px 56px;
+      }
+      .sales-header {
+        display: flex;
+        align-items: baseline;
+        gap: 18px;
+        padding: 20px 0 0;
+        margin-bottom: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .sales-heading {
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: var(--fog);
+      }
+      .sales-heading em { font-style: italic; color: var(--gold-light); }
+      .sales-sub {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: rgba(200, 220, 235, 0.32);
+      }
+      .sales-cols {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .sales-panel {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 22px 24px;
+      }
+      .sales-panel-label {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--water-shimmer);
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(61, 143, 192, 0.2);
+      }
+      .sales-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+        transition: padding-left 0.12s;
+      }
+      .sales-row:last-child { border-bottom: none; }
+      .sales-row:hover { padding-left: 4px; }
+      .sales-row-name {
+        font-size: 13px;
+        color: var(--fog);
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+      }
+      .sales-badge {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        padding: 3px 9px;
+        border-radius: 4px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .badge-blue  { background: rgba(61,  143, 192, 0.18); color: var(--water-shimmer); }
+      .badge-gold  { background: rgba(201, 153,  58, 0.18); color: var(--gold-light); }
+      .badge-green { background: rgba(63,  168, 118, 0.18); color: var(--accent-light); }
+      .sales-empty {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: rgba(200, 220, 235, 0.3);
+        letter-spacing: 0.08em;
+        padding: 14px 0;
+        text-align: center;
+      }
+      .td-sale {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        text-align: right;
+        color: rgba(200, 220, 235, 0.52);
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body>
@@ -1185,6 +1330,7 @@
         <div class="stat-value" id="stat-avg">— <span>$/ac</span></div>
       </div>
     </div>
+
 
     <div class="last-updated">Data sourced from county assessor records · Last updated: <span id="last-updated-time"></span></div>
 
@@ -1306,6 +1452,10 @@
             <div class="panel-field-label">Parcel Type</div>
             <div class="panel-field-value" id="panel-type"></div>
           </div>
+          <div class="panel-section-label">Sales History</div>
+          <div style="font-size:0.78rem;opacity:0.45;line-height:1.6;padding:4px 0 8px">
+            Not available · See <a id="panel-beacon-link" href="#" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Forest County Beacon</a>
+          </div>
         </div>
         <div style="display:flex;gap:8px">
           <a class="panel-map-btn" id="panel-map-link" href="#" style="flex:1">
@@ -1316,6 +1466,21 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
             Parcel Website
           </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALES HISTORY SECTION -->
+    <div class="sales-section" id="sales-section">
+      <div class="sales-header">
+        <div class="sales-heading">Sales <em>History</em></div>
+        <div class="sales-sub">Deed transfer data · Forest County Register of Deeds</div>
+      </div>
+      <div style="padding:24px 0 8px;text-align:center">
+        <div class="sales-empty" style="max-width:520px;margin:0 auto;font-size:0.88rem;line-height:1.7;opacity:0.6">
+          Sale history (last sale date, price, and years owned) is not available through the Wisconsin Statewide Parcels database.
+          This data is recorded by the Forest County Register of Deeds and can be accessed at the
+          <a href="https://beacon.schneidercorp.com/Application.aspx?AppID=1198" target="_blank" rel="noopener" style="color:var(--gold)">Forest County Beacon</a> parcel website.
         </div>
       </div>
     </div>
@@ -1344,6 +1509,7 @@
         return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
       }
 
+
       // ─── LOAD DATA: parcel IDs from data.json, all fields live from ArcGIS ───
       async function loadData() {
         const ids = await fetch("data.json").then((r) => r.json());
@@ -1360,21 +1526,23 @@
         });
         try {
           const res = await fetch(API, { method: "POST", body: params });
-          if (!res.ok) throw new Error("API error");
+          if (!res.ok) throw new Error("API error " + res.status);
           const json = await res.json();
+          if (json.error) throw new Error(json.error.message);
           DATA = (json.features || []).map(({ attributes: a }) => ({
-            parcel: a.TAXPARCELID,
-            owner: toTitleCase(
-              a.OWNERNME1 + (a.OWNERNME2 ? " / " + a.OWNERNME2 : ""),
-            ),
+            parcel:  a.TAXPARCELID,
+            owner:   toTitleCase(a.OWNERNME1 + (a.OWNERNME2 ? " / " + a.OWNERNME2 : "")),
             address: a.SITEADRESS ? toTitleCase(a.SITEADRESS) : "",
-            acres: a.ASSDACRES ?? 0,
-            value: a.CNTASSDVALUE ?? 0,
-            land:  a.LNDVALUE ?? 0,
-            impr:  a.IMPVALUE ?? 0,
+            acres:   a.ASSDACRES ?? 0,
+            value:   a.CNTASSDVALUE ?? 0,
+            land:    a.LNDVALUE ?? 0,
+            impr:    a.IMPVALUE ?? 0,
           }));
         } catch (err) {
-          console.warn("Could not fetch parcel data from ArcGIS:", err);
+          console.error("Could not fetch parcel data from ArcGIS:", err);
+          document.getElementById("table-body").innerHTML =
+            `<tr><td colspan="4" style="text-align:center;padding:32px;opacity:0.5">Unable to load parcel data. ${err.message}</td></tr>`;
+          return;
         }
 
         MAX_VALUE = Math.max(...DATA.map((d) => d.value));
@@ -1536,6 +1704,7 @@
         document.getElementById("panel-impr").textContent     = d.impr ? "$" + d.impr.toLocaleString() : "—";
         document.getElementById("panel-map-link").href        = "map.html#" + d.parcel;
         document.getElementById("panel-map-btn").href         = parcelMapUrl(d.parcel);
+        document.getElementById("panel-beacon-link").href     = parcelMapUrl(d.parcel);
         document.getElementById("panel-nav-counter").textContent =
           (idx + 1) + " of " + filteredData.length;
         document.getElementById("detail-overlay").classList.add("open");
@@ -1695,6 +1864,17 @@
                  <span class="facts-fish-status">${b.boat_ramp === "Yes" ? "Boat ramp" : b.type || ""}</span></div>`).join("")
             : '<div class="facts-empty">No public boat launches recorded for this lake.</div>';
 
+          const regs = d.regulations && d.regulations.length
+            ? `<div class="facts-reg-header"><span>Species</span><span>Size</span><span>Bag</span></div>` +
+              d.regulations.map((r) =>
+                `<div class="facts-reg-row">
+                  <span>${r.species}</span>
+                  <span class="facts-reg-val">${r.size}</span>
+                  <span class="facts-reg-val">${r.bag}</span>
+                  ${r.note ? `<span class="facts-reg-note">${r.note}</span>` : ""}
+                </div>`).join("")
+            : '<div class="facts-empty">No regulation data available.</div>';
+
           content.innerHTML = `
             <div class="facts-grid">
               ${field("Surface Area", d.surface_acres ? d.surface_acres + " acres" : null, true)}
@@ -1715,6 +1895,13 @@
             <div class="facts-block">
               <div class="facts-section-label">Public Boat Launches</div>
               ${launches}
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Fishing Regulations &middot; ${d.reg_season ?? ""}</div>
+              ${regs}
+              ${d.reg_source ? `<div class="facts-source" style="margin-top:10px">
+                <a href="${d.reg_source}" target="_blank" rel="noopener">Full regulations — Wisconsin DNR Fisheries</a>
+              </div>` : ""}
             </div>
             <div class="facts-source">
               Source: <a href="${d.source}" target="_blank" rel="noopener">Wisconsin DNR &mdash; Find A Lake (WBIC ${d.wbic})</a>

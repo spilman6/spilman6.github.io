@@ -1,0 +1,955 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pickerel Lake — Forest County Property Registry</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --water: #1a3a52;
+        --water-mid: #1e4d6b;
+        --water-light: #2a6a94;
+        --water-shimmer: #3d8fc0;
+        --shore: #8fa87c;
+        --sand: #c8b89a;
+        --bark: #5c4a32;
+        --fog: #e8eff5;
+        --mist: #d0dde8;
+        --paper: #f4f0eb;
+        --ink: #1a1a2e;
+        --ink-light: #3a3a5c;
+        --gold: #c9993a;
+        --gold-light: #e8c06a;
+        --accent: #2d7d5a;
+        --accent-light: #3fa876;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--water);
+        color: var(--fog);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(ellipse 120% 60% at 50% 0%, #0d2235 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ─── HEADER ─── */
+      header {
+        position: relative;
+        z-index: 10;
+        padding: 48px 48px 36px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: linear-gradient(180deg, rgba(10, 25, 40, 0.7) 0%, transparent 100%);
+        backdrop-filter: blur(2px);
+      }
+      .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+      .view-nav { display: flex; gap: 6px; flex-shrink: 0; }
+      .view-btn {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 7px 14px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        color: rgba(200, 220, 235, 0.7);
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+      }
+      .view-btn:hover { background: rgba(255,255,255,0.08); color: var(--fog); border-color: rgba(255,255,255,0.3); }
+      .view-btn.active { background: rgba(61,143,192,0.2); color: var(--fog); border-color: var(--water-shimmer); }
+      .header-text { flex: 1; }
+      .header-lake-wrap { flex-shrink: 0; width: 100px; opacity: 0.9; }
+      .lake-svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 18px rgba(61,143,192,0.35)); }
+
+      .header-eyebrow {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--water-shimmer);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .header-eyebrow::after { content: ""; display: block; height: 1px; width: 60px; background: var(--water-shimmer); opacity: 0.5; }
+
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        font-weight: 400;
+        line-height: 1.05;
+        color: var(--fog);
+        letter-spacing: -0.01em;
+      }
+      h1 em { font-style: italic; color: var(--gold-light); }
+
+      .header-sub { font-size: 13px; color: rgba(200,220,235,0.55); margin-top: 10px; font-weight: 300; letter-spacing: 0.02em; }
+
+      /* ─── STATS BAR ─── */
+      .stats-bar { position: relative; z-index: 10; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .stat-card { padding: 28px 36px; border-right: 1px solid rgba(255,255,255,0.07); transition: background 0.25s; }
+      .stat-card:last-child { border-right: none; }
+      .stat-card:hover { background: rgba(255,255,255,0.03); }
+      .stat-label { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,220,235,0.45); margin-bottom: 8px; }
+      .stat-value { font-family: "Playfair Display", serif; font-size: 2rem; font-weight: 700; color: var(--fog); line-height: 1; }
+      .stat-value span { font-size: 1rem; font-family: "DM Mono", monospace; font-weight: 300; color: var(--gold-light); margin-left: 4px; }
+
+      /* ─── LAST UPDATED ─── */
+      .last-updated { text-align: right; font-size: 0.72rem; color: rgba(255,255,255,0.35); padding: 6px 32px 0; letter-spacing: 0.03em; }
+
+      /* ─── CONTROLS ─── */
+      .controls {
+        position: relative; z-index: 10;
+        display: flex; align-items: center; gap: 16px;
+        padding: 20px 48px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        flex-wrap: wrap;
+      }
+      .search-wrap { position: relative; flex: 1; min-width: 220px; max-width: 380px; }
+      .search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); opacity: 0.4; pointer-events: none; }
+      input[type="search"] {
+        width: 100%;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 8px;
+        color: var(--fog);
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        padding: 10px 14px 10px 40px;
+        outline: none;
+        transition: border-color 0.2s, background 0.2s;
+      }
+      input[type="search"]::placeholder { color: rgba(200,220,235,0.3); }
+      input[type="search"]:focus { border-color: var(--water-shimmer); background: rgba(255,255,255,0.09); }
+      .sort-group { display: flex; gap: 6px; align-items: center; }
+      .sort-label { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(200,220,235,0.35); white-space: nowrap; }
+      .pill-btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        color: rgba(200,220,235,0.6);
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        padding: 7px 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .pill-btn:hover { background: rgba(255,255,255,0.1); color: var(--fog); }
+      .pill-btn.active { background: var(--water-shimmer); border-color: var(--water-shimmer); color: #fff; }
+      .results-count { font-family: "DM Mono", monospace; font-size: 11px; color: rgba(200,220,235,0.35); margin-left: auto; white-space: nowrap; }
+
+      /* ─── TABLE ─── */
+      .table-wrap { position: relative; z-index: 10; padding: 0 48px 48px; }
+      table { width: 100%; border-collapse: collapse; }
+      thead tr { border-bottom: 1px solid rgba(255,255,255,0.1); }
+      th {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(200,220,235,0.4);
+        padding: 16px 16px;
+        text-align: left;
+        font-weight: 400;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.2s;
+        white-space: nowrap;
+      }
+      th:not([data-col]) { cursor: default; }
+      th:hover { color: var(--fog); }
+      th.sorted { color: var(--gold-light); }
+      th .sort-arrow { display: inline-block; margin-left: 5px; opacity: 0.5; transition: opacity 0.2s; font-size: 10px; }
+      th.sorted .sort-arrow { opacity: 1; }
+      tbody tr {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        transition: background 0.15s;
+        cursor: pointer;
+        animation: rowFadeIn 0.35s ease backwards;
+      }
+      tbody tr:hover { background: rgba(255,255,255,0.04); }
+      tbody tr.highlighted { background: rgba(61,143,192,0.12); }
+      td { padding: 15px 16px; font-size: 13.5px; font-weight: 300; }
+      .td-parcel { font-family: "DM Mono", monospace; font-size: 11px; color: rgba(200,220,235,0.5); letter-spacing: 0.04em; }
+      .td-owner { color: var(--fog); font-weight: 400; max-width: 340px; }
+      .td-owner.trust { color: var(--gold-light); }
+      .td-owner.llc { color: var(--accent-light); }
+      .td-acres { font-family: "DM Mono", monospace; font-size: 12px; text-align: right; color: rgba(200,220,235,0.7); }
+      .td-value { font-family: "DM Mono", monospace; font-size: 12px; text-align: right; font-weight: 500; }
+      .value-bar-wrap { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+      .value-bar { height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--water-shimmer), var(--gold-light)); min-width: 2px; transition: width 0.3s; }
+      .map-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: rgba(42,106,148,0.25);
+        border: 1px solid rgba(61,143,192,0.3);
+        border-radius: 6px;
+        color: var(--water-shimmer);
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        padding: 5px 12px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .map-btn:hover { background: rgba(61,143,192,0.35); border-color: var(--water-shimmer); color: #fff; }
+      .map-btn svg { flex-shrink: 0; }
+
+      /* ─── EMPTY STATE ─── */
+      .empty-state { text-align: center; padding: 80px 0; color: rgba(200,220,235,0.3); font-family: "DM Mono", monospace; font-size: 13px; letter-spacing: 0.1em; display: none; }
+
+      /* ─── DETAIL PANEL ─── */
+      .detail-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(10,22,36,0.75); backdrop-filter: blur(6px);
+        z-index: 100; align-items: center; justify-content: center; padding: 24px;
+      }
+      .detail-overlay.open { display: flex; }
+      .detail-panel {
+        background: linear-gradient(145deg, #0f2840 0%, #162f47 100%);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 520px;
+        width: 100%;
+        position: relative;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+        animation: panelIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes panelIn {
+        from { opacity: 0; transform: scale(0.92) translateY(20px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .panel-close {
+        background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 50%; width: 30px; height: 30px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; color: rgba(200,220,235,0.6); font-size: 16px;
+        transition: all 0.2s; margin-left: auto;
+      }
+      .panel-close:hover { background: rgba(255,255,255,0.12); color: var(--fog); }
+      .panel-eyebrow { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--water-shimmer); margin-bottom: 12px; }
+      .panel-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+      .panel-nav-btn {
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 6px; color: rgba(200,220,235,0.7);
+        width: 30px; height: 30px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; flex-shrink: 0;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+      }
+      .panel-nav-btn:hover { background: rgba(255,255,255,0.12); color: var(--fog); border-color: rgba(255,255,255,0.25); }
+      .panel-nav-counter { flex: 1; text-align: center; font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.1em; color: rgba(200,220,235,0.4); }
+      .panel-owner { font-family: "Playfair Display", serif; font-size: 1.7rem; font-weight: 400; color: var(--fog); line-height: 1.2; margin-bottom: 28px; }
+      .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+      .panel-field { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; }
+      .panel-field-label { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(200,220,235,0.4); margin-bottom: 6px; }
+      .panel-field-value { font-family: "DM Mono", monospace; font-size: 1.15rem; font-weight: 500; color: var(--fog); }
+      .panel-field-value.green { color: var(--accent-light); }
+      .panel-field-value.gold { color: var(--gold-light); }
+      .panel-section-label {
+        grid-column: 1 / -1;
+        font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+        color: rgba(200,220,235,0.3); padding-top: 8px;
+        border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px;
+      }
+      .panel-section-label:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+      .panel-map-btn {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        width: 100%; background: var(--water-shimmer); border: none;
+        border-radius: 10px; color: #fff;
+        font-family: "DM Mono", monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+        padding: 14px; cursor: pointer; transition: all 0.2s; font-weight: 500;
+      }
+      .panel-map-btn:hover { background: #4fa8d8; transform: translateY(-1px); }
+
+      /* ─── FOOTER ─── */
+      footer {
+        position: relative; z-index: 10;
+        padding: 24px 48px;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      }
+      .footer-text { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.15em; color: rgba(200,220,235,0.25); }
+
+      @keyframes panelSlideUp {
+        from { transform: translateY(60px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+      }
+      @keyframes rowFadeIn {
+        from { opacity: 0; transform: translateX(-8px); }
+        to   { opacity: 1; transform: translateX(0); }
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 900px) {
+        header { padding: 32px 24px 24px; }
+        .header-lake-wrap { width: 120px; }
+        .header-inner { gap: 24px; }
+        .stats-bar { grid-template-columns: repeat(2, 1fr); }
+        .controls { padding: 16px 24px; }
+        .table-wrap { padding: 0 24px 40px; }
+        footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; }
+        td, th { padding: 12px 10px; }
+        .td-owner { max-width: 180px; }
+        .detail-panel { padding: 28px 20px; }
+        .panel-grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 640px) {
+        header { padding: 16px 16px 14px; }
+        .header-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .header-lake-wrap { display: none; }
+        .view-nav { order: -1; }
+        .stats-bar { grid-template-columns: 1fr 1fr; }
+        .stat-card { padding: 18px; }
+        .stat-value { font-size: 1.4rem; }
+        .controls { padding: 12px 16px; }
+        .search-wrap { max-width: 100%; flex: 1 1 100%; }
+        .col-parcel, .col-acres { display: none; }
+        .table-wrap { padding: 0 16px 32px; overflow-x: auto; }
+        .detail-overlay { padding: 0; align-items: flex-end; }
+        .detail-panel { border-radius: 16px 16px 0 0; max-width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px 16px 36px; animation: panelSlideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1); }
+        footer { padding: 16px; }
+        .pin-box { width: calc(100% - 32px); padding: 36px 24px 28px; }
+      }
+      @media (max-width: 400px) {
+        h1 { font-size: 1.9rem; }
+        .header-eyebrow { font-size: 10px; letter-spacing: 0.15em; }
+        .sort-label { display: none; }
+        .stat-value { font-size: 1.2rem; }
+      }
+
+      /* ─── PIN LOGIN ─── */
+      #pin-overlay {
+        position: fixed; inset: 0; background: var(--water); z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        flex-direction: column; gap: 32px;
+      }
+      #pin-overlay::before {
+        content: ""; position: absolute; inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(42,106,148,0.35) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .pin-box {
+        position: relative;
+        background: linear-gradient(145deg, #0f2840 0%, #162f47 100%);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px;
+        padding: 48px 48px 44px;
+        width: 340px;
+        text-align: center;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        animation: panelIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+      }
+      .pin-lake-icon { margin-bottom: 12px; line-height: 0; }
+      .pin-title { font-family: "Playfair Display", serif; font-size: 1.5rem; font-weight: 400; color: var(--fog); margin-bottom: 4px; }
+      .pin-subtitle { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,220,235,0.4); margin-bottom: 32px; }
+      .pin-dots { display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; }
+      .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(200,220,235,0.3); background: transparent; transition: all 0.15s; }
+      .pin-dot.filled { background: var(--water-shimmer); border-color: var(--water-shimmer); box-shadow: 0 0 8px rgba(61,143,192,0.6); }
+      .pin-dot.error  { background: #c0392b; border-color: #e74c3c; box-shadow: 0 0 8px rgba(231,76,60,0.6); }
+      .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+      .pin-key {
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px; color: var(--fog); font-family: "DM Mono", monospace;
+        font-size: 1.1rem; font-weight: 500; padding: 16px 0;
+        cursor: pointer; transition: all 0.15s; user-select: none;
+      }
+      .pin-key:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+      .pin-key:active { background: rgba(61,143,192,0.3); transform: scale(0.95); }
+      .pin-key.del { font-size: 1rem; color: rgba(200,220,235,0.5); }
+      .pin-error-msg { font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: 0.1em; color: #e74c3c; min-height: 18px; }
+      @keyframes pinShake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60%  { transform: translateX(-8px); }
+        40%, 80%  { transform: translateX(8px); }
+      }
+      .pin-box.shake { animation: pinShake 0.4s ease; }
+
+      /* ─── LAKE FACTS MODAL ─── */
+      #facts-overlay {
+        position: fixed; inset: 0; z-index: 800; display: none;
+        align-items: center; justify-content: center; padding: 24px;
+        background: rgba(8, 20, 34, 0.7); backdrop-filter: blur(5px);
+      }
+      #facts-overlay.open { display: flex; }
+      .facts-box {
+        background: linear-gradient(145deg, #0f2840 0%, #162f47 100%);
+        border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+        padding: 40px 44px 36px; width: 520px; max-width: 100%;
+        max-height: 90vh; overflow-y: auto;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        animation: panelIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+        position: relative;
+      }
+      .facts-close { position: absolute; top: 16px; right: 18px; background: none; border: none; color: rgba(200,220,235,0.5); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 6px; }
+      .facts-close:hover { color: var(--fog); }
+      .facts-eyebrow { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--water-shimmer); margin-bottom: 8px; }
+      .facts-title { font-family: "Playfair Display", serif; font-size: 1.6rem; font-weight: 400; color: var(--fog); margin-bottom: 24px; }
+      .facts-title em { font-style: italic; color: var(--gold-light); }
+      .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin-bottom: 24px; }
+      .facts-field-label { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(200,220,235,0.45); margin-bottom: 4px; }
+      .facts-field-value { font-size: 0.95rem; color: var(--fog); }
+      .facts-field-value.gold { color: var(--gold-light); }
+      .facts-section-label { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--water-shimmer); border-bottom: 1px solid rgba(61,143,192,0.25); padding-bottom: 6px; margin-bottom: 12px; }
+      .facts-fish-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.92rem; color: var(--fog); }
+      .facts-fish-status { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light, #3fa876); }
+      .facts-empty { font-size: 0.88rem; color: rgba(200,220,235,0.55); font-style: italic; }
+      .facts-block { margin-bottom: 24px; }
+      .facts-source { font-family: "DM Mono", monospace; font-size: 10px; color: rgba(200,220,235,0.4); margin-top: 4px; }
+      .facts-source a { color: var(--water-shimmer); text-decoration: none; }
+      .facts-source a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <!-- PIN LOGIN OVERLAY -->
+    <div id="pin-overlay">
+      <div class="pin-box" id="pin-box">
+        <div class="pin-lake-icon"><img src="Pickerel-Lake.png" alt="Pickerel Lake" style="width:120px;height:auto;mix-blend-mode:screen;display:block;margin:0 auto" /></div>
+        <div class="pin-title">
+          <em style="font-style:italic;color:var(--gold-light)">Pickerel</em> Lake
+        </div>
+        <div class="pin-subtitle">Enter PIN to continue</div>
+        <div class="pin-dots">
+          <div class="pin-dot" id="dot-0"></div>
+          <div class="pin-dot" id="dot-1"></div>
+          <div class="pin-dot" id="dot-2"></div>
+          <div class="pin-dot" id="dot-3"></div>
+        </div>
+        <div class="pin-keypad">
+          <button class="pin-key" data-val="1">1</button>
+          <button class="pin-key" data-val="2">2</button>
+          <button class="pin-key" data-val="3">3</button>
+          <button class="pin-key" data-val="4">4</button>
+          <button class="pin-key" data-val="5">5</button>
+          <button class="pin-key" data-val="6">6</button>
+          <button class="pin-key" data-val="7">7</button>
+          <button class="pin-key" data-val="8">8</button>
+          <button class="pin-key" data-val="9">9</button>
+          <button class="pin-key del" data-val="del" style="grid-column:1">⌫</button>
+          <button class="pin-key" data-val="0">0</button>
+        </div>
+        <div class="pin-error-msg" id="pin-error"></div>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-inner">
+        <div class="header-text">
+          <div class="header-eyebrow">
+            Wisconsin &middot; Forest County &middot; <span id="current-year"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:18px">
+            <h1>Pickerel <em>Lake</em></h1>
+            <div class="header-lake-wrap">
+              <img class="lake-svg" src="Pickerel-Lake.png" alt="Pickerel Lake silhouette" />
+            </div>
+          </div>
+          <div>Property Ownership Registry</div>
+          <div class="header-sub">276 recorded parcels &nbsp;&middot;&nbsp; Full Dataset</div>
+        </div>
+        <nav class="view-nav">
+          <a href="../index.html" class="view-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Home
+          </a>
+          <a href="index.html" class="view-btn active">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Grid View
+          </a>
+          <a href="map.html" class="view-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            Map View
+          </a>
+          <button type="button" class="view-btn" id="facts-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Lake Facts
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Parcels</div>
+        <div class="stat-value" id="stat-parcels">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Acreage</div>
+        <div class="stat-value" id="stat-acres">— <span>ac</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Assessed Value</div>
+        <div class="stat-value" id="stat-value">— <span>$</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Value / Acre</div>
+        <div class="stat-value" id="stat-avg">— <span>$/ac</span></div>
+      </div>
+    </div>
+
+    <div class="last-updated">Data sourced from county assessor records · Last updated: <span id="last-updated-time"></span></div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="search" placeholder="Search owner or parcel…" />
+      </div>
+      <div class="sort-group">
+        <span class="sort-label">Sort</span>
+        <button class="pill-btn" data-sort="owner">Owner</button>
+        <button class="pill-btn active" data-sort="parcel">Parcel</button>
+        <button class="pill-btn" data-sort="acres">Acres</button>
+        <button class="pill-btn" data-sort="value">Value</button>
+      </div>
+      <span class="results-count" id="results-count"></span>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table id="prop-table">
+        <thead>
+          <tr>
+            <th class="col-parcel" data-col="parcel" tabindex="0" aria-sort="ascending">
+              Parcel <span class="sort-arrow">↕</span>
+            </th>
+            <th data-col="owner" tabindex="0" aria-sort="none">
+              Owner <span class="sort-arrow">↕</span>
+            </th>
+            <th class="col-acres" data-col="acres" style="text-align:right" tabindex="0" aria-sort="none">
+              Acres <span class="sort-arrow">↕</span>
+            </th>
+            <th data-col="value" style="text-align:right" tabindex="0" aria-sort="none">
+              Assessed Value <span class="sort-arrow">↕</span>
+            </th>
+            <th style="text-align:right">Map</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state">No parcels match your search.</div>
+    </div>
+
+    <!-- DETAIL PANEL OVERLAY -->
+    <div class="detail-overlay" id="detail-overlay">
+      <div class="detail-panel">
+        <div class="panel-nav">
+          <button class="panel-nav-btn" id="panel-prev" title="Previous parcel">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="panel-nav-counter" id="panel-nav-counter"></div>
+          <button class="panel-nav-btn" id="panel-next" title="Next parcel">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="panel-close" id="panel-close">&times;</button>
+        </div>
+        <div class="panel-eyebrow" id="panel-parcel"></div>
+        <div class="panel-owner" id="panel-owner"></div>
+        <div id="panel-address" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(200,220,235,0.45);margin-top:-20px;margin-bottom:24px;letter-spacing:0.04em"></div>
+        <div class="panel-grid">
+          <div class="panel-section-label">Valuation</div>
+          <div class="panel-field">
+            <div class="panel-field-label">Assessed Value</div>
+            <div class="panel-field-value gold" id="panel-value"></div>
+          </div>
+          <div class="panel-field">
+            <div class="panel-field-label">Value / Acre</div>
+            <div class="panel-field-value" id="panel-per-acre"></div>
+          </div>
+          <div class="panel-field">
+            <div class="panel-field-label">Land Value</div>
+            <div class="panel-field-value" id="panel-land"></div>
+          </div>
+          <div class="panel-field">
+            <div class="panel-field-label">Improvements</div>
+            <div class="panel-field-value" id="panel-impr"></div>
+          </div>
+          <div class="panel-section-label">Property</div>
+          <div class="panel-field">
+            <div class="panel-field-label">Acreage</div>
+            <div class="panel-field-value green" id="panel-acres"></div>
+          </div>
+          <div class="panel-field">
+            <div class="panel-field-label">Parcel Type</div>
+            <div class="panel-field-value" id="panel-type"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <a class="panel-map-btn" id="panel-map-link" href="#" style="flex:1">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            View on Map
+          </a>
+          <a class="panel-map-btn" id="panel-map-btn" href="#" target="_blank" rel="noopener" style="flex:1">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+            Parcel Website
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-text">
+        Pickerel Lake Property Registry · <span class="current-year"></span> · Forest County, Wisconsin
+      </div>
+      <div class="footer-text">Data sourced from county assessor records</div>
+    </footer>
+
+    <script>
+      let DATA = [];
+      let MAX_VALUE = 0;
+      let sortKey = "parcel";
+      let sortDir = 1;
+      let searchQuery = "";
+      let filteredData = [];
+      let currentPanelIdx = -1;
+
+      function toTitleCase(str) {
+        return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+      }
+
+      async function loadData() {
+        const ids = await fetch("parcels.json").then((r) => r.json());
+        const API = "https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/Wisconsin_Statewide_Parcels/FeatureServer/0/query";
+        const FIELDS = "TAXPARCELID,PARCELID,OWNERNME1,OWNERNME2,SITEADRESS,ASSDACRES,CNTASSDVALUE,LNDVALUE,IMPVALUE";
+
+        function queryParcel(where) {
+          const p = new URLSearchParams({ where, outFields: FIELDS, f: "json", returnGeometry: "false", resultRecordCount: "500" });
+          return fetch(API, { method: "POST", body: p }).then((r) => r.json()).then((j) => j.features || []);
+        }
+
+        try {
+          const forestIds   = (ids.forest   || []).map((id) => `'${id}'`).join(",");
+          const langladeIds = (ids.langlade || []).map((id) => `'${id}'`).join(",");
+          const [fFeats, lFeats] = await Promise.all([
+            forestIds   ? queryParcel(`CONAME = 'FOREST'   AND TAXPARCELID IN (${forestIds})`)   : [],
+            langladeIds ? queryParcel(`CONAME = 'LANGLADE' AND PARCELID     IN (${langladeIds})`) : [],
+          ]);
+          DATA = [...fFeats, ...lFeats].map(({ attributes: a }) => ({
+            parcel: a.TAXPARCELID || a.PARCELID,
+            owner: toTitleCase(a.OWNERNME1 + (a.OWNERNME2 ? " / " + a.OWNERNME2 : "")),
+            address: a.SITEADRESS ? toTitleCase(a.SITEADRESS) : "",
+            acres: a.ASSDACRES ?? 0,
+            value: a.CNTASSDVALUE ?? 0,
+            land:  a.LNDVALUE ?? 0,
+            impr:  a.IMPVALUE ?? 0,
+          }));
+        } catch (err) {
+          console.error("Could not fetch parcel data from ArcGIS:", err);
+          document.getElementById("table-body").innerHTML =
+            `<tr><td colspan="4" style="text-align:center;padding:32px;opacity:0.5">Unable to load parcel data. ${err.message}</td></tr>`;
+          return;
+        }
+
+        MAX_VALUE = Math.max(...DATA.map((d) => d.value));
+        const totalAcres = DATA.reduce((s, d) => s + d.acres, 0);
+        const totalValue = DATA.reduce((s, d) => s + d.value, 0);
+
+        document.getElementById("stat-acres").innerHTML = totalAcres.toFixed(2) + " <span>ac</span>";
+        document.getElementById("stat-value").innerHTML = "$" + (totalValue / 1000000).toFixed(2) + " <span>M</span>";
+        document.getElementById("stat-avg").innerHTML = "$" + Math.round(totalValue / totalAcres).toLocaleString() + " <span>/ac</span>";
+
+        syncSortUi();
+        renderTable();
+      }
+
+      function setSort(key) {
+        if (sortKey === key) sortDir *= -1;
+        else { sortKey = key; sortDir = 1; }
+        syncSortUi();
+        renderTable();
+      }
+
+      function syncSortUi() {
+        document.querySelectorAll(".pill-btn[data-sort]").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.sort === sortKey);
+        });
+        document.querySelectorAll("th[data-col]").forEach((th) => {
+          const isActive = th.dataset.col === sortKey;
+          const arrow = th.querySelector(".sort-arrow");
+          th.classList.toggle("sorted", isActive);
+          th.setAttribute("aria-sort", isActive ? (sortDir === 1 ? "ascending" : "descending") : "none");
+          if (arrow) arrow.textContent = isActive ? (sortDir === 1 ? "↑" : "↓") : "↕";
+        });
+      }
+
+      function ownerClass(owner) {
+        const lower = owner.toLowerCase();
+        if (lower.includes("trust")) return "trust";
+        if (lower.includes("llc") || lower.includes("llp") || lower.includes("group")) return "llc";
+        return "";
+      }
+
+      function ownerType(owner) {
+        const lower = owner.toLowerCase();
+        if (lower.includes("irrevocable trust")) return "Irrevocable Trust";
+        if (lower.includes("revocable trust")) return "Revocable Trust";
+        if (lower.includes("trust")) return "Trust";
+        if (lower.includes("llc")) return "LLC";
+        if (lower.includes("llp")) return "LLP";
+        if (lower.includes("group")) return "Group";
+        if (lower.includes("et ux")) return "Et Ux";
+        if (owner.includes(" / ") || owner.includes(" & ")) return "Joint Owners";
+        return "Individual";
+      }
+
+      function parcelMapUrl(parcel) {
+        return `https://beacon.schneidercorp.com/Application.aspx?AppID=1198&LayerID=36063&PageTypeID=1&PageID=13677&KeyValue=${encodeURIComponent(parcel)}`;
+      }
+
+      function renderTable() {
+        const q = searchQuery.toLowerCase();
+        filteredData = DATA.filter((d) => d.owner.toLowerCase().includes(q) || d.parcel.includes(q));
+        filteredData.sort((a, b) => {
+          let av = a[sortKey], bv = b[sortKey];
+          if (typeof av === "string") { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+          return av < bv ? -sortDir : av > bv ? sortDir : 0;
+        });
+
+        const tbody = document.getElementById("table-body");
+        const empty = document.getElementById("empty-state");
+        const count = document.getElementById("results-count");
+
+        document.getElementById("stat-parcels").textContent = filteredData.length;
+        count.textContent = filteredData.length + " / " + DATA.length + " parcels";
+
+        if (filteredData.length === 0) {
+          tbody.innerHTML = "";
+          empty.style.display = "block";
+          return;
+        }
+        empty.style.display = "none";
+
+        tbody.innerHTML = filteredData.map((d, i) => {
+          const barW = Math.round((d.value / MAX_VALUE) * 80);
+          const cls = ownerClass(d.owner);
+          const delay = Math.min(i * 0.02, 0.4);
+          return `<tr data-idx="${DATA.indexOf(d)}" style="animation-delay:${delay}s">
+      <td class="td-parcel col-parcel">${d.parcel}</td>
+      <td class="td-owner ${cls}">${d.owner}</td>
+      <td class="td-acres col-acres">${d.acres.toFixed(3)}</td>
+      <td class="td-value">
+        <div class="value-bar-wrap">
+          <div class="value-bar" style="width:${barW}px"></div>
+          $${d.value.toLocaleString()}
+        </div>
+      </td>
+      <td style="text-align:right">
+        <a class="map-btn" href="map.html#${d.parcel}" onclick="event.stopPropagation()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+          Map
+        </a>
+      </td>
+    </tr>`;
+        }).join("");
+
+        tbody.querySelectorAll("tr").forEach((tr) => {
+          tr.addEventListener("click", () => {
+            const d = DATA[parseInt(tr.dataset.idx)];
+            const idx = filteredData.indexOf(d);
+            openPanel(idx);
+          });
+        });
+      }
+
+      function openPanel(idx) {
+        currentPanelIdx = idx;
+        const d = filteredData[idx];
+        document.getElementById("panel-parcel").textContent   = "Parcel · " + d.parcel;
+        document.getElementById("panel-owner").textContent    = d.owner;
+        document.getElementById("panel-address").textContent  = d.address || "";
+        document.getElementById("panel-acres").textContent    = d.acres.toFixed(3) + " ac";
+        document.getElementById("panel-value").textContent    = "$" + d.value.toLocaleString();
+        document.getElementById("panel-per-acre").textContent = "$" + Math.round(d.value / d.acres).toLocaleString() + " / ac";
+        document.getElementById("panel-type").textContent     = ownerType(d.owner);
+        document.getElementById("panel-land").textContent     = d.land ? "$" + d.land.toLocaleString() : "—";
+        document.getElementById("panel-impr").textContent     = d.impr ? "$" + d.impr.toLocaleString() : "—";
+        document.getElementById("panel-map-link").href        = "map.html#" + d.parcel;
+        document.getElementById("panel-map-btn").href         = parcelMapUrl(d.parcel);
+        document.getElementById("panel-nav-counter").textContent = (idx + 1) + " of " + filteredData.length;
+        document.getElementById("detail-overlay").classList.add("open");
+      }
+
+      document.getElementById("search").addEventListener("input", (e) => { searchQuery = e.target.value; renderTable(); });
+      document.querySelectorAll(".pill-btn[data-sort]").forEach((btn) => { btn.addEventListener("click", () => setSort(btn.dataset.sort)); });
+      document.querySelectorAll("th[data-col]").forEach((th) => {
+        th.addEventListener("click", () => setSort(th.dataset.col));
+        th.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSort(th.dataset.col); } });
+      });
+      document.getElementById("panel-close").addEventListener("click", () => { document.getElementById("detail-overlay").classList.remove("open"); });
+      document.getElementById("detail-overlay").addEventListener("click", (e) => { if (e.target === document.getElementById("detail-overlay")) document.getElementById("detail-overlay").classList.remove("open"); });
+      document.addEventListener("keydown", (e) => {
+        const overlayOpen = document.getElementById("detail-overlay").classList.contains("open");
+        if (e.key === "Escape") { document.getElementById("detail-overlay").classList.remove("open"); }
+        else if (overlayOpen && e.key === "ArrowLeft") { openPanel((currentPanelIdx - 1 + filteredData.length) % filteredData.length); }
+        else if (overlayOpen && e.key === "ArrowRight") { openPanel((currentPanelIdx + 1) % filteredData.length); }
+      });
+      document.getElementById("panel-prev").addEventListener("click", () => { openPanel((currentPanelIdx - 1 + filteredData.length) % filteredData.length); });
+      document.getElementById("panel-next").addEventListener("click", () => { openPanel((currentPanelIdx + 1) % filteredData.length); });
+
+      const YEAR = new Date().getFullYear();
+      document.querySelectorAll("#current-year, .current-year").forEach(el => el.textContent = YEAR);
+      document.title = `Pickerel Lake — Forest County Property Registry ${YEAR}`;
+      document.getElementById("last-updated-time").textContent =
+        new Date().toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+
+      loadData();
+
+      // ─── PIN LOGIN ───
+      (function () {
+        const CORRECT   = [98, 100, 98, 100].map((n) => String.fromCharCode(n ^ 82)).join("");
+        const CACHE_KEY = "pkl_pin_ts";
+        const ONE_DAY   = 86400000;
+        const overlay   = document.getElementById("pin-overlay");
+
+        const ts = parseInt(localStorage.getItem(CACHE_KEY) || "0", 10);
+        if (Date.now() - ts < ONE_DAY) { overlay.style.display = "none"; }
+
+        let entered = "";
+
+        function updateDots(isError) {
+          for (let i = 0; i < 4; i++) {
+            const dot = document.getElementById("dot-" + i);
+            dot.classList.remove("filled", "error");
+            if (isError) dot.classList.add("error");
+            else if (i < entered.length) dot.classList.add("filled");
+          }
+        }
+
+        function pressKey(val) {
+          document.getElementById("pin-error").textContent = "";
+          if (val === "del") { entered = entered.slice(0, -1); updateDots(false); return; }
+          if (entered.length >= 4) return;
+          entered += val;
+          updateDots(false);
+          if (entered.length === 4) {
+            if (entered === CORRECT) {
+              localStorage.setItem(CACHE_KEY, Date.now().toString());
+              overlay.style.display = "none";
+            } else {
+              const box = document.getElementById("pin-box");
+              box.classList.remove("shake");
+              void box.offsetWidth;
+              box.classList.add("shake");
+              updateDots(true);
+              document.getElementById("pin-error").textContent = "Incorrect PIN";
+              setTimeout(() => { entered = ""; updateDots(false); }, 800);
+            }
+          }
+        }
+
+        document.querySelectorAll(".pin-key").forEach((btn) => { btn.addEventListener("click", () => pressKey(btn.dataset.val)); });
+        document.addEventListener("keydown", (e) => {
+          if (overlay.style.display === "none") return;
+          if (e.key >= "0" && e.key <= "9") pressKey(e.key);
+          else if (e.key === "Backspace") pressKey("del");
+        });
+      })();
+    </script>
+
+    <!-- LAKE FACTS MODAL -->
+    <div id="facts-overlay">
+      <div class="facts-box" role="dialog" aria-modal="true" aria-labelledby="facts-title">
+        <button type="button" class="facts-close" id="facts-close" aria-label="Close">&times;</button>
+        <div class="facts-eyebrow">Wisconsin DNR &middot; Lake Facts</div>
+        <div class="facts-title" id="facts-title">Pickerel <em>Lake</em></div>
+        <div id="facts-content"><div class="facts-empty">Loading&hellip;</div></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const overlay = document.getElementById("facts-overlay");
+        const content = document.getElementById("facts-content");
+        let loaded = false;
+
+        function field(label, value, gold) {
+          return `<div><div class="facts-field-label">${label}</div>
+            <div class="facts-field-value${gold ? " gold" : ""}">${value ?? "—"}</div></div>`;
+        }
+
+        function render(d) {
+          const fish = d.fish && d.fish.length
+            ? d.fish.map((f) =>
+                `<div class="facts-fish-row"><span>${f.species}</span>
+                 <span class="facts-fish-status">${f.status}</span></div>`).join("")
+            : '<div class="facts-empty">No fish survey data recorded.</div>';
+
+          const launches = d.boat_launches && d.boat_launches.length
+            ? d.boat_launches.map((b) =>
+                `<div class="facts-fish-row"><span>${b.name}</span>
+                 <span class="facts-fish-status">${b.boat_ramp === "Yes" ? "Boat ramp" : b.type || ""}</span></div>`).join("")
+            : '<div class="facts-empty">No public boat launches recorded for this lake.</div>';
+
+          content.innerHTML = `
+            <div class="facts-grid">
+              ${field("Surface Area", d.surface_acres ? d.surface_acres + " acres" : null, true)}
+              ${field("Maximum Depth", d.max_depth_ft ? d.max_depth_ft + " ft" : null)}
+              ${field("Mean Depth", d.mean_depth_ft ? d.mean_depth_ft + " ft" : null)}
+              ${field("Water Clarity", d.water_clarity)}
+              ${field("Trophic Status", d.trophic_status)}
+              ${field("Lake Type", d.lake_type)}
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Bottom Composition</div>
+              <div class="facts-field-value">${d.bottom ?? "—"}</div>
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Fish Species</div>
+              ${fish}
+            </div>
+            <div class="facts-block">
+              <div class="facts-section-label">Public Boat Launches</div>
+              ${launches}
+            </div>
+            <div class="facts-source">
+              Source: <a href="${d.source}" target="_blank" rel="noopener">Wisconsin DNR &mdash; Find A Lake (WBIC ${d.wbic})</a>
+              &middot; retrieved ${d.retrieved}
+            </div>`;
+        }
+
+        function open() {
+          overlay.classList.add("open");
+          if (loaded) return;
+          fetch("lake-facts.json")
+            .then((r) => r.json())
+            .then((d) => { loaded = true; render(d); })
+            .catch(() => { content.innerHTML = '<div class="facts-empty">Could not load lake facts.</div>'; });
+        }
+
+        document.getElementById("facts-btn").addEventListener("click", open);
+        document.getElementById("facts-close").addEventListener("click", () => overlay.classList.remove("open"));
+        overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.classList.remove("open"); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") overlay.classList.remove("open"); });
+      })();
+    </script>
+  </body>
+</html>

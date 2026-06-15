@@ -1,0 +1,29 @@
+{
+  "name": "Pickerel Lake",
+  "county": "Forest / Langlade",
+  "town": "Nashville",
+  "wbic": 388100,
+  "surface_acres": 1272,
+  "max_depth_ft": 19,
+  "mean_depth_ft": null,
+  "water_clarity": null,
+  "trophic_status": null,
+  "lake_type": null,
+  "bottom": null,
+  "fish": [
+    { "species": "Walleye",         "status": "Present" },
+    { "species": "Northern Pike",   "status": "Common" },
+    { "species": "Largemouth Bass", "status": "Common" },
+    { "species": "Smallmouth Bass", "status": "Present" },
+    { "species": "Bluegill",        "status": "Abundant" },
+    { "species": "Yellow Perch",    "status": "Present" },
+    { "species": "Crappie",         "status": "Present" }
+  ],
+  "boat_launches": [
+    { "name": "Pickerel Lake Access — South Shore Dr",          "boat_ramp": "Yes", "type": "Public" },
+    { "name": "Pickerel Lake Access — Pickerel Lake Rd (N)",    "boat_ramp": "Yes", "type": "Public" },
+    { "name": "Pine Point Resort Launch",                        "boat_ramp": "No",  "type": "Private" }
+  ],
+  "source": "https://apps.dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=388100",
+  "retrieved": "June 15, 2026"
+}
