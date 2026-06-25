@@ -1,0 +1,17 @@
+@AiIntelligence.Api_HostAddress = http://localhost:5203
+
+GET {{AiIntelligence.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+POST {{AiIntelligence.Api_HostAddress}}/api/intelligence/import-rss
+Content-Type: application/json
+
+{
+  "feedUrls": [
+    "https://example.com/rss"
+  ]
+}
+
+###
