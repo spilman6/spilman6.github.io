@@ -31,4 +31,22 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     });
 
+    // Fade sections in as they enter the viewport
+    const revealEls = [].slice.call(document.querySelectorAll('.reveal'));
+    if (revealEls.length) {
+        if ('IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            revealEls.forEach(el => revealObserver.observe(el));
+        } else {
+            revealEls.forEach(el => el.classList.add('is-visible'));
+        }
+    }
+
 });

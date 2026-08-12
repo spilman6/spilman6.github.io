@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C# Data Types — Quick Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F2F8;
+  --card:#FFFFFF;
+  --ink:#191233;
+  --muted:#6C6588;
+  --line:#E0DBEC;
+  --value:#7A3FA6;        /* C# purple — value types */
+  --value-soft:#F0E7F8;
+  --ref:#0E7C86;          /* teal — reference types */
+  --ref-soft:#DFF1F2;
+  --shadow:0 1px 2px rgba(25,18,51,.05), 0 8px 24px -12px rgba(25,18,51,.18);
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:15px; line-height:1.5;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 72px}
+
+/* ---------- Hero ---------- */
+header.hero{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 14px
+}
+h1{
+  font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;
+  font-weight:800;font-size:clamp(38px,6.4vw,68px);line-height:.98;
+  letter-spacing:-.03em;margin:0 0 16px;max-width:14ch;
+}
+h1 em{font-style:normal;color:var(--value)}
+.lede{max-width:56ch;color:var(--muted);font-size:16.5px;margin:0}
+
+/* memory ruler — the signature element */
+.ruler{margin:34px 0 4px}
+.ruler-label{
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px
+}
+.ruler-track{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap}
+.ruler-step{display:flex;flex-direction:column;gap:7px}
+.ruler-step span{
+  font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted)
+}
+.bytes{display:flex;gap:2px}
+.bytes i{
+  width:9px;height:16px;border-radius:2px;background:var(--value);
+  display:block;opacity:.88
+}
+.bytes.ref i{background:transparent;border:1.5px dashed var(--ref);opacity:1}
+
+/* ---------- Quick picks ---------- */
+.picks{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin:40px 0 8px
+}
+.pick{background:var(--card);padding:18px 18px 20px}
+.pick b{
+  display:block;font-family:"JetBrains Mono",monospace;font-weight:700;
+  font-size:17px;color:var(--value);margin-bottom:5px
+}
+.pick small{display:block;color:var(--muted);font-size:13.5px;line-height:1.45}
+.section-title{
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:700;
+  font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:44px 0 14px
+}
+
+/* ---------- Controls ---------- */
+.controls{
+  position:sticky;top:0;z-index:20;background:rgba(244,242,248,.92);
+  backdrop-filter:blur(8px);padding:14px 0 12px;margin-bottom:6px;
+  border-bottom:1px solid var(--line);display:flex;gap:10px;
+  flex-wrap:wrap;align-items:center
+}
+.search{
+  flex:1 1 220px;min-width:180px;border:1px solid var(--line);background:var(--card);
+  border-radius:999px;padding:9px 16px;font:inherit;font-size:14px;color:var(--ink)
+}
+.search::placeholder{color:#A39CBB}
+.search:focus{outline:2px solid var(--value);outline-offset:1px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{
+  font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.02em;
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  padding:8px 13px;border-radius:999px;cursor:pointer
+}
+.chip:hover{border-color:var(--value);color:var(--value)}
+.chip:focus-visible{outline:2px solid var(--value);outline-offset:2px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------- Cards ---------- */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
+  gap:14px;margin-top:20px
+}
+.type{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 18px 16px;box-shadow:var(--shadow);position:relative;
+  border-top:3px solid var(--value);transition:transform .18s ease, box-shadow .18s ease
+}
+.type.is-ref{border-top-color:var(--ref)}
+.type:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(25,18,51,.06),0 16px 32px -16px rgba(25,18,51,.28)}
+.type-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.kw{
+  font-family:"JetBrains Mono",monospace;font-weight:700;font-size:21px;
+  letter-spacing:-.02em;color:var(--value);margin:0
+}
+.is-ref .kw{color:var(--ref)}
+.clr{
+  font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);
+  margin:3px 0 0;word-break:break-word
+}
+.size{text-align:right;flex:0 0 auto}
+.size .n{
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--muted);
+  display:block;margin-bottom:6px;white-space:nowrap
+}
+.range{
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.55;
+  margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);
+  word-break:break-word
+}
+.use{color:var(--muted);font-size:13.5px;margin:9px 0 0}
+.tag{
+  display:inline-block;margin:10px 0 0;font-family:"JetBrains Mono",monospace;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--ink);color:#fff;padding:3px 9px;border-radius:5px
+}
+.is-ref .tag{background:var(--ink);color:#fff}
+.empty{color:var(--muted);padding:40px 4px;font-size:15px;display:none}
+
+/* ---------- Footnotes ---------- */
+.notes{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:26px;margin-top:20px;padding-top:26px;border-top:1px solid var(--line)
+}
+.note h3{
+  font-family:"Bricolage Grotesque",sans-serif;font-size:15px;margin:0 0 8px;letter-spacing:-.01em
+}
+.note p{margin:0 0 8px;color:var(--muted);font-size:13.5px}
+.note code{
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--value-soft);
+  color:var(--value);padding:1px 5px;border-radius:4px
+}
+footer{margin-top:44px;color:var(--muted);font-size:12.5px}
+
+/* ---------- Example chips ---------- */
+.ex{
+  display:flex;flex-wrap:wrap;gap:6px;margin:13px 0 0;
+  padding-top:12px;border-top:1px dashed var(--line)
+}
+.ex-label{
+  width:100%;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:#B0A9C8;margin:0 0 2px
+}
+.ex span{
+  display:inline-flex;align-items:baseline;gap:6px;
+  background:var(--value-soft);color:var(--value);
+  padding:5px 10px;border-radius:7px;font-size:12.5px;font-weight:500;
+  line-height:1.3
+}
+.is-ref .ex span{background:var(--ref-soft);color:var(--ref)}
+.ex span i{
+  font-family:"JetBrains Mono",monospace;font-style:normal;
+  font-size:11px;opacity:.62
+}
+
+/* ---------- Practice ---------- */
+.practice{
+  margin-top:52px;background:var(--ink);color:#fff;border-radius:20px;
+  padding:32px 32px 28px;position:relative;overflow:hidden
+}
+.practice::after{
+  content:"";position:absolute;right:-90px;top:-90px;width:280px;height:280px;
+  border-radius:50%;background:radial-gradient(circle,rgba(122,63,166,.55),transparent 68%)
+}
+.practice > *{position:relative;z-index:1}
+.practice .eyebrow{color:#A79CD0;margin-bottom:10px}
+.q{
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:700;
+  font-size:clamp(20px,3vw,27px);line-height:1.25;letter-spacing:-.02em;
+  margin:0 0 22px;max-width:30ch
+}
+.opts{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.opt{
+  font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:500;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+  color:#fff;padding:11px 18px;border-radius:10px;cursor:pointer;
+  transition:background .15s ease,border-color .15s ease
+}
+.opt:hover:not(:disabled){background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
+.opt:focus-visible{outline:2px solid #C9A9F0;outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt.right{background:#17795E;border-color:#25A87F;color:#fff}
+.opt.wrong{background:#8E2749;border-color:#B3305A}
+.why{
+  font-size:14.5px;line-height:1.6;color:#D9D3EE;margin:0 0 20px;
+  min-height:46px;max-width:60ch;display:none
+}
+.why.show{display:block}
+.why b{color:#fff}
+.practice-foot{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(255,255,255,.14)
+}
+.score{
+  font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:#A79CD0
+}
+.next{
+  font-family:"JetBrains Mono",monospace;font-size:13px;background:#fff;color:var(--ink);
+  border:0;padding:11px 22px;border-radius:10px;cursor:pointer;font-weight:500
+}
+.next:hover{background:#E8E1F5}
+.next:focus-visible{outline:2px solid #C9A9F0;outline-offset:2px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- Print: dense handout ---------- */
+@media print{
+  @page{margin:12mm}
+  body{background:#fff;font-size:9.5pt}
+  .controls,.ruler,.picks,.hero .lede,.practice{display:none!important}
+  header.hero{padding:0 0 8px}
+  h1{font-size:22pt;margin-bottom:4px}
+  .wrap{padding:0}
+  .grid{grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+  .type{break-inside:avoid;box-shadow:none;padding:8px 10px;border-radius:6px}
+  .type:hover{transform:none}
+  .kw{font-size:13pt}
+  .range{font-size:8pt;margin-top:7px;padding-top:6px}
+  .use{font-size:8pt}
+  .ex{margin-top:6px;padding-top:5px;gap:3px}
+  .ex-label{display:none}
+  .ex span{font-size:7.5pt;padding:2px 6px;border-radius:4px}
+  .ex span i{font-size:7pt}
+  .section-title{margin:14px 0 4px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">C# Reference · Fox Valley Technical College</p>
+    <h1>Data types, <em>by the byte</em>.</h1>
+    <p class="lede">Every value you store takes up a fixed amount of memory. Pick the smallest type that comfortably holds your data — and never store money in a <code style="font-family:'JetBrains Mono',monospace">double</code>.</p>
+
+    <div class="ruler" aria-hidden="true">
+      <p class="ruler-label">Memory footprint, to scale</p>
+      <div class="ruler-track">
+        <div class="ruler-step"><div class="bytes"><i></i></div><span>1 byte · bool, byte</span></div>
+        <div class="ruler-step"><div class="bytes"><i></i><i></i></div><span>2 · char, short</span></div>
+        <div class="ruler-step"><div class="bytes"><i></i><i></i><i></i><i></i></div><span>4 · int, float</span></div>
+        <div class="ruler-step"><div class="bytes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>8 · long, double</span></div>
+        <div class="ruler-step"><div class="bytes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>16 · decimal</span></div>
+        <div class="ruler-step"><div class="bytes ref"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>ref · string, object</span></div>
+      </div>
+    </div>
+  </header>
+
+  <p class="section-title">Start here — the five you'll use most</p>
+  <div class="picks">
+    <div class="pick"><b>int</b><small>Whole numbers. The default for counting anything.</small></div>
+    <div class="pick"><b>double</b><small>Numbers with decimals — measurements, averages, science.</small></div>
+    <div class="pick"><b>decimal</b><small>Money. Exact to the cent, no rounding surprises.</small></div>
+    <div class="pick"><b>string</b><small>Text of any length. Double quotes.</small></div>
+    <div class="pick"><b>bool</b><small>A yes/no answer: <code style="font-family:'JetBrains Mono',monospace">true</code> or <code style="font-family:'JetBrains Mono',monospace">false</code>.</small></div>
+  </div>
+
+  <div class="controls">
+    <input class="search" id="q" type="search" placeholder="Search a type, size, or CLR name…" aria-label="Search data types">
+    <div class="chips" role="group" aria-label="Filter data types">
+      <button class="chip" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" data-f="integer" aria-pressed="false">Integers</button>
+      <button class="chip" data-f="real" aria-pressed="false">Decimals</button>
+      <button class="chip" data-f="text" aria-pressed="false">Text</button>
+      <button class="chip" data-f="value" aria-pressed="false">Value types</button>
+      <button class="chip" data-f="reference" aria-pressed="false">Reference types</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No type matches that search. Try <code>int</code>, <code>16</code>, or <code>System.Single</code>.</p>
+
+  <section class="practice" aria-labelledby="pq">
+    <p class="eyebrow">Practice · pick the right type</p>
+    <h2 class="q" id="pq">Loading…</h2>
+    <div class="opts" id="opts"></div>
+    <p class="why" id="why"></p>
+    <div class="practice-foot">
+      <span class="score" id="score">0 correct · 0 answered</span>
+      <button class="next" id="next">Skip &rarr;</button>
+    </div>
+  </section>
+
+  <div class="notes">
+    <div class="note">
+      <h3>Literal suffixes</h3>
+      <p>Number literals default to <code>int</code> and <code>double</code>. Tell the compiler otherwise:</p>
+      <p><code>3.5f</code> float · <code>19.99m</code> decimal · <code>9000000000L</code> long · <code>25u</code> uint</p>
+    </div>
+    <div class="note">
+      <h3>Value vs. reference</h3>
+      <p>Value types hold the data itself and copy on assignment. Reference types hold an address that points at data on the heap — copying the variable copies the address, not the object.</p>
+    </div>
+    <div class="note">
+      <h3>Default values</h3>
+      <p>Uninitialized fields start at <code>0</code> for numbers, <code>false</code> for bool, <code>'\0'</code> for char, and <code>null</code> for reference types. Local variables must be assigned before use.</p>
+    </div>
+    <div class="note">
+      <h3>Converting text to numbers</h3>
+      <p>User input arrives as <code>string</code>. Use <code>int.TryParse</code> or <code>double.TryParse</code> so bad input returns <code>false</code> instead of crashing.</p>
+    </div>
+  </div>
+
+  <footer>Sizes shown are the in-memory size of the value. Reference types store an 8-byte address on 64-bit systems; the object itself lives on the heap. Print this page for a two-column handout.</footer>
+</div>
+
+<script>
+const types = [
+  {kw:"bool", clr:"System.Boolean", size:1, sizeLabel:"1 byte", cats:["value"],
+   range:"true or false", use:"Yes/no conditions and flags."},
+  {kw:"byte", clr:"System.Byte", size:1, sizeLabel:"1 byte", cats:["value","integer"],
+   range:"0 to 255", use:"Unsigned. Raw file and image data."},
+  {kw:"sbyte", clr:"System.SByte", size:1, sizeLabel:"1 byte", cats:["value","integer"],
+   range:"−128 to 127", use:"Signed byte. Rarely needed."},
+  {kw:"char", clr:"System.Char", size:2, sizeLabel:"2 bytes", cats:["value","text"],
+   range:"U+0000 to U+FFFF (0 to 65,535)", use:"A single character in single quotes: 'A'."},
+  {kw:"short", clr:"System.Int16", size:2, sizeLabel:"2 bytes", cats:["value","integer"],
+   range:"−32,768 to 32,767", use:"Small whole numbers where memory is tight."},
+  {kw:"ushort", clr:"System.UInt16", size:2, sizeLabel:"2 bytes", cats:["value","integer"],
+   range:"0 to 65,535", use:"Unsigned small whole numbers."},
+  {kw:"int", clr:"System.Int32", size:4, sizeLabel:"4 bytes", cats:["value","integer"], badge:"Default",
+   range:"−2,147,483,648 to 2,147,483,647", use:"Your go-to for counts, indexes, and IDs."},
+  {kw:"uint", clr:"System.UInt32", size:4, sizeLabel:"4 bytes", cats:["value","integer"],
+   range:"0 to 4,294,967,295", use:"Unsigned. Suffix a literal with u."},
+  {kw:"float", clr:"System.Single", size:4, sizeLabel:"4 bytes", cats:["value","real"],
+   range:"±1.5E−45 to ±3.4E+38 · 6–9 digits", use:"Lower-precision decimals. Suffix with f."},
+  {kw:"long", clr:"System.Int64", size:8, sizeLabel:"8 bytes", cats:["value","integer"],
+   range:"−9,223,372,036,854,775,808 to 9,223,372,036,854,775,807", use:"Whole numbers past two billion. Suffix with L."},
+  {kw:"ulong", clr:"System.UInt64", size:8, sizeLabel:"8 bytes", cats:["value","integer"],
+   range:"0 to 18,446,744,073,709,551,615", use:"Very large unsigned whole numbers."},
+  {kw:"double", clr:"System.Double", size:8, sizeLabel:"8 bytes", cats:["value","real"], badge:"Default",
+   range:"±5.0E−324 to ±1.7E+308 · 15–17 digits", use:"Standard choice for decimals and math."},
+  {kw:"DateTime", clr:"System.DateTime", size:8, sizeLabel:"8 bytes", cats:["value"],
+   range:"0001-01-01 00:00:00 to 9999-12-31 23:59:59", use:"Dates and times. A struct, not a keyword."},
+  {kw:"decimal", clr:"System.Decimal", size:16, sizeLabel:"16 bytes", cats:["value","real"], badge:"Money",
+   range:"±1.0E−28 to ±7.9E+28 · 28–29 significant digits", use:"Exact base-10 math. Suffix with m."},
+  {kw:"string", clr:"System.String", size:0, sizeLabel:"reference", cats:["reference","text"],
+   range:"0 to roughly 1 billion characters", use:"Text. Immutable — every edit makes a new string."},
+  {kw:"object", clr:"System.Object", size:0, sizeLabel:"reference", cats:["reference"],
+   range:"Any type — every type inherits from object", use:"The root of the type system. Prefer a specific type."},
+  {kw:"struct", clr:"inherits System.ValueType", size:0, sizeLabel:"sum of members", cats:["value"],
+   range:"Each member keeps the range of its own type", use:"Your own small value type, like a Point or Money."}
+];
+
+const examples = {
+  bool:   [["Is enrolled","true"],["Has paid","false"],["Dark mode on","true"]],
+  byte:   [["Color channel","220"],["Percent complete","87"],["Volume level","64"]],
+  sbyte:  [["Temperature change","-18"],["Score adjustment","-7"]],
+  char:   [["Letter grade","'A'"],["Middle initial","'J'"],["Menu choice","'F'"]],
+  short:  [["Stadium capacity","12500"],["Calendar year","2026"],["Employee count","480"]],
+  ushort: [["Port number","8080"],["ZIP code","54914"],["Seats sold","1200"]],
+  int:    [["Age","21"],["Goals scored","42"],["Quantity ordered","3"],["Student ID","90210"]],
+  uint:   [["Order number","90210"],["Page views","1500000"],["Points earned","250"]],
+  float:  [["Height in meters","1.70"],["Temperature","72.5"],["Game coordinate","12.5"]],
+  long:   [["World population","8100000000"],["Milliseconds since 1970",""],["File size in bytes",""]],
+  ulong:  [["Bytes transferred",""],["Distance to a star, in km",""],["Hash value",""]],
+  double: [["GPA","3.75"],["Pass accuracy","87.35"],["Race distance","26.2"],["Average score","88.6"]],
+  DateTime:[["Birth date",""],["Kickoff time",""],["Assignment due date",""],["Order placed",""]],
+  decimal:[["Ticket price","249.99m"],["Salary","58400.00m"],["Sales tax","13.75m"],["Account balance",""]],
+  string: [["Team name","\"Fox Valley FC\""],["Player bio",""],["Email address",""],["Street address",""]],
+  object: [["A value of unknown type",""],["Item in a mixed list",""]],
+  struct: [["A point","(x, y)"],["A final score","(3, 1)"],["A color","(r, g, b)"]]
+};
+
+const grid = document.getElementById("grid");
+const empty = document.getElementById("empty");
+
+function blocks(t){
+  if(t.size === 0) return '<div class="bytes ref">'+ '<i></i>'.repeat(4) +'</div>';
+  return '<div class="bytes">'+ '<i></i>'.repeat(t.size) +'</div>';
+}
+
+grid.innerHTML = types.map(t => `
+  <article class="type ${t.cats.includes("reference") ? "is-ref" : ""} ${t.badge ? "has-tag" : ""}"
+           data-cats="${t.cats.join(" ")}"
+           data-search="${(t.kw+" "+t.clr+" "+t.sizeLabel+" "+t.range+" "+t.use).toLowerCase()}">
+    <div class="type-head">
+      <div>
+        <h2 class="kw">${t.kw}</h2>
+        <p class="clr">${t.clr}</p>
+      </div>
+      <div class="size">
+        <span class="n">${t.sizeLabel}</span>
+        ${blocks(t)}
+      </div>
+    </div>
+    <p class="range">${t.range}</p>
+    <p class="use">${t.use}</p>
+    ${t.badge ? `<span class="tag">${t.badge}</span>` : ""}
+    <div class="ex">
+      <p class="ex-label">You'd use it for</p>
+      ${examples[t.kw].map(e => `<span>${e[0]}${e[1] ? `<i>${e[1]}</i>` : ""}</span>`).join("")}
+    </div>
+  </article>
+`).join("");
+
+let filter = "all", query = "";
+const cards = [...grid.querySelectorAll(".type")];
+
+function apply(){
+  let shown = 0;
+  cards.forEach(c => {
+    const okCat = filter === "all" || c.dataset.cats.includes(filter);
+    const okQ = !query || c.dataset.search.includes(query);
+    const on = okCat && okQ;
+    c.style.display = on ? "" : "none";
+    if(on) shown++;
+  });
+  empty.style.display = shown ? "none" : "block";
+}
+
+document.querySelectorAll(".chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed","false"));
+    btn.setAttribute("aria-pressed","true");
+    filter = btn.dataset.f;
+    apply();
+  });
+});
+
+document.getElementById("q").addEventListener("input", e => {
+  query = e.target.value.trim().toLowerCase();
+  apply();
+});
+
+/* ---------- Practice ---------- */
+const bank = [
+  {ask:"The number of goals a player scored this season.",
+   opts:["int","double","decimal","string"], a:"int",
+   why:"<b>int</b> — a whole number that will never come close to 2.1 billion. Counting anything is an int by default."},
+  {ask:"A player's pass accuracy, like 87.35 percent.",
+   opts:["int","double","decimal","float"], a:"double",
+   why:"<b>double</b> — decimals where a tiny rounding difference doesn't matter. Use decimal only when exactness is required."},
+  {ask:"The price of a season ticket: $249.99.",
+   opts:["double","decimal","float","int"], a:"decimal",
+   why:"<b>decimal</b> — money must be exact. A double stores 0.1 as an approximation, so totals drift by fractions of a cent."},
+  {ask:"Whether a player is currently on the active roster.",
+   opts:["bool","char","string","byte"], a:"bool",
+   why:"<b>bool</b> — a true/false answer. Storing \"yes\" in a string means you'd have to compare text every time."},
+  {ask:"A single letter grade for a lab assignment: A, B, or C.",
+   opts:["string","char","byte","object"], a:"char",
+   why:"<b>char</b> — exactly one character, in single quotes. A string would work but wastes memory and allows 'ABCD'."},
+  {ask:"A player's full name.",
+   opts:["char","string","object","char[]"], a:"string",
+   why:"<b>string</b> — text of any length, in double quotes. It's a reference type, so an empty variable holds null."},
+  {ask:"Total attendance across every MLS match ever played — over 4 billion.",
+   opts:["int","uint","long","double"], a:"long",
+   why:"<b>long</b> — int stops at about 2.1 billion. Beyond that you need 8 bytes. Suffix big literals with L."},
+  {ask:"The exact date and time a match kicks off.",
+   opts:["string","DateTime","long","int"], a:"DateTime",
+   why:"<b>DateTime</b> — it can compare, add, and format times. A string can't tell you which of two matches is sooner."},
+  {ask:"A player's jersey number, 1 through 99, in a memory-tight mobile app.",
+   opts:["byte","int","short","char"], a:"byte",
+   why:"<b>byte</b> — 0 to 255 covers it in a single byte. In most desktop apps int is still fine; here the constraint decides."},
+  {ask:"Your own bundle of a home score and an away score that copies by value.",
+   opts:["class","struct","object","string"], a:"struct",
+   why:"<b>struct</b> — a small value type you define. Assigning it copies the data, not a reference."}
+];
+
+let qi = -1, answered = 0, right = 0, locked = false;
+const qEl = document.getElementById("pq"), optsEl = document.getElementById("opts"),
+      whyEl = document.getElementById("why"), scoreEl = document.getElementById("score"),
+      nextEl = document.getElementById("next");
+
+function shuffle(a){ return a.map(v => [Math.random(), v]).sort((x,y) => x[0]-y[0]).map(v => v[1]); }
+
+function loadQ(){
+  qi = (qi + 1) % bank.length;
+  if(qi === 0) bank.sort(() => Math.random() - .5);
+  locked = false;
+  const q = bank[qi];
+  qEl.textContent = q.ask;
+  whyEl.classList.remove("show");
+  nextEl.textContent = "Skip →";
+  optsEl.innerHTML = shuffle([...q.opts])
+    .map(o => `<button class="opt" data-o="${o}">${o}</button>`).join("");
+  optsEl.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => pick(b, q)));
+}
+
+function pick(btn, q){
+  if(locked) return;
+  locked = true; answered++;
+  const correct = btn.dataset.o === q.a;
+  if(correct) right++;
+  optsEl.querySelectorAll(".opt").forEach(b => {
+    b.disabled = true;
+    if(b.dataset.o === q.a) b.classList.add("right");
+    else if(b === btn) b.classList.add("wrong");
+  });
+  whyEl.innerHTML = q.why;
+  whyEl.classList.add("show");
+  nextEl.textContent = "Next question →";
+  scoreEl.textContent = `${right} correct · ${answered} answered`;
+}
+
+nextEl.addEventListener("click", loadQ);
+loadQ();
+</script>
+</body>
+</html>

@@ -7,56 +7,77 @@
         <!-- Font Awesome icons (free version)-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="../css/styles.css" rel="stylesheet" />
         <link href="../css/override.css" rel="stylesheet" />
 </head>
 <body class="sub">
- 
-    <header class="w-100">Courses</header>
-   
-    <div class="container">
-        <h1 class="text-left">Courses</h1>
-        <div class="row">
-          <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="https://picsum.photos/500/320?sd=3" class="card-img-top" alt="...">
+
+    <header class="course-hero">
+        <div class="container hero-inner">
+            <div class="hero-copy">
+                <div class="course-branding">
+                    <a class="back-link" href="../index.html" aria-label="Back to portfolio">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <p class="eyebrow">TJ Spilman</p>
+                </div>
+                <h1>Courses</h1>
+                <p class="subtitle">Practical technology education for curious learners and future developers.</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container py-5">
+        <div class="section-head mb-4">
+            <p class="section-kicker">Learning track</p>
+            <h2>Featured courses</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3">
+            <div class="card course-card h-100">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="Database server infrastructure">
                 <div class="card-body">
-                  <h5 class="card-title">Data Access for programmers</h5>
-                  <p class="card-text">Provides background in fundamental database concepts, design, documentation, implementation and distribution involving the relational database model. Students will create, query and update relational databases using Structured Query Language (SQL).</p>
-                  <a href="#" class="btn btn-primary">Let's get it</a>
+                  <div class="course-meta">Database + SQL</div>
+                  <h5 class="card-title">Data Access for Programmers</h5>
+                  <p class="card-text">Learn how to design, query, and maintain relational databases with SQL. This course covers schema design, table relationships, data integrity, and practical access patterns for application development.</p>
+                  <a href="#" class="btn btn-primary">Explore course</a>
                 </div>
               </div>
           </div>
-          <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="https://picsum.photos/500/320?sd=6" class="card-img-top" alt="...">
+          <div class="col-md-6 col-xl-3">
+            <div class="card course-card h-100">
+                <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="Web graphics design workspace">
                 <div class="card-body">
+                  <div class="course-meta">Design + UI</div>
                   <h5 class="card-title">Web Graphics</h5>
-                  <p class="card-text">Introduces the fundamental concepts necessary to generate and prepare graphics for Web pages. The course will focus on raster as well as vector images. Areas addressed will be color selection, layout, text, optimizing images, creating backgrounds, slicing, creating navigation, transparent graphics and animated graphics. Adobe software will be utilized.</p>
-                  <a href="#" class="btn btn-primary">Let's get it</a>
+                  <p class="card-text">Explore layout, color theory, image optimization, and visual storytelling for the web. Students create polished graphics, navigation assets, and responsive design elements using industry tools and best practices.</p>
+                  <a href="#" class="btn btn-primary">Explore course</a>
                 </div>
               </div>
           </div>
-          <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="https://picsum.photos/500/320?sd=2" class="card-img-top" alt="...">
+          <div class="col-md-6 col-xl-3">
+            <div class="card course-card h-100">
+                <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="C# programming">
                 <div class="card-body">
-                  <h5 class="card-title">Introduction to c#</h5>
-                  <p class="card-text">Introduces students with little or no programming background to programming and logic principles that apply to traditional and Windows systems. Uses C# to apply the principles by developing simple Windows applications.</p>
-                  <a href="#" class="btn btn-primary">Let's get it</a>
+                  <div class="course-meta">Programming</div>
+                  <h5 class="card-title">Introduction to C#</h5>
+                  <p class="card-text">Build a strong foundation in programming logic and C# fundamentals. Students practice variables, conditions, loops, classes, and event-driven coding while creating simple Windows and application-based projects.</p>
+                  <a href="#" class="btn btn-primary">Explore course</a>
                 </div>
               </div>
           </div>
-          <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="https://picsum.photos/500/320?sd=1" class="card-img-top" alt="...">
+          <div class="col-md-6 col-xl-3">
+            <div class="card course-card h-100">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="Agile development workshop">
                 <div class="card-body">
-                  <h5 class="card-title">Agile development</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Let's get it</a>
+                  <div class="course-meta">Process + Delivery</div>
+                  <h5 class="card-title">Agile Development</h5>
+                  <p class="card-text">Understand agile delivery practices, team collaboration, and iterative planning. Students learn backlog refinement, sprint flow, communication, and how to deliver software value in fast-moving development cycles.</p>
+                  <a href="#" class="btn btn-primary">Explore course</a>
                 </div>
               </div>
           </div>
