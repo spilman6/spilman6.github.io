@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASCII Map and Name Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4F2F8;--card:#FFF;--ink:#191233;--muted:#6C6588;--line:#E0DBEC;--purple:#7A3FA6;--purple-soft:#F0E7F8;--teal:#0E7C86;--teal-soft:#DFF1F2;--good:#17795E;--bad:#9C3656;--r:16px;--shadow:0 1px 2px rgba(25,18,51,.05),0 12px 28px -14px rgba(25,18,51,.2)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;line-height:1.5}.wrap{max-width:1100px;margin:0 auto;padding:0 24px 72px}
+.back{display:inline-flex;align-items:center;gap:8px;margin:22px 0 0;color:var(--purple);font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;text-decoration:none}.back:hover{text-decoration:underline;text-underline-offset:3px}
+.hero{padding:38px 0 30px;border-bottom:1px solid var(--line);text-align:center}.eyebrow{margin:0 0 14px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}h1{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(44px,7vw,78px);font-weight:800;line-height:.92;letter-spacing:-.05em}h1 em{display:block;margin-top:10px;color:var(--purple);font-size:clamp(24px,3vw,35px);font-style:normal;letter-spacing:-.02em}.lede{max-width:62ch;margin:18px auto 0;color:var(--muted);font-size:16px}
+.lab{margin-top:42px;background:linear-gradient(145deg,#1D2C63,#162557);border:1px solid #3856A8;border-radius:20px;padding:30px;color:#fff;box-shadow:0 20px 44px rgba(25,18,51,.18)}.lab-head{display:flex;justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap}.lab .eyebrow{color:#B9D5FF}.lab h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(28px,4vw,40px);letter-spacing:-.03em}.lab-copy{margin:6px 0 0;color:#DCEAFF}.setup{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:22px}.name-input{min-width:220px;flex:1 1 260px;border:1px solid rgba(185,213,255,.4);border-radius:10px;background:rgba(255,255,255,.1);padding:12px 14px;color:#fff;font:inherit}.name-input::placeholder{color:#B9D5FF}.name-input:focus{outline:2px solid #8FC5FF;outline-offset:2px}.start{border:0;border-radius:10px;background:#fff;color:var(--ink);padding:12px 18px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;cursor:pointer}.start:hover{background:#E8E1F5;transform:translateY(-1px)}
+.name-game[hidden]{display:none}.progress{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:26px;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:12px}.character{margin:8px 0 18px;text-align:center;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(70px,12vw,118px);font-weight:800;line-height:1;color:#fff}.character.space{font-family:"JetBrains Mono",monospace;font-size:clamp(28px,5vw,48px);letter-spacing:0}.bit-labels,.bits{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}.bit-labels{margin-bottom:8px}.bit-labels span{text-align:center;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:11px}.bit{min-width:0;height:60px;border:1px solid rgba(185,213,255,.4);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:700;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease}.bit:hover{transform:translateY(-2px);border-color:#8FC5FF;background:rgba(96,165,250,.22)}.bit:focus-visible{outline:2px solid #8FC5FF;outline-offset:2px}.bit[aria-pressed="true"]{background:rgba(96,165,250,.42);border-color:#8FC5FF}.bit.correct{background:rgba(23,121,94,.45);border-color:#6EE7B7}.bit.wrong{background:rgba(156,54,86,.45);border-color:#FF92AF}.game-status{min-height:24px;margin:16px 0 0;color:#DCEAFF;font-weight:700}.game-status.good{color:#94F5CB}.game-status.bad{color:#FFB3C5}.game-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.check,.next{border-radius:10px;padding:11px 18px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;cursor:pointer}.check{border:0;background:#fff;color:var(--ink)}.next{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff}.check:hover{background:#E8E1F5}.next:hover{background:rgba(255,255,255,.2)}.check:focus-visible,.next:focus-visible{outline:2px solid #8FC5FF;outline-offset:3px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-top:46px}.section-head h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(28px,4vw,40px);letter-spacing:-.03em}.section-head p{margin:6px 0 0;color:var(--muted)}.map-controls{display:flex;gap:8px;flex-wrap:wrap}.filter{border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);padding:7px 11px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;cursor:pointer}.filter[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}.ascii-map{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px;margin-top:20px}.ascii-card{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:12px;box-shadow:var(--shadow)}.ascii-char{font-family:"Bricolage Grotesque",sans-serif;font-size:30px;font-weight:800;color:var(--purple);line-height:1}.ascii-char.space{font-family:"JetBrains Mono",monospace;font-size:14px;letter-spacing:0}.ascii-info{margin-top:8px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:10px;line-height:1.55}.ascii-card[data-group="punctuation"] .ascii-char{color:var(--teal)}footer{margin-top:44px;color:var(--muted);font-size:12.5px}
+@media(max-width:600px){.wrap{padding:0 16px 48px}.lab{padding:22px 16px}.bit-labels,.bits{gap:4px}.bit{height:52px;font-size:21px}.bit-labels span{font-size:9px}.ascii-map{grid-template-columns:repeat(3,1fr)}}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="BinaryHTML.html">&larr; Back to Binary Practice</a>
+  <header class="hero">
+    <p class="eyebrow">ASCII character lab</p>
+    <h1>Characters are <em>numbers in disguise.</em></h1>
+    <p class="lede">ASCII gives each printable character a decimal code. Explore the map, then encode your own name one letter at a time using eight bits.</p>
+  </header>
+
+  <section class="lab" aria-labelledby="lab-title">
+    <div class="lab-head"><div><p class="eyebrow">Name encoder</p><h2 id="lab-title">Spell your name in binary.</h2><p class="lab-copy">Enter a name, then build the ASCII bit pattern for each character.</p></div></div>
+    <div class="setup"><input class="name-input" id="name-input" maxlength="30" autocomplete="name" placeholder="Type your name"><button class="start" id="start" type="button">Start name lab</button></div>
+    <div class="name-game" id="name-game" hidden>
+      <div class="progress"><span id="name-progress">Character 1 of 1</span><span id="current-code">ASCII 65</span></div>
+      <div class="character" id="character" aria-live="polite">A</div>
+      <div class="bit-labels" aria-hidden="true"><span>128</span><span>64</span><span>32</span><span>16</span><span>8</span><span>4</span><span>2</span><span>1</span></div>
+      <div class="bits" aria-label="Toggle the eight binary digits for this character">
+        <button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button><button class="bit" type="button" aria-pressed="false">0</button>
+      </div>
+      <p class="game-status" id="game-status" role="status" aria-live="polite">Turn on the bit values that make this character.</p>
+      <div class="game-actions"><button class="check" id="check" type="button">Check character</button><button class="next" id="next" type="button">Next character</button></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="map-title">
+    <div class="section-head"><div><p class="eyebrow">Printable ASCII reference</p><h2 id="map-title">The ASCII map</h2><p>Letters, lowercase letters, digits, spaces, and punctuation all have a decimal code and an 8-bit binary representation.</p></div><div class="map-controls" role="group" aria-label="Filter the ASCII map"><button class="filter" data-filter="all" aria-pressed="true">All</button><button class="filter" data-filter="uppercase" aria-pressed="false">A-Z</button><button class="filter" data-filter="lowercase" aria-pressed="false">a-z</button><button class="filter" data-filter="punctuation" aria-pressed="false">Punctuation</button></div></div>
+    <div class="ascii-map" id="ascii-map"></div>
+  </section>
+  <footer>ASCII covers standard English characters. Most modern text uses Unicode, which builds on the same idea with a much larger character set.</footer>
+</main>
+<script>
+const values = [128,64,32,16,8,4,2,1];
+const nameInput = document.getElementById('name-input');
+const start = document.getElementById('start');
+const game = document.getElementById('name-game');
+const character = document.getElementById('character');
+const currentCode = document.getElementById('current-code');
+const progress = document.getElementById('name-progress');
+const status = document.getElementById('game-status');
+const bits = Array.from(document.querySelectorAll('.bit'));
+let nameCharacters = [];
+let characterIndex = 0;
+
+function resetBits(){bits.forEach(button=>{button.textContent='0';button.setAttribute('aria-pressed','false');button.classList.remove('correct','wrong')});status.textContent='Turn on the bit values that make this character.';status.className='game-status'}
+function value(){return bits.reduce((sum,button,index)=>button.getAttribute('aria-pressed')==='true'?sum+values[index]:sum,0)}
+function renderCharacter(){const char=nameCharacters[characterIndex];const code=char.charCodeAt(0);character.textContent=char===' '?'space':char;character.classList.toggle('space',char===' ');currentCode.textContent=`ASCII ${code}`;progress.textContent=`Character ${characterIndex+1} of ${nameCharacters.length}`;resetBits();bits[0].focus()}
+function startLab(){const entered=nameInput.value.trim();if(!entered){nameInput.focus();return}nameCharacters=Array.from(entered).filter(char=>char.charCodeAt(0)>=32&&char.charCodeAt(0)<=126);if(!nameCharacters.length)return;characterIndex=0;game.hidden=false;renderCharacter()}
+function checkCharacter(){const char=nameCharacters[characterIndex];const code=char.charCodeAt(0);const expected=code.toString(2).padStart(8,'0');const correct=value()===code;bits.forEach((button,index)=>button.classList.add(button.textContent===expected[index]?'correct':'wrong'));if(correct){status.textContent=`Correct. ${char===' '?'A space':char} is ${expected} in ASCII binary.`;status.className='game-status good'}else{status.textContent=`That pattern is ${value()}. Check the highlighted bits and try again.`;status.className='game-status bad'}}
+start.addEventListener('click',startLab);nameInput.addEventListener('keydown',event=>{if(event.key==='Enter')startLab()});bits.forEach((button,index)=>{button.addEventListener('click',()=>{const on=button.getAttribute('aria-pressed')==='true';const next=on?'0':'1';button.textContent=next;button.setAttribute('aria-pressed',String(!on));button.classList.remove('correct','wrong');status.textContent='Turn on the bit values that make this character.';status.className='game-status'});button.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'&&index>0)bits[index-1].focus();if(event.key==='ArrowRight'&&index<bits.length-1)bits[index+1].focus()})});document.getElementById('check').addEventListener('click',checkCharacter);document.getElementById('next').addEventListener('click',()=>{if(!nameCharacters.length)return;characterIndex=(characterIndex+1)%nameCharacters.length;renderCharacter()});
+
+const printable=[];for(let code=32;code<=126;code+=1){const char=String.fromCharCode(code);const group=code>=65&&code<=90?'uppercase':code>=97&&code<=122?'lowercase':code>=48&&code<=57?'number':'punctuation';printable.push({char,code,group})}const map=document.getElementById('ascii-map');function renderMap(filter='all'){map.innerHTML=printable.filter(item=>filter==='all'||item.group===filter).map(item=>`<article class="ascii-card" data-group="${item.group}"><div class="ascii-char ${item.char===' '?'space':''}">${item.char===' '?'SPACE':item.char.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')}</div><div class="ascii-info">${item.code}<br>${item.code.toString(2).padStart(8,'0')}</div></article>`).join('')}renderMap();document.querySelectorAll('.filter').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(item=>item.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true');renderMap(button.dataset.filter)}));
+</script>
+</body>
+</html>

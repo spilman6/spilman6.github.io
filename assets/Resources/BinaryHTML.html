@@ -30,7 +30,7 @@ body{
   font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-size:15px;line-height:1.5;
 }
-.wrap{max-width:1100px;margin:0 auto;padding:0 24px 72px}
+.wrap{max-width:1600px;margin:0 auto;padding:0 32px 72px}
 .hero{padding:56px 0 32px;border-bottom:1px solid var(--line);text-align:center}
 .eyebrow{
   margin:0 0 14px;color:var(--muted);font-family:"JetBrains Mono",monospace;
@@ -43,26 +43,10 @@ h1{
 h1 em{display:block;margin-top:10px;color:var(--value);font-size:clamp(25px,3vw,36px);font-style:normal;letter-spacing:-.02em}
 .lede{max-width:59ch;margin:0 auto;color:var(--muted);font-size:16.5px}
 
-.binary-key{
-  display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:34px auto 0;max-width:660px;
-}
-.binary-key span{
-  display:grid;place-items:center;height:40px;border:1px solid var(--line);border-radius:8px;
-  background:var(--card);font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;color:var(--value);
-}
-
-.mode-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:30px auto 0;max-width:660px}
-.mode-card{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-radius:12px;
-  background:#FFFBEA;padding:15px 16px;color:var(--ink);text-decoration:none;box-shadow:var(--shadow);
-  transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
-}
-.mode-card:hover{transform:translateY(-2px);border-color:#D9C66B;background:#FFF7CF;box-shadow:0 4px 14px rgba(25,18,51,.12);color:var(--ink)}
-.mode-card strong{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:18px;letter-spacing:-.02em}
-.mode-card span{display:block;margin-top:2px;color:var(--muted);font-size:12.5px}
-.mode-card b{display:grid;place-items:center;flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--value-soft);color:var(--value);font-family:"JetBrains Mono",monospace}
-
-.lesson{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start;margin-top:42px}
+.binary-key{display:grid;grid-template-columns:repeat(8,1fr) auto;gap:10px;margin:38px auto 0;max-width:820px}.binary-column{display:grid;grid-template-rows:50px 26px 40px;place-items:center;font-family:"JetBrains Mono",monospace;font-weight:700}.place-value{display:grid;place-items:center;width:100%;height:50px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--value);font-size:15px}.place-arrow{color:var(--muted);font-size:21px;line-height:1}.place-bit{display:grid;place-items:center;width:100%;height:40px;border-radius:8px;background:var(--value-soft);color:var(--value);font-size:16px}.place-bit.on{background:var(--teal);color:#fff;box-shadow:0 3px 8px rgba(14,124,134,.26)}.binary-result{align-self:end;margin-bottom:8px;color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:18px;font-weight:700;white-space:nowrap}
+.guide .binary-key{max-width:none;margin:22px 0 30px}.header-guide .tip{clear:both;margin-top:0}
+.header-guide{width:80%;max-width:none;margin:32px auto 0;text-align:left}
+.activity-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:680px;gap:24px;margin-top:42px;align-items:stretch}.activity-deck > section{min-width:0;height:680px;margin-top:0;overflow:auto}.lesson{display:grid;grid-template-columns:1fr;gap:16px;align-items:stretch;margin-top:0}.lesson .practice{height:100%}
 .practice{
   position:relative;overflow:hidden;background:linear-gradient(145deg,#1D2C63,#162557);color:#fff;
   border:1px solid #3856A8;border-radius:20px;padding:32px;box-shadow:0 20px 44px rgba(25,18,51,.18);
@@ -155,6 +139,7 @@ button{font:inherit;cursor:pointer}
 .example-title{margin:0 0 10px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}
 .example-bits{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:10px}
 .example-bits span{display:grid;place-items:center;border-radius:5px;background:var(--value-soft);color:var(--value);font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;padding:5px 0}
+.example-bits span.on{background:var(--teal);color:#fff;box-shadow:0 3px 8px rgba(14,124,134,.26)}
 .example-math{margin:0;color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.65}
 .tip{margin:26px 0 0;padding:16px;border-radius:10px;background:var(--teal-soft);color:#075C63;font-size:13.5px;line-height:1.55}
 .tip b{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
@@ -179,10 +164,47 @@ button{font:inherit;cursor:pointer}
 .switch-math{margin:20px 0 0;padding:14px 16px;border-radius:10px;background:var(--teal-soft);color:#075C63;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6}
 .switch-math b{color:#075C63}
 
+.letter-practice{margin-top:42px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
+.letter-practice-head{display:flex;align-items:start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+.letter-practice h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(26px,4vw,36px);letter-spacing:-.03em}
+.letter-practice p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.hint-toggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;background:#FAF9FC;padding:8px 11px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;cursor:pointer}
+.hint-toggle input{accent-color:var(--value)}
+.letter-workspace{display:grid;grid-template-columns:190px minmax(0,1fr);gap:26px;align-items:center;padding-top:22px;border-top:1px solid var(--line)}
+.letter-target{display:grid;place-items:center;min-height:185px;border-radius:14px;background:var(--value-soft);color:var(--value);font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(86px,12vw,130px);font-weight:800;line-height:1;letter-spacing:-.06em}
+.letter-hint{margin:10px 0 0!important;text-align:center;font-family:"JetBrains Mono",monospace;font-size:12px!important;font-weight:700;color:var(--muted)}
+.letter-hint[hidden]{display:none}
+.letter-bits{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.letter-bit{min-width:0;height:58px;border:1px solid var(--line);border-radius:10px;background:#FAF9FC;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:700;transition:transform .15s ease,background .15s ease,border-color .15s ease,color .15s ease}
+.letter-bit:hover{transform:translateY(-2px);border-color:var(--value);color:var(--value)}
+.letter-bit:focus-visible{outline:2px solid var(--value);outline-offset:2px}
+.letter-bit[aria-pressed="true"]{background:var(--value-soft);border-color:var(--value);color:var(--value)}
+.letter-bit.correct{background:#DCF7EC;border-color:#25A87F;color:#17795E}.letter-bit.wrong{background:#FCE5EB;border-color:#B3305A;color:#9C3656}
+.letter-status{min-height:24px;margin:16px 0 0!important;font-weight:700}.letter-status.good{color:#17795E}.letter-status.bad{color:#9C3656}
+.letter-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.letter-check{border:0;border-radius:10px;padding:11px 18px;background:var(--value);color:#fff;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}.letter-check:hover{background:#683491;transform:translateY(-1px)}
+.letter-next{border:1px solid var(--line);border-radius:10px;padding:11px 18px;background:#fff;color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}.letter-next:hover{background:#FAF9FC;transform:translateY(-1px)}
+.letter-check:focus-visible,.letter-next:focus-visible{outline:2px solid var(--value);outline-offset:3px}
+.ascii-map-link{display:inline-flex;align-items:center;gap:7px;margin-top:12px;color:var(--value);font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;text-decoration:none}.ascii-map-link:hover{text-decoration:underline;text-underline-offset:3px}
+
+.name-practice{margin-top:42px;background:linear-gradient(145deg,#1D2C63,#162557);border:1px solid #3856A8;border-radius:20px;padding:30px;color:#fff;box-shadow:0 20px 44px rgba(25,18,51,.18)}
+.name-practice-head{display:flex;align-items:start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px}.name-practice .eyebrow{color:#B9D5FF}.name-practice h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(26px,4vw,36px);letter-spacing:-.03em}.name-practice p{margin:6px 0 0;color:#DCEAFF;font-size:14px}.name-setup{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.name-input{min-width:220px;flex:1 1 260px;border:1px solid rgba(185,213,255,.4);border-radius:10px;background:rgba(255,255,255,.1);padding:12px 14px;color:#fff;font:inherit}.name-input::placeholder{color:#B9D5FF}.name-input:focus{outline:2px solid #8FC5FF;outline-offset:2px}.name-start{border:0;border-radius:10px;background:#fff;color:var(--ink);padding:12px 18px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}.name-start:hover{background:#E8E1F5;transform:translateY(-1px)}
+.name-examples{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}.name-examples-label{margin:0!important;color:#B9D5FF!important;font-family:"JetBrains Mono",monospace;font-size:11px!important;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.name-example{border:1px solid rgba(185,213,255,.35);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;padding:7px 11px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700}.name-example:hover{background:rgba(255,255,255,.18)}.name-example:focus-visible{outline:2px solid #8FC5FF;outline-offset:3px}
+.name-workspace[hidden]{display:none}.name-progress{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:26px;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:12px}.name-code.is-wrong-hint{animation:wrong-code-hint 1.6s ease-out}.name-target{margin:8px 0 18px;text-align:center;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(70px,12vw,118px);font-weight:800;line-height:1;color:#fff}.name-target.space{font-family:"JetBrains Mono",monospace;font-size:clamp(28px,5vw,48px);letter-spacing:0}.name-bits{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}.name-bit{min-width:0;height:60px;border:1px solid rgba(185,213,255,.4);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:700;transition:transform .15s ease,background .15s ease,border-color .15s ease}.name-bit:hover{transform:translateY(-2px);border-color:#8FC5FF;background:rgba(96,165,250,.22)}.name-bit:focus-visible{outline:2px solid #8FC5FF;outline-offset:2px}.name-bit[aria-pressed="true"]{background:rgba(96,165,250,.42);border-color:#8FC5FF}.name-bit.correct{background:rgba(23,121,94,.45);border-color:#6EE7B7}.name-bit.wrong{background:rgba(156,54,86,.45);border-color:#FF92AF}.name-total{margin:14px 0 0!important;color:#B9D5FF!important;font-family:"JetBrains Mono",monospace;font-size:13px!important;font-weight:700}.name-total b{color:#fff}.name-status{min-height:24px;margin:16px 0 0!important;color:#DCEAFF;font-weight:700}.name-status.good{color:#94F5CB}.name-status.bad{color:#FFB3C5}.name-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.name-check,.name-next{border-radius:10px;padding:11px 18px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}.name-check{border:0;background:#fff;color:var(--ink)}.name-next{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff}.name-check:hover{background:#E8E1F5}.name-next:hover{background:rgba(255,255,255,.2)}.name-check:focus-visible,.name-next:focus-visible{outline:2px solid #8FC5FF;outline-offset:3px}
+.name-results{margin-top:24px;padding-top:20px;border-top:1px solid rgba(185,213,255,.28)}.name-results[hidden]{display:none}.name-results-title{margin:0 0 12px!important;color:#B9D5FF!important;font-family:"JetBrains Mono",monospace;font-size:11px!important;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.name-results-list{display:flex;gap:10px;flex-wrap:wrap}.name-result{min-width:78px;border:1px solid rgba(185,213,255,.35);border-radius:10px;background:rgba(255,255,255,.09);padding:10px;text-align:center}.name-result-character{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:34px;font-weight:800;line-height:1}.name-result-character.space{font-family:"JetBrains Mono",monospace;font-size:12px;line-height:34px}.name-result-binary{display:block;margin-top:8px;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700}
+@keyframes wrong-code-hint{0%,45%{color:#FFF3B0;transform:scale(1.14);text-shadow:0 0 15px rgba(255,220,104,.9)}100%{color:#B9D5FF;transform:scale(1);text-shadow:none}}
+
 footer{margin-top:44px;color:var(--muted);font-size:12.5px}
 @media (max-width:780px){
+  .wrap{padding:0 24px 56px}
+  .activity-deck{grid-template-columns:1fr;grid-auto-rows:auto}
+  .activity-deck > section{height:auto;overflow:visible}
   .lesson{grid-template-columns:1fr}
   .practice{padding:24px 20px}
+  .mode-picker{grid-template-columns:1fr 1fr;max-width:660px}
+  .letter-workspace{grid-template-columns:1fr}
+  .letter-target{min-height:130px}
+  .name-practice{padding:24px 20px}
 }
 @media (max-width:440px){
   .wrap{padding:0 16px 48px}
@@ -206,21 +228,25 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
     <p class="eyebrow">Binary fundamentals</p>
     <h1>Learn Binary<em>bit by bit.</em></h1>
     <p class="lede">An 8-bit binary number has eight places. Enter a <strong>1</strong> to include a value or a <strong>0</strong> to leave it out. Your selected places add up to the target decimal number.</p>
-    <div class="binary-key" aria-label="Eight-bit place values">
-      <span>128</span><span>64</span><span>32</span><span>16</span><span>8</span><span>4</span><span>2</span><span>1</span>
-    </div>
-    <nav class="mode-picker" aria-label="Choose a binary practice activity">
-      <a class="mode-card" href="#number-challenge">
-        <span><strong>Number challenge</strong><span>Turn a target number into bits.</span></span>
-        <b aria-hidden="true">01</b>
-      </a>
-      <a class="mode-card" href="#bit-switchboard">
-        <span><strong>Bit switchboard</strong><span>Flip values and watch the math.</span></span>
-        <b aria-hidden="true">10</b>
-      </a>
-    </nav>
+    <aside class="guide header-guide" aria-labelledby="guide-title">
+      <h2 id="guide-title">How it works</h2>
+      <p>Each position represents a power of two. A 1 turns that value on; a 0 leaves it off.</p>
+      <div class="binary-key" aria-label="Eight-bit place values mapped to the binary representation of six">
+        <div class="binary-column"><span class="place-value">128</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit">0</span></div>
+        <div class="binary-column"><span class="place-value">64</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit">0</span></div>
+        <div class="binary-column"><span class="place-value">32</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit">0</span></div>
+        <div class="binary-column"><span class="place-value">16</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit">0</span></div>
+        <div class="binary-column"><span class="place-value">8</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit">0</span></div>
+        <div class="binary-column"><span class="place-value">4</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit on">1</span></div>
+        <div class="binary-column"><span class="place-value">2</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit on">1</span></div>
+        <div class="binary-column"><span class="place-value">1</span><span class="place-arrow" aria-hidden="true">&darr;</span><span class="place-bit">0</span></div>
+        <span class="binary-result">= 6</span>
+      </div>
+      <p class="tip"><b>Quick check</b><br>Start with the largest place value that does not go over the target. Subtract it, then continue to the right.</p>
+    </aside>
   </header>
 
+  <div class="activity-deck">
   <section class="lesson" id="number-challenge" aria-labelledby="practice-title">
     <section class="practice" aria-labelledby="practice-title">
       <div class="practice-top">
@@ -255,19 +281,6 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
       <span class="success-emoji" aria-hidden="true">😎</span>
       <span class="wrong-emoji" aria-hidden="true">🤔</span>
     </section>
-
-    <aside class="guide" aria-labelledby="guide-title">
-      <h2 id="guide-title">How it works</h2>
-      <p>Each position represents a power of two. A 1 turns that value on; a 0 leaves it off.</p>
-      <div class="example">
-        <p class="example-title">Example: 6 in binary</p>
-        <div class="example-bits" aria-label="Binary representation of six">
-          <span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>1</span><span>0</span>
-        </div>
-        <p class="example-math">4 + 2 = 6<br>00000110</p>
-      </div>
-      <p class="tip"><b>Quick check</b><br>Start with the largest place value that does not go over the target. Subtract it, then continue to the right.</p>
-    </aside>
   </section>
 
   <section class="switchboard" id="bit-switchboard" aria-labelledby="switchboard-title">
@@ -291,6 +304,82 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
     </div>
     <p class="switch-math" id="switch-math">00000000 = <b>0</b></p>
   </section>
+
+  <section class="letter-practice" id="letter-challenge" aria-labelledby="letter-title">
+    <div class="letter-practice-head">
+      <div>
+        <p class="eyebrow">ASCII letter challenge</p>
+        <h2 id="letter-title">Give a letter its binary code.</h2>
+        <p>Computers store letters as numbers. Turn the letter below into its 8-bit ASCII representation.</p>
+        <a class="ascii-map-link" href="BinaryASCII.html">Open the ASCII map for uppercase, lowercase, and punctuation &rarr;</a>
+      </div>
+      <label class="hint-toggle"><input id="hide-letter-hint" type="checkbox"> Hide decimal hint</label>
+    </div>
+    <div class="letter-workspace">
+      <div>
+        <div class="letter-target" id="letter-target">A</div>
+        <p class="letter-hint" id="letter-hint">ASCII decimal: 65</p>
+      </div>
+      <div>
+        <div class="bit-labels" aria-hidden="true">
+          <label>128</label><label>64</label><label>32</label><label>16</label><label>8</label><label>4</label><label>2</label><label>1</label>
+        </div>
+        <div class="letter-bits" aria-label="Toggle the eight ASCII binary digits">
+          <button class="letter-bit" type="button" aria-label="128 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="64 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="32 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="16 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="8 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="4 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="2 place, currently 0" aria-pressed="false">0</button>
+          <button class="letter-bit" type="button" aria-label="1 place, currently 0" aria-pressed="false">0</button>
+        </div>
+        <p class="letter-status" id="letter-status" role="status" aria-live="polite">Switch on the values that spell this letter.</p>
+        <div class="letter-actions">
+          <button class="letter-check" id="letter-check" type="button">Check letter</button>
+          <button class="letter-next" id="letter-next" type="button">Next letter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="name-practice" id="name-challenge" aria-labelledby="name-title">
+    <div class="name-practice-head">
+      <div>
+        <p class="eyebrow">Name lab</p>
+        <h2 id="name-title">Encode alphanumeric characters.</h2>
+        <p>Enter letters or numbers, then encode each character's ASCII value with eight bits.</p>
+      </div>
+      <label class="hint-toggle"><input id="hide-name-code" type="checkbox"> Hide ASCII code</label>
+    </div>
+    <div class="name-setup">
+      <input class="name-input" id="name-input" type="text" maxlength="30" autocomplete="off" placeholder="Enter letters or numbers">
+      <button class="name-start" id="name-start" type="button">Start challenge</button>
+    </div>
+    <div class="name-examples" aria-label="Example challenge entries">
+      <p class="name-examples-label">Try an example</p>
+      <button class="name-example" type="button" data-example="123 Elm Street">123 Elm Street</button>
+      <button class="name-example" type="button" data-example="Mark Zuckerberg">Mark Zuckerberg</button>
+    </div>
+    <div class="name-workspace" id="name-workspace" hidden>
+      <div class="name-progress"><span id="name-progress">Character 1 of 1</span><span class="name-code" id="name-code">ASCII 65</span></div>
+      <div class="name-target" id="name-target" aria-live="polite">A</div>
+      <div class="bit-labels" aria-hidden="true">
+        <label>128</label><label>64</label><label>32</label><label>16</label><label>8</label><label>4</label><label>2</label><label>1</label>
+      </div>
+      <div class="name-bits" aria-label="Toggle the eight binary digits for this name character">
+        <button class="name-bit" type="button" aria-label="128 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="64 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="32 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="16 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="8 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="4 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="2 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="1 place, currently 0" aria-pressed="false">0</button>
+      </div>
+      <p class="name-total" id="name-total" aria-live="polite">Selected total: <b>0</b></p>
+      <p class="name-status" id="name-status" role="status" aria-live="polite">Turn on the bit values that make this character.</p>
+      <div class="name-actions"><button class="name-check" id="name-check" type="button">Check character</button><button class="name-next" id="name-next" type="button">Next character</button><button class="name-next" id="name-reset" type="button">Reset challenge</button></div>
+      <div class="name-results" id="name-results" hidden>
+        <p class="name-results-title">Your name in binary</p>
+        <div class="name-results-list" id="name-results-list" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+  </div>
 
   <footer>Binary is a base-2 number system. Eight bits can represent every whole number from 0 to 255.</footer>
 </main>
@@ -418,6 +507,296 @@ switches.forEach(button => {
     updateSwitchboard();
   });
 });
+
+const letterBits = Array.from(document.querySelectorAll('.letter-bit'));
+const letterTargetEl = document.getElementById('letter-target');
+const letterHintEl = document.getElementById('letter-hint');
+const hideLetterHint = document.getElementById('hide-letter-hint');
+const letterStatus = document.getElementById('letter-status');
+const letterCheck = document.getElementById('letter-check');
+const letterNext = document.getElementById('letter-next');
+let letterCode = 65;
+
+function resetLetterBits() {
+  letterBits.forEach((button, index) => {
+    button.textContent = '0';
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-label', `${placeValues[index]} place, currently 0`);
+    button.classList.remove('correct', 'wrong');
+  });
+  letterStatus.textContent = 'Switch on the values that spell this letter.';
+  letterStatus.className = 'letter-status';
+}
+
+function setLetter(code) {
+  letterCode = code;
+  letterTargetEl.textContent = String.fromCharCode(letterCode);
+  letterHintEl.textContent = `ASCII decimal: ${letterCode}`;
+  resetLetterBits();
+}
+
+function letterValue() {
+  return letterBits.reduce((sum, button, index) => (
+    button.getAttribute('aria-pressed') === 'true' ? sum + placeValues[index] : sum
+  ), 0);
+}
+
+function checkLetter() {
+  const expectedBits = letterCode.toString(2).padStart(8, '0');
+  const isCorrect = letterValue() === letterCode;
+  letterBits.forEach((button, index) => {
+    button.classList.add(button.textContent === expectedBits[index] ? 'correct' : 'wrong');
+  });
+  if (isCorrect) {
+    letterStatus.textContent = `Correct. ${String.fromCharCode(letterCode)} is ${expectedBits} in ASCII binary.`;
+    letterStatus.className = 'letter-status good';
+  } else {
+    letterStatus.textContent = `That bit pattern is ${letterValue()}. Check the highlighted positions and try again.`;
+    letterStatus.className = 'letter-status bad';
+  }
+}
+
+letterBits.forEach((button, index) => {
+  button.addEventListener('click', () => {
+    const isOn = button.getAttribute('aria-pressed') === 'true';
+    const nextValue = isOn ? '0' : '1';
+    button.textContent = nextValue;
+    button.setAttribute('aria-pressed', String(!isOn));
+    button.setAttribute('aria-label', `${placeValues[index]} place, currently ${nextValue}`);
+    button.classList.remove('correct', 'wrong');
+    letterStatus.textContent = 'Switch on the values that spell this letter.';
+    letterStatus.className = 'letter-status';
+  });
+  button.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' && index > 0) letterBits[index - 1].focus();
+    if (event.key === 'ArrowRight' && index < letterBits.length - 1) letterBits[index + 1].focus();
+    if (event.key === 'Enter') checkLetter();
+  });
+});
+
+hideLetterHint.addEventListener('change', () => {
+  letterHintEl.hidden = hideLetterHint.checked;
+  localStorage.setItem('binary-letter-hint-hidden', String(hideLetterHint.checked));
+});
+
+letterCheck.addEventListener('click', checkLetter);
+letterNext.addEventListener('click', () => {
+  let nextCode;
+  do {
+    nextCode = 65 + Math.floor(Math.random() * 26);
+  } while (nextCode === letterCode);
+  setLetter(nextCode);
+});
+
+const nameInput = document.getElementById('name-input');
+const nameStart = document.getElementById('name-start');
+const nameWorkspace = document.getElementById('name-workspace');
+const nameTarget = document.getElementById('name-target');
+const nameProgress = document.getElementById('name-progress');
+const nameCode = document.getElementById('name-code');
+const nameStatus = document.getElementById('name-status');
+const nameTotal = document.getElementById('name-total');
+const nameBits = Array.from(document.querySelectorAll('.name-bit'));
+const hideNameCode = document.getElementById('hide-name-code');
+const nameResults = document.getElementById('name-results');
+const nameResultsList = document.getElementById('name-results-list');
+const nameReset = document.getElementById('name-reset');
+const nameExamples = Array.from(document.querySelectorAll('.name-example'));
+let nameCharacters = [];
+let nameIndex = 0;
+let solvedCharacters = new Map();
+let nameAdvanceTimer = null;
+let nameCodeHintTimer = null;
+
+function resetNameBits() {
+  nameBits.forEach((button, index) => {
+    button.textContent = '0';
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-label', `${placeValues[index]} place, currently 0`);
+    button.classList.remove('correct', 'wrong');
+  });
+  nameStatus.textContent = 'Turn on the bit values that make this character.';
+  nameStatus.className = 'name-status';
+  updateNameTotal();
+}
+
+function nameValue() {
+  return nameBits.reduce((sum, button, index) => (
+    button.getAttribute('aria-pressed') === 'true' ? sum + placeValues[index] : sum
+  ), 0);
+}
+
+function updateNameTotal() {
+  const selectedValues = nameBits
+    .map((button, index) => button.getAttribute('aria-pressed') === 'true' ? placeValues[index] : null)
+    .filter(value => value !== null);
+  const total = selectedValues.reduce((sum, value) => sum + value, 0);
+  nameTotal.innerHTML = selectedValues.length
+    ? `Selected total: <b>${selectedValues.join(' + ')} = ${total}</b>`
+    : 'Selected total: <b>0</b>';
+}
+
+function renderNameCharacter() {
+  clearTimeout(nameCodeHintTimer);
+  nameCodeHintTimer = null;
+  nameCode.classList.remove('is-wrong-hint');
+  const character = nameCharacters[nameIndex];
+  const code = character.charCodeAt(0);
+  nameTarget.textContent = character === ' ' ? 'space' : character;
+  nameTarget.classList.toggle('space', character === ' ');
+  nameProgress.textContent = `Character ${nameIndex + 1} of ${nameCharacters.length}`;
+  nameCode.textContent = `ASCII ${code}`;
+  resetNameBits();
+  nameBits[0].focus();
+}
+
+function showNameCodeHint() {
+  clearTimeout(nameCodeHintTimer);
+  nameCode.hidden = false;
+  nameCode.classList.remove('is-wrong-hint');
+  void nameCode.offsetWidth;
+  nameCode.classList.add('is-wrong-hint');
+  nameCodeHintTimer = setTimeout(() => {
+    nameCode.classList.remove('is-wrong-hint');
+    nameCode.hidden = hideNameCode.checked;
+    nameCodeHintTimer = null;
+  }, 1600);
+}
+
+function renderNameResults() {
+  nameResultsList.innerHTML = nameCharacters.map((character, index) => {
+    const binary = solvedCharacters.get(index);
+    if (!binary) return '';
+    const displayCharacter = character === ' ' ? 'space' : character;
+    const spaceClass = character === ' ' ? ' space' : '';
+    return `<div class="name-result"><span class="name-result-character${spaceClass}">${displayCharacter}</span><span class="name-result-binary">${binary}</span></div>`;
+  }).join('');
+  nameResults.hidden = solvedCharacters.size === 0;
+}
+
+function startNameLab() {
+  const enteredName = nameInput.value.trim();
+  if (!enteredName) {
+    nameInput.focus();
+    return;
+  }
+  nameCharacters = Array.from(enteredName).filter(character => {
+    const code = character.charCodeAt(0);
+    return code >= 32 && code <= 126;
+  });
+  if (!nameCharacters.length) return;
+  clearTimeout(nameAdvanceTimer);
+  nameAdvanceTimer = null;
+  nameIndex = 0;
+  solvedCharacters = new Map();
+  nameResultsList.innerHTML = '';
+  nameResults.hidden = true;
+  nameWorkspace.hidden = false;
+  renderNameCharacter();
+}
+
+function resetNameLab() {
+  clearTimeout(nameAdvanceTimer);
+  nameAdvanceTimer = null;
+  clearTimeout(nameCodeHintTimer);
+  nameCodeHintTimer = null;
+  nameCharacters = [];
+  nameIndex = 0;
+  solvedCharacters = new Map();
+  nameInput.value = '';
+  nameResultsList.innerHTML = '';
+  nameResults.hidden = true;
+  nameWorkspace.hidden = true;
+  nameInput.focus();
+}
+
+function checkNameCharacter() {
+  const character = nameCharacters[nameIndex];
+  const code = character.charCodeAt(0);
+  const expectedBits = code.toString(2).padStart(8, '0');
+  const isCorrect = nameValue() === code;
+  nameBits.forEach((button, index) => {
+    button.classList.add(button.textContent === expectedBits[index] ? 'correct' : 'wrong');
+  });
+  if (isCorrect) {
+    solvedCharacters.set(nameIndex, expectedBits);
+    renderNameResults();
+    nameStatus.textContent = `Correct. ${character === ' ' ? 'A space' : character} is ${expectedBits} in ASCII binary.`;
+    nameStatus.className = 'name-status good';
+    if (nameAdvanceTimer === null) {
+      nameAdvanceTimer = setTimeout(() => {
+        nameAdvanceTimer = null;
+        advanceNameCharacter();
+      }, 700);
+    }
+  } else {
+    showNameCodeHint();
+    nameStatus.textContent = `That pattern is ${nameValue()}. Check the highlighted positions and try again.`;
+    nameStatus.className = 'name-status bad';
+  }
+}
+
+function advanceNameCharacter() {
+  if (!nameCharacters.length) return;
+  nameIndex = (nameIndex + 1) % nameCharacters.length;
+  renderNameCharacter();
+}
+
+nameStart.addEventListener('click', startNameLab);
+nameInput.addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    startNameLab();
+  }
+});
+nameExamples.forEach(button => {
+  button.addEventListener('click', () => {
+    nameInput.value = button.dataset.example;
+    nameInput.focus();
+  });
+});
+nameBits.forEach((button, index) => {
+  button.addEventListener('click', () => {
+    const isOn = button.getAttribute('aria-pressed') === 'true';
+    const nextValue = isOn ? '0' : '1';
+    button.textContent = nextValue;
+    button.setAttribute('aria-pressed', String(!isOn));
+    button.setAttribute('aria-label', `${placeValues[index]} place, currently ${nextValue}`);
+    button.classList.remove('correct', 'wrong');
+    updateNameTotal();
+    const expectedBit = nameCharacters[nameIndex].charCodeAt(0).toString(2).padStart(8, '0')[index];
+    if (nextValue === '1' && expectedBit === '0') showNameCodeHint();
+    nameStatus.textContent = 'Turn on the bit values that make this character.';
+    nameStatus.className = 'name-status';
+  });
+  button.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' && index > 0) nameBits[index - 1].focus();
+    if (event.key === 'ArrowRight' && index < nameBits.length - 1) nameBits[index + 1].focus();
+    if (event.key === 'Enter') checkNameCharacter();
+  });
+});
+document.getElementById('name-check').addEventListener('click', checkNameCharacter);
+document.getElementById('name-next').addEventListener('click', () => {
+  clearTimeout(nameAdvanceTimer);
+  nameAdvanceTimer = null;
+  advanceNameCharacter();
+});
+nameReset.addEventListener('click', resetNameLab);
+
+hideNameCode.addEventListener('change', () => {
+  nameCode.hidden = hideNameCode.checked;
+  localStorage.setItem('binary-name-code-hidden', String(hideNameCode.checked));
+});
+
+if (localStorage.getItem('binary-letter-hint-hidden') === 'true') {
+  hideLetterHint.checked = true;
+  letterHintEl.hidden = true;
+}
+
+if (localStorage.getItem('binary-name-code-hidden') === 'true') {
+  hideNameCode.checked = true;
+  nameCode.hidden = true;
+}
 </script>
 </body>
 </html>
