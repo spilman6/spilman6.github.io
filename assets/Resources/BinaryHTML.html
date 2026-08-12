@@ -31,25 +31,36 @@ body{
   font-size:15px;line-height:1.5;
 }
 .wrap{max-width:1100px;margin:0 auto;padding:0 24px 72px}
-.hero{padding:56px 0 32px;border-bottom:1px solid var(--line)}
+.hero{padding:56px 0 32px;border-bottom:1px solid var(--line);text-align:center}
 .eyebrow{
   margin:0 0 14px;color:var(--muted);font-family:"JetBrains Mono",monospace;
   font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
 }
 h1{
-  max-width:13ch;margin:0 0 16px;font-family:"Bricolage Grotesque",sans-serif;
-  font-size:clamp(38px,6.5vw,70px);font-weight:800;letter-spacing:-.04em;line-height:.96;
+  margin:0;font-family:"Bricolage Grotesque",sans-serif;
+  font-size:clamp(48px,7.5vw,82px);font-weight:800;letter-spacing:-.05em;line-height:.9;text-align:center;
 }
-h1 em{color:var(--value);font-style:normal}
-.lede{max-width:59ch;margin:0;color:var(--muted);font-size:16.5px}
+h1 em{display:block;margin-top:10px;color:var(--value);font-size:clamp(25px,3vw,36px);font-style:normal;letter-spacing:-.02em}
+.lede{max-width:59ch;margin:0 auto;color:var(--muted);font-size:16.5px}
 
 .binary-key{
-  display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:34px 0 0;max-width:660px;
+  display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:34px auto 0;max-width:660px;
 }
 .binary-key span{
   display:grid;place-items:center;height:40px;border:1px solid var(--line);border-radius:8px;
   background:var(--card);font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;color:var(--value);
 }
+
+.mode-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:30px auto 0;max-width:660px}
+.mode-card{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-radius:12px;
+  background:#FFFBEA;padding:15px 16px;color:var(--ink);text-decoration:none;box-shadow:var(--shadow);
+  transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+.mode-card:hover{transform:translateY(-2px);border-color:#D9C66B;background:#FFF7CF;box-shadow:0 4px 14px rgba(25,18,51,.12);color:var(--ink)}
+.mode-card strong{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:18px;letter-spacing:-.02em}
+.mode-card span{display:block;margin-top:2px;color:var(--muted);font-size:12.5px}
+.mode-card b{display:grid;place-items:center;flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--value-soft);color:var(--value);font-family:"JetBrains Mono",monospace}
 
 .lesson{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start;margin-top:42px}
 .practice{
@@ -113,6 +124,26 @@ button{font:inherit;cursor:pointer}
 .tip{margin:26px 0 0;padding:16px;border-radius:10px;background:var(--teal-soft);color:#075C63;font-size:13.5px;line-height:1.55}
 .tip b{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
 
+.switchboard{margin-top:42px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
+.switchboard-head{display:flex;align-items:end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.switchboard h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(26px,4vw,36px);letter-spacing:-.03em}
+.switchboard p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.switch-result{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--teal);white-space:nowrap}
+.switch-result b{font-size:24px}
+.switches{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+.bit-switch{
+  min-width:0;border:1px solid var(--line);border-radius:12px;background:#FAF9FC;padding:13px 8px 11px;
+  color:var(--muted);font-family:"JetBrains Mono",monospace;text-align:center;transition:transform .15s ease,border-color .15s ease,background .15s ease,color .15s ease;
+}
+.bit-switch:hover{transform:translateY(-2px);border-color:var(--value);color:var(--value)}
+.bit-switch:focus-visible{outline:2px solid var(--value);outline-offset:3px}
+.bit-switch.on{border-color:var(--value);background:var(--value-soft);color:var(--value)}
+.switch-value{display:block;font-size:14px;font-weight:700}
+.switch-state{display:block;margin-top:9px;padding:4px 0;border-radius:5px;background:var(--line);font-size:12px;font-weight:700}
+.bit-switch.on .switch-state{background:var(--value);color:#fff}
+.switch-math{margin:20px 0 0;padding:14px 16px;border-radius:10px;background:var(--teal-soft);color:#075C63;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6}
+.switch-math b{color:#075C63}
+
 footer{margin-top:44px;color:var(--muted);font-size:12.5px}
 @media (max-width:780px){
   .lesson{grid-template-columns:1fr}
@@ -121,9 +152,15 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
 @media (max-width:440px){
   .wrap{padding:0 16px 48px}
   .hero{padding-top:40px}
+  .mode-picker{grid-template-columns:1fr}
   .bit-labels,.bit-inputs{gap:4px}
   .bit-input{height:52px;font-size:22px}
   .bit-labels label{font-size:9px}
+  .switchboard{padding:22px 16px}
+  .switches{gap:4px}
+  .bit-switch{padding:10px 3px 8px}
+  .switch-value{font-size:11px}
+  .switch-state{font-size:10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -132,14 +169,24 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
 <main class="wrap">
   <header class="hero">
     <p class="eyebrow">Binary fundamentals</p>
-    <h1>Build numbers, <em>bit by bit.</em></h1>
+    <h1>Learn Binary<em>bit by bit.</em></h1>
     <p class="lede">An 8-bit binary number has eight places. Enter a <strong>1</strong> to include a value or a <strong>0</strong> to leave it out. Your selected places add up to the target decimal number.</p>
     <div class="binary-key" aria-label="Eight-bit place values">
       <span>128</span><span>64</span><span>32</span><span>16</span><span>8</span><span>4</span><span>2</span><span>1</span>
     </div>
+    <nav class="mode-picker" aria-label="Choose a binary practice activity">
+      <a class="mode-card" href="#number-challenge">
+        <span><strong>Number challenge</strong><span>Turn a target number into bits.</span></span>
+        <b aria-hidden="true">01</b>
+      </a>
+      <a class="mode-card" href="#bit-switchboard">
+        <span><strong>Bit switchboard</strong><span>Flip values and watch the math.</span></span>
+        <b aria-hidden="true">10</b>
+      </a>
+    </nav>
   </header>
 
-  <section class="lesson" aria-labelledby="practice-title">
+  <section class="lesson" id="number-challenge" aria-labelledby="practice-title">
     <section class="practice" aria-labelledby="practice-title">
       <div class="practice-top">
         <p class="practice-label">Practice item</p>
@@ -181,6 +228,28 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
       </div>
       <p class="tip"><b>Quick check</b><br>Start with the largest place value that does not go over the target. Subtract it, then continue to the right.</p>
     </aside>
+  </section>
+
+  <section class="switchboard" id="bit-switchboard" aria-labelledby="switchboard-title">
+    <div class="switchboard-head">
+      <div>
+        <p class="eyebrow">Bit switchboard</p>
+        <h2 id="switchboard-title">Flip the bits. Watch the math.</h2>
+        <p>Turn a place value on to add it to the number. Turn it off to remove it.</p>
+      </div>
+      <div class="switch-result" aria-live="polite">Decimal: <b id="switch-total">0</b></div>
+    </div>
+    <div class="switches" id="switches" aria-label="Eight binary bit switches">
+      <button class="bit-switch" type="button" data-value="128" aria-pressed="false"><span class="switch-value">128</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="64" aria-pressed="false"><span class="switch-value">64</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="32" aria-pressed="false"><span class="switch-value">32</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="16" aria-pressed="false"><span class="switch-value">16</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="8" aria-pressed="false"><span class="switch-value">8</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="4" aria-pressed="false"><span class="switch-value">4</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="2" aria-pressed="false"><span class="switch-value">2</span><span class="switch-state">0</span></button>
+      <button class="bit-switch" type="button" data-value="1" aria-pressed="false"><span class="switch-value">1</span><span class="switch-state">0</span></button>
+    </div>
+    <p class="switch-math" id="switch-math">00000000 = <b>0</b></p>
   </section>
 
   <footer>Binary is a base-2 number system. Eight bits can represent every whole number from 0 to 255.</footer>
@@ -274,6 +343,34 @@ inputs.forEach((input, index) => {
 
 checkButton.addEventListener('click', checkAnswer);
 nextButton.addEventListener('click', setTarget);
+
+const switches = Array.from(document.querySelectorAll('.bit-switch'));
+const switchTotal = document.getElementById('switch-total');
+const switchMath = document.getElementById('switch-math');
+
+function updateSwitchboard() {
+  const activeValues = switches
+    .filter(button => button.getAttribute('aria-pressed') === 'true')
+    .map(button => Number(button.dataset.value));
+  const binary = switches
+    .map(button => button.getAttribute('aria-pressed') === 'true' ? '1' : '0')
+    .join('');
+  const decimal = activeValues.reduce((sum, value) => sum + value, 0);
+  switchTotal.textContent = decimal;
+  switchMath.innerHTML = activeValues.length
+    ? `${binary} = <b>${activeValues.join(' + ')} = ${decimal}</b>`
+    : `${binary} = <b>0</b>`;
+}
+
+switches.forEach(button => {
+  button.addEventListener('click', () => {
+    const isOn = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!isOn));
+    button.classList.toggle('on', !isOn);
+    button.querySelector('.switch-state').textContent = isOn ? '0' : '1';
+    updateSwitchboard();
+  });
+});
 </script>
 </body>
 </html>
