@@ -150,6 +150,7 @@ button{font:inherit;cursor:pointer}
 .switchboard p{margin:6px 0 0;color:var(--muted);font-size:14px}
 .switch-result{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--teal);white-space:nowrap}
 .switch-result b{font-size:24px}
+.switch-result.is-too-high{animation:switch-too-high 1.1s ease-out;color:var(--bad)}.switch-result.is-too-high b{color:var(--bad)}
 .switches{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
 .bit-switch{
   min-width:0;border:1px solid var(--line);border-radius:12px;background:#FAF9FC;padding:13px 8px 11px;
@@ -163,6 +164,7 @@ button{font:inherit;cursor:pointer}
 .bit-switch.on .switch-state{background:var(--value);color:#fff}
 .switch-math{margin:20px 0 0;padding:14px 16px;border-radius:10px;background:var(--teal-soft);color:#075C63;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6}
 .switch-math b{color:#075C63}
+.switch-message{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}.switch-message-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}.switch-message-title{margin:0;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.switch-message-map{color:var(--value);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;text-decoration:none}.switch-message-map:hover{text-decoration:underline;text-underline-offset:3px}.switch-output{display:flex;align-items:center;justify-content:center;gap:8px;min-height:132px;margin-top:10px;padding:18px;border:1px solid var(--line);border-radius:10px;background:#FAF9FC;color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:clamp(28px,3vw,42px);font-weight:700;letter-spacing:.04em;line-height:1.25;overflow-wrap:anywhere}.password-character{position:relative;display:inline-grid;place-items:center;min-width:1.15em;border-bottom:3px solid var(--line);color:var(--muted)}.password-character.current{border-color:var(--value);color:var(--value);background:var(--value-soft)}.password-character.solved{border-color:var(--teal);color:var(--teal)}.password-character.just-solved{animation:password-correct .85s ease-out}.password-character.just-solved::after{content:"Correct";position:absolute;top:-1.35em;color:var(--good);font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:700;letter-spacing:0;text-transform:uppercase;white-space:nowrap}.switch-status{min-height:20px;margin:10px 0 0;color:var(--muted);font-size:12px;font-weight:600}.switch-builder-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.switch-add,.switch-utility{border-radius:8px;padding:9px 12px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700}.switch-add{border:0;background:var(--value);color:#fff}.switch-add:hover{background:#683491}.switch-utility{border:1px solid var(--line);background:#fff;color:var(--ink)}.switch-utility:hover{background:#FAF9FC}.switch-add:focus-visible,.switch-utility:focus-visible{outline:2px solid var(--value);outline-offset:3px}
 
 .letter-practice{margin-top:42px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
 .letter-practice-head{display:flex;align-items:start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px}
@@ -193,6 +195,8 @@ button{font:inherit;cursor:pointer}
 .name-workspace[hidden]{display:none}.name-progress{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:26px;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:12px}.name-code.is-wrong-hint{animation:wrong-code-hint 1.6s ease-out}.name-target{margin:8px 0 18px;text-align:center;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(70px,12vw,118px);font-weight:800;line-height:1;color:#fff}.name-target.space{font-family:"JetBrains Mono",monospace;font-size:clamp(28px,5vw,48px);letter-spacing:0}.name-bits{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}.name-bit{min-width:0;height:60px;border:1px solid rgba(185,213,255,.4);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:700;transition:transform .15s ease,background .15s ease,border-color .15s ease}.name-bit:hover{transform:translateY(-2px);border-color:#8FC5FF;background:rgba(96,165,250,.22)}.name-bit:focus-visible{outline:2px solid #8FC5FF;outline-offset:2px}.name-bit[aria-pressed="true"]{background:rgba(96,165,250,.42);border-color:#8FC5FF}.name-bit.correct{background:rgba(23,121,94,.45);border-color:#6EE7B7}.name-bit.wrong{background:rgba(156,54,86,.45);border-color:#FF92AF}.name-total{margin:14px 0 0!important;color:#B9D5FF!important;font-family:"JetBrains Mono",monospace;font-size:13px!important;font-weight:700}.name-total b{color:#fff}.name-status{min-height:24px;margin:16px 0 0!important;color:#DCEAFF;font-weight:700}.name-status.good{color:#94F5CB}.name-status.bad{color:#FFB3C5}.name-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.name-check,.name-next{border-radius:10px;padding:11px 18px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}.name-check{border:0;background:#fff;color:var(--ink)}.name-next{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff}.name-check:hover{background:#E8E1F5}.name-next:hover{background:rgba(255,255,255,.2)}.name-check:focus-visible,.name-next:focus-visible{outline:2px solid #8FC5FF;outline-offset:3px}
 .name-results{margin-top:24px;padding-top:20px;border-top:1px solid rgba(185,213,255,.28)}.name-results[hidden]{display:none}.name-results-title{margin:0 0 12px!important;color:#B9D5FF!important;font-family:"JetBrains Mono",monospace;font-size:11px!important;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.name-results-list{display:flex;gap:10px;flex-wrap:wrap}.name-result{min-width:78px;border:1px solid rgba(185,213,255,.35);border-radius:10px;background:rgba(255,255,255,.09);padding:10px;text-align:center}.name-result-character{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:34px;font-weight:800;line-height:1}.name-result-character.space{font-family:"JetBrains Mono",monospace;font-size:12px;line-height:34px}.name-result-binary{display:block;margin-top:8px;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700}
 @keyframes wrong-code-hint{0%,45%{color:#FFF3B0;transform:scale(1.14);text-shadow:0 0 15px rgba(255,220,104,.9)}100%{color:#B9D5FF;transform:scale(1);text-shadow:none}}
+@keyframes switch-too-high{0%,55%{color:#B3305A;transform:scale(1.06);text-shadow:0 0 12px rgba(179,48,90,.28)}100%{color:var(--bad);transform:scale(1);text-shadow:none}}
+@keyframes password-correct{0%{transform:scale(1)}45%{transform:scale(1.45)}100%{transform:scale(1)}}
 
 footer{margin-top:44px;color:var(--muted);font-size:12.5px}
 @media (max-width:780px){
@@ -287,10 +291,10 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
     <div class="switchboard-head">
       <div>
         <p class="eyebrow">Bit switchboard</p>
-        <h2 id="switchboard-title">Flip the bits. Watch the math.</h2>
-        <p>Turn a place value on to add it to the number. Turn it off to remove it.</p>
+        <h2 id="switchboard-title">Crack the binary password.</h2>
+        <p>Match each alphanumeric character in the secret password using its 8-bit ASCII value.</p>
       </div>
-      <div class="switch-result" aria-live="polite">Decimal: <b id="switch-total">0</b></div>
+      <div><label class="hint-toggle"><input id="hide-switch-code" type="checkbox"> Hide ASCII value</label><div class="switch-result" id="switch-result" aria-live="polite">Selected: <b id="switch-total">0</b><span id="switch-code"> | ASCII 65</span></div></div>
     </div>
     <div class="switches" id="switches" aria-label="Eight binary bit switches">
       <button class="bit-switch" type="button" data-value="128" aria-pressed="false"><span class="switch-value">128</span><span class="switch-state">0</span></button>
@@ -303,6 +307,12 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
       <button class="bit-switch" type="button" data-value="1" aria-pressed="false"><span class="switch-value">1</span><span class="switch-state">0</span></button>
     </div>
     <p class="switch-math" id="switch-math">00000000 = <b>0</b></p>
+    <div class="switch-message">
+      <div class="switch-message-head"><p class="switch-message-title">Secret password</p><a class="switch-message-map" href="BinaryASCII.html">View ASCII map &rarr;</a></div>
+      <output class="switch-output" id="switch-output" aria-live="polite"></output>
+      <p class="switch-status" id="switch-status" role="status" aria-live="polite">Build the highlighted character, then check it.</p>
+      <div class="switch-builder-actions"><button class="switch-add" id="switch-add" type="button">Check character</button><button class="switch-utility" id="switch-undo" type="button">Undo character</button><button class="switch-utility" id="switch-clear" type="button">New password</button></div>
+    </div>
   </section>
 
   <section class="letter-practice" id="letter-challenge" aria-labelledby="letter-title">
@@ -483,6 +493,15 @@ resetButton.addEventListener('click', resetInputs);
 const switches = Array.from(document.querySelectorAll('.bit-switch'));
 const switchTotal = document.getElementById('switch-total');
 const switchMath = document.getElementById('switch-math');
+const switchResult = document.getElementById('switch-result');
+const switchOutput = document.getElementById('switch-output');
+const switchStatus = document.getElementById('switch-status');
+const switchCode = document.getElementById('switch-code');
+const hideSwitchCode = document.getElementById('hide-switch-code');
+const secretPasswords = ['ByteMe42', 'TacoCode', 'BugSquash', 'CtrlZHero', 'Coffee42', 'ZeroDrama', 'CodePotato', 'BinaryBard', 'PixelParty', 'LogicSnack'];
+let secretPassword = '';
+let passwordIndex = 0;
+let recentlySolvedIndex = -1;
 
 function updateSwitchboard() {
   const activeValues = switches
@@ -493,9 +512,44 @@ function updateSwitchboard() {
     .join('');
   const decimal = activeValues.reduce((sum, value) => sum + value, 0);
   switchTotal.textContent = decimal;
+  const expectedCode = secretPassword[passwordIndex]?.charCodeAt(0);
+  const isTooHigh = expectedCode !== undefined && decimal > expectedCode;
+  switchResult.classList.toggle('is-too-high', isTooHigh);
   switchMath.innerHTML = activeValues.length
     ? `${binary} = <b>${activeValues.join(' + ')} = ${decimal}</b>`
     : `${binary} = <b>0</b>`;
+}
+
+function resetSwitches() {
+  switches.forEach(button => {
+    button.setAttribute('aria-pressed', 'false');
+    button.classList.remove('on');
+    button.querySelector('.switch-state').textContent = '0';
+  });
+  updateSwitchboard();
+}
+
+function renderPassword() {
+  switchOutput.innerHTML = Array.from(secretPassword).map((character, index) => {
+    const state = index < passwordIndex ? 'solved' : index === passwordIndex ? 'current' : '';
+    const recent = index === recentlySolvedIndex ? ' just-solved' : '';
+    return `<span class="password-character ${state}${recent}">${character}</span>`;
+  }).join('');
+  const currentCharacter = secretPassword[passwordIndex];
+  switchCode.textContent = currentCharacter ? ` | ASCII ${currentCharacter.charCodeAt(0)}` : ' | Complete';
+}
+
+function newPassword() {
+  let nextPassword;
+  do {
+    nextPassword = secretPasswords[Math.floor(Math.random() * secretPasswords.length)];
+  } while (nextPassword === secretPassword);
+  secretPassword = nextPassword;
+  passwordIndex = 0;
+  recentlySolvedIndex = -1;
+  renderPassword();
+  resetSwitches();
+  switchStatus.textContent = 'Build the highlighted character, then check it.';
 }
 
 switches.forEach(button => {
@@ -507,6 +561,53 @@ switches.forEach(button => {
     updateSwitchboard();
   });
 });
+
+document.getElementById('switch-add').addEventListener('click', () => {
+  const decimal = switches
+    .filter(button => button.getAttribute('aria-pressed') === 'true')
+    .reduce((sum, button) => sum + Number(button.dataset.value), 0);
+  const expectedCharacter = secretPassword[passwordIndex];
+  const expectedCode = expectedCharacter.charCodeAt(0);
+  if (decimal !== expectedCode) {
+    switchStatus.textContent = `${decimal} is not ${expectedCharacter}. Adjust the bits and try again.`;
+    return;
+  }
+  recentlySolvedIndex = passwordIndex;
+  passwordIndex += 1;
+  renderPassword();
+  resetSwitches();
+  switchStatus.textContent = passwordIndex === secretPassword.length
+    ? `Password cracked: ${secretPassword}`
+    : `Correct. Now build ${secretPassword[passwordIndex]}.`;
+});
+
+document.getElementById('switch-undo').addEventListener('click', () => {
+  if (passwordIndex === 0) {
+    switchStatus.textContent = 'There are no completed characters to undo.';
+    return;
+  }
+  passwordIndex -= 1;
+  recentlySolvedIndex = -1;
+  renderPassword();
+  resetSwitches();
+  switchStatus.textContent = `Return to ${secretPassword[passwordIndex]}.`;
+});
+
+document.getElementById('switch-clear').addEventListener('click', () => {
+  newPassword();
+});
+
+hideSwitchCode.addEventListener('change', () => {
+  switchCode.hidden = hideSwitchCode.checked;
+  localStorage.setItem('binary-switch-code-hidden', String(hideSwitchCode.checked));
+});
+
+if (localStorage.getItem('binary-switch-code-hidden') === 'true') {
+  hideSwitchCode.checked = true;
+  switchCode.hidden = true;
+}
+
+newPassword();
 
 const letterBits = Array.from(document.querySelectorAll('.letter-bit'));
 const letterTargetEl = document.getElementById('letter-target');
