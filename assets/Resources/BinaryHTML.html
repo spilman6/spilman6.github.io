@@ -90,10 +90,12 @@ h1 em{display:block;margin-top:10px;color:var(--value);font-size:clamp(25px,3vw,
 .bit-input{
   min-width:0;height:62px;border:1px solid rgba(185,213,255,.4);border-radius:10px;
   background:rgba(255,255,255,.09);color:#fff;font-family:"JetBrains Mono",monospace;
-  font-size:25px;font-weight:700;text-align:center;caret-color:#8FC5FF;
+  font-size:25px;font-weight:700;text-align:center;
+  transition:transform .15s ease,background .15s ease,border-color .15s ease,color .15s ease;
 }
-.bit-input::placeholder{color:rgba(185,213,255,.45)}
-.bit-input:focus{outline:2px solid #8FC5FF;outline-offset:2px;background:rgba(96,165,250,.2)}
+.bit-input:hover{transform:translateY(-2px);border-color:#8FC5FF;background:rgba(96,165,250,.2)}
+.bit-input:focus-visible{outline:2px solid #8FC5FF;outline-offset:2px}
+.bit-input[aria-pressed="true"]{border-color:#8FC5FF;background:rgba(96,165,250,.4);color:#fff}
 .bit-input.invalid{border-color:#FF92AF;background:rgba(156,54,86,.38)}
 .bit-input.correct{border-color:#6EE7B7;background:rgba(23,121,94,.42)}
 .bit-input.wrong{border-color:#FF92AF;background:rgba(156,54,86,.45)}
@@ -198,18 +200,18 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
       <div class="bit-labels" aria-hidden="true">
         <label>128</label><label>64</label><label>32</label><label>16</label><label>8</label><label>4</label><label>2</label><label>1</label>
       </div>
-      <div class="bit-inputs" id="bit-inputs" aria-label="Enter the eight binary digits from 128 through 1">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="128 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="64 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="32 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="16 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="8 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="4 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="2 place" placeholder="0">
-        <input class="bit-input" inputmode="numeric" maxlength="1" aria-label="1 place" placeholder="0">
+      <div class="bit-inputs" id="bit-inputs" aria-label="Toggle the eight binary digits from 128 through 1">
+        <button class="bit-input" type="button" aria-label="128 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="64 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="32 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="16 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="8 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="4 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="2 place, currently 0" aria-pressed="false">0</button>
+        <button class="bit-input" type="button" aria-label="1 place, currently 0" aria-pressed="false">0</button>
       </div>
       <p class="total">Your value: <b id="total">0</b></p>
-      <p class="feedback" id="feedback" role="status" aria-live="polite">Fill all eight boxes with a 0 or 1, then check your answer.</p>
+      <p class="feedback" id="feedback" role="status" aria-live="polite">Change the needed places to 1, then check your answer.</p>
       <div class="actions">
         <button class="check" id="check" type="button">Check answer</button>
         <button class="next" id="next" type="button">Next number</button>
@@ -268,7 +270,7 @@ let target = 6;
 let round = 1;
 
 function currentValue() {
-  return inputs.reduce((sum, input, index) => sum + (input.value === '1' ? placeValues[index] : 0), 0);
+  return inputs.reduce((sum, input, index) => sum + (input.getAttribute('aria-pressed') === 'true' ? placeValues[index] : 0), 0);
 }
 
 function updateTotal() {
@@ -281,10 +283,14 @@ function clearStates() {
 }
 
 function resetInputs() {
-  inputs.forEach(input => { input.value = ''; });
+  inputs.forEach((input, index) => {
+    input.textContent = '0';
+    input.setAttribute('aria-pressed', 'false');
+    input.setAttribute('aria-label', `${placeValues[index]} place, currently 0`);
+  });
   clearStates();
   updateTotal();
-  feedbackEl.textContent = 'Fill all eight boxes with a 0 or 1, then check your answer.';
+  feedbackEl.textContent = 'Change the needed places to 1, then check your answer.';
   inputs[0].focus();
 }
 
@@ -301,20 +307,10 @@ function setTarget() {
 }
 
 function checkAnswer() {
-  const incomplete = inputs.some(input => input.value !== '0' && input.value !== '1');
-  if (incomplete) {
-    inputs.forEach(input => {
-      if (input.value !== '0' && input.value !== '1') input.classList.add('invalid');
-    });
-    feedbackEl.textContent = 'Each place needs a 0 or 1.';
-    feedbackEl.className = 'feedback bad';
-    return;
-  }
-
   const isCorrect = currentValue() === target;
   inputs.forEach((input, index) => {
     const expected = target.toString(2).padStart(8, '0')[index];
-    input.classList.add(input.value === expected ? 'correct' : 'wrong');
+    input.classList.add(input.textContent === expected ? 'correct' : 'wrong');
   });
 
   if (isCorrect) {
@@ -327,14 +323,16 @@ function checkAnswer() {
 }
 
 inputs.forEach((input, index) => {
-  input.addEventListener('input', () => {
-    input.value = input.value.replace(/[^01]/g, '').slice(0, 1);
+  input.addEventListener('click', () => {
+    const isOne = input.getAttribute('aria-pressed') === 'true';
+    const nextValue = isOne ? '0' : '1';
+    input.textContent = nextValue;
+    input.setAttribute('aria-pressed', String(!isOne));
+    input.setAttribute('aria-label', `${placeValues[index]} place, currently ${nextValue}`);
     clearStates();
     updateTotal();
-    if (input.value && index < inputs.length - 1) inputs[index + 1].focus();
   });
   input.addEventListener('keydown', event => {
-    if (event.key === 'Backspace' && !input.value && index > 0) inputs[index - 1].focus();
     if (event.key === 'ArrowLeft' && index > 0) inputs[index - 1].focus();
     if (event.key === 'ArrowRight' && index < inputs.length - 1) inputs[index + 1].focus();
     if (event.key === 'Enter') checkAnswer();
