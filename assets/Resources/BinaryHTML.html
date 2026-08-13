@@ -48,12 +48,8 @@ h1 em{display:block;margin-top:10px;color:var(--value);font-size:clamp(25px,3vw,
 .header-guide{width:80%;max-width:none;margin:32px auto 0;text-align:left}
 .activity-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:42px;align-items:start}.activity-deck > section{min-width:0;margin-top:0}.lesson{display:grid;grid-template-columns:1fr;gap:16px;align-items:stretch;margin-top:0}.lesson .practice{height:100%}
 .practice{
-  position:relative;overflow:hidden;background:linear-gradient(145deg,#1D2C63,#162557);color:#fff;
-  border:1px solid #3856A8;border-radius:20px;padding:32px;box-shadow:0 20px 44px rgba(25,18,51,.18);
-}
-.practice::after{
-  content:"";position:absolute;right:-85px;top:-85px;width:275px;height:275px;border-radius:50%;
-  background:radial-gradient(circle,rgba(92,212,255,.3),transparent 68%);
+  position:relative;background:#EAF6F4;color:var(--ink);
+  border:1px solid #9ED9D3;border-radius:16px;padding:32px;box-shadow:var(--shadow);
 }
 .practice > *{position:relative;z-index:1}
 .practice.is-wrong{animation:shake .42s ease-in-out,wrong-flash 2.6s ease-out}
@@ -75,11 +71,11 @@ h1 em{display:block;margin-top:10px;color:var(--value);font-size:clamp(25px,3vw,
 }
 @keyframes wrong-flash{
   0%,45%{background:#9C3656;border-color:#FF92AF}
-  100%{background:linear-gradient(145deg,#1D2C63,#162557);border-color:#3856A8}
+  100%{background:#EAF6F4;border-color:#9ED9D3}
 }
 @keyframes success-flash{
-  0%,45%{background:#17795E;border-color:#6EE7B7}
-  100%{background:linear-gradient(145deg,#1D2C63,#162557);border-color:#3856A8}
+  0%,45%{background:#CFEFE7;border-color:#6EE7B7}
+  100%{background:#EAF6F4;border-color:#9ED9D3}
 }
 @keyframes emoji-pop{
   0%,15%{opacity:0;transform:translateY(16px) scale(.65)}
@@ -88,49 +84,49 @@ h1 em{display:block;margin-top:10px;color:var(--value);font-size:clamp(25px,3vw,
 }
 .practice-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
 .practice-label{
-  margin:0;color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;
+  margin:0;color:#075C63;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;
 }
-.round{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 9px;color:#E5F0FF;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-.target-copy{margin:0;color:#B9D5FF;font-size:14px;font-weight:600;text-align:center}
+.round{background:#D3ECE8;border:1px solid #9ED9D3;border-radius:999px;padding:4px 9px;color:#075C63;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.target-copy{margin:0;color:#075C63;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-align:center;text-transform:uppercase}
 .target{
   margin:2px 0 24px;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(62px,10vw,92px);
-  font-weight:800;letter-spacing:-.06em;line-height:.95;color:#fff;text-align:center;
+  font-weight:800;letter-spacing:-.06em;line-height:.95;color:#0E7C86;text-align:center;
 }
-.target small{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#B9D5FF}
+.target small{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#075C63}.bit-step{margin:0 0 10px;color:#075C63;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .bit-labels,.bit-inputs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
 .bit-labels{margin-bottom:8px}
-.bit-labels label{color:#B9D5FF;font-family:"JetBrains Mono",monospace;font-size:11px;text-align:center}
+.bit-labels label{color:#075C63;font-family:"JetBrains Mono",monospace;font-size:11px;text-align:center}
 .bit-input{
-  min-width:0;height:62px;border:1px solid rgba(185,213,255,.4);border-radius:10px;
-  background:rgba(255,255,255,.09);color:#fff;font-family:"JetBrains Mono",monospace;
+  min-width:0;height:62px;border:1px solid #9ED9D3;border-radius:10px;
+  background:#fff;color:#075C63;font-family:"JetBrains Mono",monospace;
   font-size:25px;font-weight:700;text-align:center;
   transition:transform .15s ease,background .15s ease,border-color .15s ease,color .15s ease;
 }
-.bit-input:hover{transform:translateY(-2px);border-color:#8FC5FF;background:rgba(96,165,250,.2)}
-.bit-input:focus-visible{outline:2px solid #8FC5FF;outline-offset:2px}
-.bit-input[aria-pressed="true"]{border-color:#8FC5FF;background:rgba(96,165,250,.4);color:#fff}
+.bit-input:hover{transform:translateY(-2px);border-color:var(--teal);background:#DFF1F2}
+.bit-input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.bit-input[aria-pressed="true"]{border-color:var(--teal);background:var(--teal);color:#fff}
 .bit-input.invalid{border-color:#FF92AF;background:rgba(156,54,86,.38)}
 .bit-input.correct{border-color:#6EE7B7;background:rgba(23,121,94,.42)}
 .bit-input.wrong{border-color:#FF92AF;background:rgba(156,54,86,.45)}
-.total{margin:20px 0 0;color:#DCEAFF;font-family:"JetBrains Mono",monospace;font-size:13px}
-.total b{color:#fff;font-size:16px}
-.feedback{min-height:25px;margin:16px 0 0;color:#DCEAFF;font-size:14px;font-weight:600}
-.feedback.good{color:#94F5CB}.feedback.bad{color:#FFB3C5}
+.total{margin:20px 0 0;padding:12px 14px;border-radius:8px;background:#D3ECE8;color:#075C63;font-family:"JetBrains Mono",monospace;font-size:13px}
+.total b{color:#075C63;font-size:18px}
+.feedback{min-height:25px;margin:16px 0 0;color:#075C63;font-size:14px;font-weight:600}
+.feedback.good{color:#17795E}.feedback.bad{color:#9C3656}
 .actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
 button{font:inherit;cursor:pointer}
 .check,.next{
   border:0;border-radius:10px;padding:11px 18px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;
   transition:transform .15s ease,background .15s ease,box-shadow .15s ease;
 }
-.check{background:#fff;color:var(--ink)}
-.check:hover{background:#E8E1F5;transform:translateY(-1px)}
-.next{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff}
-.next:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}
+.check{background:var(--teal);color:#fff}
+.check:hover{background:#075C63;transform:translateY(-1px)}
+.next{background:#fff;border:1px solid #9ED9D3;color:#075C63}
+.next:hover{background:#DFF1F2;transform:translateY(-1px)}
 .reset-row{display:flex;justify-content:flex-end;margin-top:10px}
-.reset{border:1px solid rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.08);color:#DCEAFF;padding:7px 12px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700}
-.reset:hover{background:rgba(255,255,255,.18);color:#fff}
-.check:focus-visible,.next:focus-visible,.reset:focus-visible{outline:2px solid #8FC5FF;outline-offset:3px}
+.reset{border:1px solid #9ED9D3;border-radius:999px;background:transparent;color:#075C63;padding:7px 12px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700}
+.reset:hover{background:#DFF1F2}
+.check:focus-visible,.next:focus-visible,.reset:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 
 .guide{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
 .guide h2{margin:0 0 8px;font-family:"Bricolage Grotesque",sans-serif;font-size:23px;letter-spacing:-.02em}
@@ -145,6 +141,7 @@ button{font:inherit;cursor:pointer}
 .tip b{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
 
 .activity-chooser{margin-top:42px}.activity-chooser-head{display:flex;align-items:end;justify-content:space-between;gap:18px;flex-wrap:wrap}.activity-chooser h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(28px,4vw,40px);letter-spacing:-.03em}.activity-chooser p{margin:6px 0 0;color:var(--muted);font-size:14px}.activity-menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}.activity-menu-card{position:relative;display:flex;flex-direction:column;min-height:190px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:20px;color:var(--ink);box-shadow:var(--shadow);overflow:hidden;text-decoration:none;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}.activity-menu-card::after{content:"";position:absolute;right:0;bottom:0;width:42%;height:100%;background:var(--activity-soft);clip-path:polygon(42% 0,100% 0,100% 100%,0 100%)}.activity-menu-card:hover{transform:translateY(-3px);border-color:var(--activity-color);box-shadow:0 14px 28px -16px rgba(25,18,51,.35)}.activity-menu-card > *{position:relative;z-index:1}.activity-menu-card.numbers{--activity-color:#7A3FA6;--activity-soft:#F0E7F8}.activity-menu-card.password{--activity-color:#0E7C86;--activity-soft:#DFF1F2}.activity-menu-card.letters{--activity-color:#B85C38;--activity-soft:#F9E8DF}.activity-menu-card.name{--activity-color:#17795E;--activity-soft:#DCF3EA}.activity-menu-number{color:var(--activity-color);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.activity-menu-card h3{max-width:11ch;margin:18px 0 6px;font-family:"Bricolage Grotesque",sans-serif;font-size:26px;line-height:1.05;letter-spacing:-.02em}.activity-menu-card p{max-width:32ch;margin:0;color:var(--muted);font-size:14px}.activity-menu-go{margin-top:auto;padding-top:18px;color:var(--activity-color);font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700}.activity-menu-symbol{position:absolute!important;right:20px;top:20px;z-index:2!important;color:var(--activity-color);font-family:"JetBrains Mono",monospace;font-size:48px;font-weight:700;line-height:1}.activity-return{display:none;color:var(--value);font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;text-decoration:none}.activity-return:hover{text-decoration:underline;text-underline-offset:3px}.activity-deck{display:none}body.activity-view .hero{border-bottom:0}body.activity-view .header-guide,body.activity-view .activity-chooser{display:none}body.activity-view .activity-return{display:block;width:max-content;margin:0 0 28px;text-align:left}body.activity-view .activity-deck{display:grid;grid-template-columns:minmax(0,920px);justify-content:center}body.activity-view .activity-deck > section{display:none}body.activity-view .activity-deck > section.is-active{display:block}
+.name-practice{background:#EDF7F1;border-color:#A9DCC4;border-radius:16px;color:var(--ink);box-shadow:var(--shadow)}.name-practice .eyebrow,.name-practice .name-examples-label,.name-practice .name-progress,.name-practice .name-total,.name-practice .name-status{color:#17795E!important}.name-practice p{color:var(--muted)}.name-practice .hint-toggle{background:#fff}.name-step{margin:20px 0 10px!important;color:#17795E!important;font-family:"JetBrains Mono",monospace;font-size:11px!important;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.name-input{border-color:#A9DCC4;background:#fff;color:var(--ink)}.name-input::placeholder{color:#5C8A79}.name-input:focus{outline-color:#17795E}.name-start,.name-check{background:#17795E;color:#fff}.name-start:hover,.name-check:hover{background:#0F5D46}.name-example{border-color:#A9DCC4;background:#fff;color:#17795E}.name-example:hover{background:#DCF3EA}.name-workspace{border-top-color:#A9DCC4}.name-code{color:#17795E}.name-target{background:#DCF3EA;color:#17795E}.name-bit{border-color:#A9DCC4;background:#fff;color:#17795E}.name-bit:hover{border-color:#17795E;background:#DCF3EA}.name-bit:focus-visible{outline-color:#17795E}.name-bit[aria-pressed="true"]{background:#17795E;border-color:#17795E}.name-bit.correct{background:#DCF7EC;border-color:#25A87F;color:#17795E}.name-total{padding:12px 14px;border-radius:8px;background:#DCF3EA}.name-total b{color:#17795E}.name-status.good{color:#17795E!important}.name-status.bad{color:#9C3656!important}.name-next{border-color:#A9DCC4;background:#fff;color:#17795E}.name-next:hover{background:#DCF3EA}.name-results{border-top-color:#A9DCC4}.name-results-title{color:#17795E!important}.name-result{border-color:#A9DCC4;background:#fff}.name-result-character{color:#17795E}.name-result-binary{color:#17795E}
 
 .switchboard{margin-top:42px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
 .switchboard-head{display:flex;align-items:end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
@@ -201,6 +198,7 @@ button{font:inherit;cursor:pointer}
 @keyframes password-correct{0%{transform:scale(1)}45%{transform:scale(1.45)}100%{transform:scale(1)}}
 
 footer{margin-top:44px;color:var(--muted);font-size:12.5px}
+.name-practice{background:#EDF7F1;border-color:#A9DCC4;border-radius:16px;color:var(--ink);box-shadow:var(--shadow)}.name-practice .eyebrow,.name-practice .name-examples-label,.name-practice .name-progress,.name-practice .name-total,.name-practice .name-status{color:#17795E!important}.name-practice p{color:var(--muted)}.name-practice .hint-toggle{background:#fff}.name-step{margin:20px 0 10px!important;color:#17795E!important;font-family:"JetBrains Mono",monospace;font-size:11px!important;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.name-input{border-color:#A9DCC4;background:#fff;color:var(--ink)}.name-input::placeholder{color:#5C8A79}.name-input:focus{outline-color:#17795E}.name-start,.name-check{background:#17795E;color:#fff}.name-start:hover,.name-check:hover{background:#0F5D46}.name-example{border-color:#A9DCC4;background:#fff;color:#17795E}.name-example:hover{background:#DCF3EA}.name-workspace{border-top-color:#A9DCC4}.name-code{color:#17795E}.name-target{background:#DCF3EA;color:#17795E}.name-bit{border-color:#A9DCC4;background:#fff;color:#17795E}.name-bit:hover{border-color:#17795E;background:#DCF3EA}.name-bit:focus-visible{outline-color:#17795E}.name-bit[aria-pressed="true"]{background:#17795E;border-color:#17795E}.name-bit.correct{background:#DCF7EC;border-color:#25A87F;color:#17795E}.name-total{padding:12px 14px;border-radius:8px;background:#DCF3EA}.name-total b{color:#17795E}.name-status.good{color:#17795E!important}.name-status.bad{color:#9C3656!important}.name-next{border-color:#A9DCC4;background:#fff;color:#17795E}.name-next:hover{background:#DCF3EA}.name-results{border-top-color:#A9DCC4}.name-results-title{color:#17795E!important}.name-result{border-color:#A9DCC4;background:#fff}.name-result-character{color:#17795E}.name-result-binary{color:#17795E}
 .ascii-reference-launch{position:fixed;top:16px;right:16px;z-index:10;border:1px solid var(--value);border-radius:8px;background:var(--value);box-shadow:0 8px 18px rgba(122,63,166,.3);color:#fff;padding:10px 13px;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700}.ascii-reference-launch:hover{background:#683491;border-color:#683491}.ascii-reference{width:min(80vw,1100px);max-height:calc(100vh - 32px);margin:auto;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--card);box-shadow:0 24px 56px rgba(0,0,0,.3)}.ascii-reference::backdrop{background:rgba(0,0,0,.65)}.ascii-reference-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}.ascii-reference-title{margin:0;color:var(--ink);font-family:"Bricolage Grotesque",sans-serif;font-size:22px;font-weight:800}.ascii-reference-close{width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:#FAF9FC;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:20px;line-height:1}.ascii-reference-close:hover{background:var(--value-soft);color:var(--value)}.ascii-reference-body{max-height:min(650px,calc(100vh - 122px));padding:16px;overflow:auto}.ascii-reference-controls{display:flex;gap:6px;flex-wrap:wrap}.ascii-reference-filter{border:1px solid var(--line);border-radius:999px;background:#FAF9FC;color:var(--muted);padding:5px 8px;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700}.ascii-reference-filter[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}.ascii-reference-map{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;margin-top:10px}.ascii-reference-card{min-width:0;border:1px solid var(--line);border-radius:8px;background:#FAF9FC;padding:8px}.ascii-reference-char{display:block;color:var(--value);font-family:"Bricolage Grotesque",sans-serif;font-size:24px;font-weight:800;line-height:1}.ascii-reference-card[data-group="punctuation"] .ascii-reference-char{color:var(--teal)}.ascii-reference-char.space{font-family:"JetBrains Mono",monospace;font-size:10px;line-height:24px}.ascii-reference-value{display:block;margin-top:6px;color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;line-height:1}
 @media (max-width:780px){
   .wrap{padding:0 24px 56px}
@@ -290,9 +288,10 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
         <p class="practice-label">Practice item</p>
         <span class="round" id="round">Round 1</span>
       </div>
-      <p class="target-copy">Quick! The computer needs to process this number.</p>
+      <p class="target-copy">1. Build this target number</p>
       <h2 class="target" id="practice-title"><span id="target">6</span></h2>
 
+      <p class="bit-step">2. Choose the place values to turn on</p>
       <div class="bit-labels" aria-hidden="true">
         <label>128</label><label>64</label><label>32</label><label>16</label><label>8</label><label>4</label><label>2</label><label>1</label>
       </div>
@@ -309,7 +308,7 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
       <div class="reset-row">
         <button class="reset" id="reset" type="button">Reset bits</button>
       </div>
-      <p class="total">Your value: <b id="total">0</b></p>
+      <p class="total">3. Your total: <b id="total">0</b></p>
       <p class="feedback" id="feedback" role="status" aria-live="polite">Change the needed places to 1, then check your answer.</p>
       <div class="actions">
         <button class="check" id="check" type="button">Check answer</button>
@@ -395,6 +394,7 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
       </div>
       <label class="hint-toggle"><input id="hide-name-code" type="checkbox"> Hide ASCII code</label>
     </div>
+    <p class="name-step">1. Enter a name or word</p>
     <div class="name-setup">
       <input class="name-input" id="name-input" type="text" maxlength="30" autocomplete="off" placeholder="Enter letters or numbers">
       <button class="name-start" id="name-start" type="button">Start challenge</button>
@@ -407,13 +407,14 @@ footer{margin-top:44px;color:var(--muted);font-size:12.5px}
     <div class="name-workspace" id="name-workspace" hidden>
       <div class="name-progress"><span id="name-progress">Character 1 of 1</span><span class="name-code" id="name-code">ASCII 65</span></div>
       <div class="name-target" id="name-target" aria-live="polite">A</div>
+      <p class="name-step">2. Choose the place values to turn on</p>
       <div class="bit-labels" aria-hidden="true">
         <label>128</label><label>64</label><label>32</label><label>16</label><label>8</label><label>4</label><label>2</label><label>1</label>
       </div>
       <div class="name-bits" aria-label="Toggle the eight binary digits for this name character">
         <button class="name-bit" type="button" aria-label="128 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="64 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="32 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="16 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="8 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="4 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="2 place, currently 0" aria-pressed="false">0</button><button class="name-bit" type="button" aria-label="1 place, currently 0" aria-pressed="false">0</button>
       </div>
-      <p class="name-total" id="name-total" aria-live="polite">Selected total: <b>0</b></p>
+      <p class="name-total" id="name-total" aria-live="polite">3. Your total: <b>0</b></p>
       <p class="name-status" id="name-status" role="status" aria-live="polite">Turn on the bit values that make this character.</p>
       <div class="name-actions"><button class="name-check" id="name-check" type="button">Check character</button><button class="name-next" id="name-next" type="button">Next character</button><button class="name-next" id="name-reset" type="button">Reset challenge</button></div>
       <div class="name-results" id="name-results" hidden>
@@ -825,8 +826,8 @@ function updateNameTotal() {
     .filter(value => value !== null);
   const total = selectedValues.reduce((sum, value) => sum + value, 0);
   nameTotal.innerHTML = selectedValues.length
-    ? `Selected total: <b>${selectedValues.join(' + ')} = ${total}</b>`
-    : 'Selected total: <b>0</b>';
+    ? `3. Your total: <b>${selectedValues.join(' + ')} = ${total}</b>`
+    : '3. Your total: <b>0</b>';
 }
 
 function renderNameCharacter() {
