@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Resources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f4f2f8;--card:#fff;--ink:#191233;--muted:#6c6588;--line:#e0dbec;--purple:#7a3fa6;--purple-soft:#f0e7f8;--teal:#0e7c86;--teal-soft:#dff1f2;--blue:#2e6bb2;--blue-soft:#e1edf9;--orange:#b85c38;--orange-soft:#f9e8df;--shadow:0 1px 2px rgba(25,18,51,.05),0 12px 28px -14px rgba(25,18,51,.2);--r:14px}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}.wrap{max-width:1120px;margin:0 auto;padding:0 24px 72px}
+.hero{padding:64px 0 42px;border-bottom:1px solid var(--line)}.eyebrow{margin:0 0 15px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}h1{max-width:11ch;margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(46px,8vw,82px);font-weight:800;line-height:.92;letter-spacing:-.04em}h1 em{color:var(--purple);font-style:normal}.lede{max-width:59ch;margin:20px 0 0;color:var(--muted);font-size:17px}.resource-count{display:inline-flex;margin-top:28px;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin:44px 0 18px}.section-head h2{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:28px;letter-spacing:-.02em}.section-head p{margin:4px 0 0;color:var(--muted);font-size:14px}.library{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.resource{position:relative;display:flex;flex-direction:column;min-height:265px;padding:24px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);color:var(--ink);overflow:hidden;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.resource::after{content:"";position:absolute;right:-28px;bottom:-52px;width:170px;height:170px;border-radius:50%;background:var(--soft)}.resource:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 18px 34px -20px rgba(25,18,51,.35)}.resource:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.resource>*{position:relative;z-index:1}.resource.binary{--accent:var(--purple);--soft:var(--purple-soft)}.resource.ascii{--accent:var(--orange);--soft:var(--orange-soft)}.resource.csharp{--accent:var(--teal);--soft:var(--teal-soft)}.resource.mysql{--accent:var(--blue);--soft:var(--blue-soft)}.resource-kicker{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}.resource h3{max-width:12ch;margin:18px 0 9px;font-family:"Bricolage Grotesque",sans-serif;font-size:32px;line-height:1;letter-spacing:-.03em}.resource p{max-width:34ch;margin:0;color:var(--muted);font-size:14.5px}.resource-go{margin-top:auto;padding-top:24px;color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700}.resource-symbol{position:absolute;top:20px;right:22px;z-index:1;color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:44px;font-weight:700;line-height:1}
+.tip{display:flex;gap:14px;align-items:flex-start;margin-top:36px;padding:18px 20px;border:1px solid #b9e4dc;border-radius:10px;background:var(--teal-soft);color:#075c63}.tip-mark{font-size:24px;line-height:1}.tip p{margin:0;font-size:14px}.tip b{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}footer{margin-top:42px;color:var(--muted);font-size:12.5px}@media(max-width:680px){.wrap{padding:0 18px 52px}.hero{padding:46px 0 34px}.library{grid-template-columns:1fr}.resource{min-height:238px}.resource h3{font-size:29px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Fox Valley Technical College</p>
+    <h1>Learning <em>resources.</em></h1>
+    <p class="lede">Interactive practice and quick references for building confidence with foundational programming and database concepts.</p>
+    <span class="resource-count">4 resources available</span>
+  </header>
+
+  <section aria-labelledby="library-title">
+    <div class="section-head"><div><h2 id="library-title">Choose a resource</h2><p>Open a topic to practice, explore, or keep a reference nearby.</p></div></div>
+    <div class="library">
+      <a class="resource binary" href="BinaryHTML.html"><span class="resource-symbol" aria-hidden="true">101</span><span class="resource-kicker">Interactive practice</span><h3>Binary 8-Bit Practice</h3><p>Build 8-bit binary values, explore place values, and work through number and character activities.</p><span class="resource-go">Open practice &rarr;</span></a>
+      <a class="resource ascii" href="BinaryASCII.html"><span class="resource-symbol" aria-hidden="true">A</span><span class="resource-kicker">Quick reference</span><h3>ASCII Map</h3><p>Browse printable ASCII characters alongside their decimal codes and 8-bit binary representations.</p><span class="resource-go">Open map &rarr;</span></a>
+      <a class="resource csharp" href="CIntro.html"><span class="resource-symbol" aria-hidden="true">C#</span><span class="resource-kicker">Quick reference</span><h3>C# Data Types</h3><p>Compare C# value and reference types, sizes, ranges, practical examples, and quiz questions.</p><span class="resource-go">Open reference &rarr;</span></a>
+      <a class="resource mysql" href="MySQLDataTypes.html"><span class="resource-symbol" aria-hidden="true">SQL</span><span class="resource-kicker">Quick reference</span><h3>MySQL Data Types</h3><p>Choose effective MySQL column types for numbers, text, dates, binary data, and structured values.</p><span class="resource-go">Open reference &rarr;</span></a>
+    </div>
+  </section>
+
+  <aside class="tip"><span class="tip-mark" aria-hidden="true">💡</span><p><b>Study tip</b><br>Use the references while you build, then return to the practice pages to test the choices you made.</p></aside>
+  <footer>Interactive course resources</footer>
+</main>
+</body>
+</html>
