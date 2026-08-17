@@ -40,27 +40,27 @@ header.hero{padding:56px 0 28px;border-bottom:1px solid var(--line)}.eyebrow{fon
 </div>
 <script>
 const types=[
- {kw:"TINYINT",family:"integer",size:1,sizeLabel:"1 byte",cats:["number"],range:"-128 to 127 · UNSIGNED: 0 to 255",use:"Small counts, flags, and true/false values.",badge:"Boolean"},
- {kw:"SMALLINT",family:"integer",size:2,sizeLabel:"2 bytes",cats:["number"],range:"-32,768 to 32,767 · UNSIGNED: 0 to 65,535",use:"Small whole-number quantities."},
- {kw:"MEDIUMINT",family:"integer",size:3,sizeLabel:"3 bytes",cats:["number"],range:"-8,388,608 to 8,388,607 · UNSIGNED: 0 to 16,777,215",use:"Moderate counts where INT is more than needed."},
  {kw:"INT",family:"integer",size:4,sizeLabel:"4 bytes",cats:["number"],range:"-2,147,483,648 to 2,147,483,647 · UNSIGNED: 0 to 4,294,967,295",use:"Default whole-number choice for IDs and counts.",badge:"Default"},
- {kw:"BIGINT",family:"integer",size:8,sizeLabel:"8 bytes",cats:["number"],range:"-2^63 to 2^63-1 · UNSIGNED: 0 to 2^64-1",use:"Very large IDs, counters, and epoch values."},
- {kw:"DECIMAL(p,s)",family:"fixed-point",size:0,sizeLabel:"variable",cats:["number"],range:"Up to 65 total digits; up to 30 after decimal point",use:"Exact base-10 values, especially money. Example: DECIMAL(10,2).",badge:"Money"},
- {kw:"FLOAT",family:"floating-point",size:4,sizeLabel:"4 bytes",cats:["number"],range:"Approx. 7 significant digits",use:"Approximate measurements where small rounding differences are acceptable."},
- {kw:"DOUBLE",family:"floating-point",size:8,sizeLabel:"8 bytes",cats:["number"],range:"Approx. 15 significant digits",use:"Higher-precision approximate scientific and measurement data."},
  {kw:"VARCHAR(n)",family:"variable text",size:0,sizeLabel:"variable",cats:["text"],range:"0 to 65,535 bytes, limited by row size and character set",use:"Names, email addresses, titles, and short text.",badge:"Default text"},
+ {kw:"DECIMAL(p,s)",family:"fixed-point",size:0,sizeLabel:"variable",cats:["number"],range:"Up to 65 total digits; up to 30 after decimal point",use:"Exact base-10 values, especially money. Example: DECIMAL(10,2).",badge:"Money"},
+ {kw:"DATETIME",family:"temporal",size:5,sizeLabel:"5 bytes",cats:["temporal"],range:"1000-01-01 00:00:00 to 9999-12-31 23:59:59",use:"Date-and-time events stored exactly as entered.",badge:"Common"},
+ {kw:"DATE",family:"temporal",size:3,sizeLabel:"3 bytes",cats:["temporal"],range:"1000-01-01 to 9999-12-31",use:"Birth dates, due dates, and any calendar-only value."},
+ {kw:"TINYINT",family:"integer",size:1,sizeLabel:"1 byte",cats:["number"],range:"-128 to 127 · UNSIGNED: 0 to 255",use:"Small counts, flags, and true/false values.",badge:"Boolean"},
+ {kw:"TIMESTAMP",family:"temporal",size:4,sizeLabel:"4 bytes",cats:["temporal"],range:"1970-01-01 UTC to 2038-01-19 UTC",use:"Time-zone-aware instants, often for created and updated timestamps."},
  {kw:"CHAR(n)",family:"fixed text",size:0,sizeLabel:"fixed length",cats:["text"],range:"0 to 255 characters",use:"Fixed-width codes such as US state or country codes."},
  {kw:"TEXT",family:"large text",size:0,sizeLabel:"variable",cats:["text"],range:"Up to 65,535 bytes; MEDIUMTEXT and LONGTEXT hold more",use:"Long descriptions, comments, and article content."},
+ {kw:"BIGINT",family:"integer",size:8,sizeLabel:"8 bytes",cats:["number"],range:"-2^63 to 2^63-1 · UNSIGNED: 0 to 2^64-1",use:"Very large IDs, counters, and epoch values."},
+ {kw:"JSON",family:"document",size:0,sizeLabel:"variable",cats:["special"],range:"Validated JSON document, up to MySQL storage limits",use:"Flexible structured attributes that do not justify their own columns."},
+ {kw:"DOUBLE",family:"floating-point",size:8,sizeLabel:"8 bytes",cats:["number"],range:"Approx. 15 significant digits",use:"Higher-precision approximate scientific and measurement data."},
  {kw:"ENUM",family:"enumeration",size:1,sizeLabel:"1-2 bytes",cats:["text","special"],range:"Up to 65,535 listed values",use:"A small, stable list such as a status. Use a lookup table when it changes often."},
- {kw:"DATE",family:"temporal",size:3,sizeLabel:"3 bytes",cats:["temporal"],range:"1000-01-01 to 9999-12-31",use:"Birth dates, due dates, and any calendar-only value."},
  {kw:"TIME",family:"temporal",size:3,sizeLabel:"3 bytes",cats:["temporal"],range:"-838:59:59 to 838:59:59",use:"Durations or time-of-day values without a date."},
- {kw:"DATETIME",family:"temporal",size:5,sizeLabel:"5 bytes",cats:["temporal"],range:"1000-01-01 00:00:00 to 9999-12-31 23:59:59",use:"Date-and-time events stored exactly as entered.",badge:"Common"},
- {kw:"TIMESTAMP",family:"temporal",size:4,sizeLabel:"4 bytes",cats:["temporal"],range:"1970-01-01 UTC to 2038-01-19 UTC",use:"Time-zone-aware instants, often for created and updated timestamps."},
  {kw:"YEAR",family:"temporal",size:1,sizeLabel:"1 byte",cats:["temporal"],range:"1901 to 2155",use:"A year alone, such as a model year or graduation year."},
+ {kw:"SMALLINT",family:"integer",size:2,sizeLabel:"2 bytes",cats:["number"],range:"-32,768 to 32,767 · UNSIGNED: 0 to 65,535",use:"Small whole-number quantities."},
+ {kw:"FLOAT",family:"floating-point",size:4,sizeLabel:"4 bytes",cats:["number"],range:"Approx. 7 significant digits",use:"Approximate measurements where small rounding differences are acceptable."},
  {kw:"BINARY(n)",family:"fixed binary",size:0,sizeLabel:"fixed length",cats:["binary"],range:"0 to 255 bytes",use:"Fixed-size hashes, UUID bytes, and machine data."},
  {kw:"VARBINARY(n)",family:"variable binary",size:0,sizeLabel:"variable",cats:["binary"],range:"0 to 65,535 bytes",use:"Variable-size encrypted values, files, and binary identifiers."},
  {kw:"BLOB",family:"large binary",size:0,sizeLabel:"variable",cats:["binary"],range:"Up to 65,535 bytes; MEDIUMBLOB and LONGBLOB hold more",use:"Images, documents, or arbitrary binary content."},
- {kw:"JSON",family:"document",size:0,sizeLabel:"variable",cats:["special"],range:"Validated JSON document, up to MySQL storage limits",use:"Flexible structured attributes that do not justify their own columns."},
+ {kw:"MEDIUMINT",family:"integer",size:3,sizeLabel:"3 bytes",cats:["number"],range:"-8,388,608 to 8,388,607 · UNSIGNED: 0 to 16,777,215",use:"Moderate counts where INT is more than needed."},
  {kw:"GEOMETRY",family:"spatial",size:0,sizeLabel:"variable",cats:["special"],range:"Spatial values including POINT, LINESTRING, and POLYGON",use:"Maps, coordinates, and geographic shapes."}
 ];
 const examples={TINYINT:[["Active flag","1"],["Rating","5"]],SMALLINT:[["Seats left","125"],["Graduation year","2026"]],MEDIUMINT:[["Page views","500000"]],INT:[["Student ID","90210"],["Order quantity","3"]],BIGINT:[["Large event ID",""],["Lifetime view count",""]],"DECIMAL(p,s)":[["Course price","249.99"],["Tax rate","5.500"]],FLOAT:[["Temperature","72.5"],["Latitude estimate","43.07"]],DOUBLE:[["Scientific measurement","3.14159265358979"],["Average","87.35"]],"VARCHAR(n)":[["Email","student@example.edu"],["Name","Jordan Lee"]],"CHAR(n)":[["State code","WI"],["Course prefix","IT"]],TEXT:[["Article body",""],["Feedback comment",""]],ENUM:[["Order status","shipped"],["Letter grade","A"]],DATE:[["Birth date","2004-09-17"],["Due date","2026-08-21"]],TIME:[["Class duration","01:20:00"],["Start time","08:00:00"]],DATETIME:[["Order placed","2026-08-17 14:30:00"],["Appointment",""]],TIMESTAMP:[["Created at","2026-08-17 19:30:00"],["Last updated",""]],YEAR:[["Model year","2026"],["Graduation year","2027"]],"BINARY(n)":[["SHA-256 hash",""],["UUID bytes",""]],"VARBINARY(n)":[["Encrypted token",""],["Signature",""]],BLOB:[["Profile image",""],["PDF attachment",""]],JSON:[["Preferences","{...}"],["API payload","{...}"]],GEOMETRY:[["Campus location","POINT(...)"],["Lake boundary","POLYGON(...)"]]};
